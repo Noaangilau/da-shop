@@ -97,7 +97,7 @@ export default function BecomeAVendor() {
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             { title: 'Your Own Storefront', body: 'A dedicated page for your brand, your products, and your story — no noise from other vendors.' },
-            { title: 'Built for the Culture', body: 'A marketplace made specifically for Pacific vendors. Your buyers already know what they're looking for.' },
+            { title: 'Built for the Culture', body: 'A marketplace made specifically for Pacific vendors. Your buyers already know what they are looking for.' },
             { title: 'Simple Setup', body: 'No tech skills needed. Apply below, we handle the rest and get you live within the week.' },
           ].map((item) => (
             <div key={item.title} className="bg-white p-8 shadow-sm">

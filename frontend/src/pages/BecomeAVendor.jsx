@@ -165,7 +165,7 @@ export default function BecomeAVendor() {
                 Email Address <span className="text-red-500">*</span>
               </label>
               <input
-                type="email"
+                type="text"
                 name="email"
                 value={form.email}
                 onChange={handleChange}

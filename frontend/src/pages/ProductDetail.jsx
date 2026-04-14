@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 // ─── Demo Data ────────────────────────────────────────────────────────────────
@@ -76,6 +77,12 @@ const productData = {
 export default function ProductDetail() {
   const { id } = useParams()
   const product = productData[id]
+  const [added, setAdded] = useState(false)
+
+  function handleAddToCart() {
+    setAdded(true)
+    setTimeout(() => setAdded(false), 2000)
+  }
 
   if (!product) {
     return (
@@ -161,8 +168,15 @@ export default function ProductDetail() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button className="bg-midnight text-white font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-midnight/80 transition-colors duration-200 flex-1">
-                Add to Cart
+              <button
+                onClick={handleAddToCart}
+                className={`font-black text-xs tracking-widest uppercase px-10 py-4 transition-colors duration-200 flex-1 ${
+                  added
+                    ? 'bg-white text-midnight border border-midnight'
+                    : 'bg-midnight text-white hover:bg-midnight/80'
+                }`}
+              >
+                {added ? '✓ Added to Cart' : 'Add to Cart'}
               </button>
               <Link
                 to={`/vendor/${product.vendorId}`}

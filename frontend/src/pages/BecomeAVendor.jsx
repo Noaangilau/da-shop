@@ -40,6 +40,11 @@ export default function BecomeAVendor() {
       setError('Please fill in all required fields.')
       return
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(form.email)) {
+      setError('Please enter a valid email address.')
+      return
+    }
     setLoading(true)
     try {
       await axios.post(`${API_URL}/vendor-inquiry`, form)

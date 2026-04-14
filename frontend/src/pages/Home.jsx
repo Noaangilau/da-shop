@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 // ─── Demo Data ────────────────────────────────────────────────────────────────
 
@@ -103,6 +103,12 @@ const products = [
 // ─── Home Page ────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const [searchParams] = useSearchParams()
+  const selectedCategory = searchParams.get('category')
+  const filteredProducts = selectedCategory
+    ? products.filter((p) => p.category === selectedCategory)
+    : products
+
   return (
     <main className="pt-16">
 
@@ -253,17 +259,34 @@ export default function Home() {
       {/* ── Featured Products ── */}
       <section id="products" className="bg-sand py-24 px-6 border-t border-midnight/10">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
-            <p className="text-isle-teal text-xs tracking-widest uppercase font-semibold mb-3">
-              New Arrivals
-            </p>
-            <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
-              Featured Products
-            </h2>
+          <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <p className="text-midnight/40 text-xs tracking-widest uppercase font-semibold mb-3">
+                {selectedCategory ? selectedCategory : 'New Arrivals'}
+              </p>
+              <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
+                {selectedCategory ? `${selectedCategory} Products` : 'Featured Products'}
+              </h2>
+            </div>
+            {selectedCategory && (
+              <Link
+                to="/"
+                className="text-midnight/40 text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
+              >
+                ← All Products
+              </Link>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {products.map((product) => (
+            {filteredProducts.length === 0 ? (
+              <div className="col-span-3 py-16 text-center">
+                <p className="text-midnight/40 text-sm">No products found in this category.</p>
+                <Link to="/" className="text-midnight text-xs tracking-widest uppercase font-bold mt-4 inline-block hover:underline">
+                  View All →
+                </Link>
+              </div>
+            ) : filteredProducts.map((product) => (
               <Link key={product.id} to={`/product/${product.id}`} className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">

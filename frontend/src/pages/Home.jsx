@@ -204,8 +204,8 @@ export default function Home() {
                     {vendor.bio}
                   </p>
                   <Link
-                    to="/"
-                    className="text-gold text-xs tracking-widest uppercase font-bold hover:text-white transition-colors"
+                    to={`/vendor/${vendor.id}`}
+                    className="text-white text-xs tracking-widest uppercase font-bold hover:text-white/60 transition-colors"
                   >
                     Visit Store →
                   </Link>
@@ -265,7 +265,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {products.map((product) => (
-              <div key={product.id} className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+              <Link key={product.id} to={`/product/${product.id}`} className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
                   <img
@@ -274,7 +274,7 @@ export default function Home() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="bg-gold text-midnight text-xs font-bold tracking-widest uppercase px-2 py-1">
+                    <span className="bg-midnight text-white text-xs font-bold tracking-widest uppercase px-2 py-1">
                       {product.category}
                     </span>
                   </div>
@@ -292,15 +292,9 @@ export default function Home() {
                     <span className="text-midnight font-black text-lg">
                       ${product.price}
                     </span>
-                    <Link
-                      to="/"
-                      className="text-isle-teal text-xs tracking-widest uppercase font-bold hover:text-midnight transition-colors"
-                    >
-                      View →
-                    </Link>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

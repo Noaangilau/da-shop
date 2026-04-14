@@ -1,6 +1,13 @@
 import { Link } from 'react-router-dom'
 import logoDark from '../assets/logo-dark.svg'
 
+const categories = ['Clothing', 'Jewelry', 'Food', 'Art', 'Accessories']
+const vendors = [
+  { name: 'Frost City Tatau', id: 1 },
+  { name: "D's Fale Mā", id: 2 },
+  { name: 'ffiliku', id: 3 },
+]
+
 export default function Footer() {
   return (
     <footer className="bg-midnight border-t border-white/10">
@@ -15,7 +22,7 @@ export default function Footer() {
             </p>
             <Link
               to="/become-a-vendor"
-              className="inline-block mt-6 bg-gold text-midnight text-xs tracking-widest uppercase font-bold px-6 py-3 hover:bg-gold-muted transition-colors duration-200"
+              className="inline-block mt-6 bg-white text-midnight text-xs tracking-widest uppercase font-bold px-6 py-3 hover:bg-white/90 transition-colors duration-200"
             >
               Become a Vendor
             </Link>
@@ -23,11 +30,11 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-5">Categories</p>
+            <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-5">Categories</p>
             <ul className="space-y-3">
-              {['Clothing', 'Jewelry', 'Food', 'Art', 'Accessories'].map((cat) => (
+              {categories.map((cat) => (
                 <li key={cat}>
-                  <Link to="/" className="text-white/50 hover:text-white text-sm transition-colors">
+                  <Link to={`/?category=${cat}`} className="text-white/50 hover:text-white text-sm transition-colors">
                     {cat}
                   </Link>
                 </li>
@@ -37,12 +44,12 @@ export default function Footer() {
 
           {/* Vendors */}
           <div>
-            <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-5">Vendors</p>
+            <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-5">Vendors</p>
             <ul className="space-y-3">
-              {['Frost City Tatau', "D's Fale Mā", 'ffiliku'].map((vendor) => (
-                <li key={vendor}>
-                  <Link to="/" className="text-white/50 hover:text-white text-sm transition-colors">
-                    {vendor}
+              {vendors.map((vendor) => (
+                <li key={vendor.id}>
+                  <Link to={`/vendor/${vendor.id}`} className="text-white/50 hover:text-white text-sm transition-colors">
+                    {vendor.name}
                   </Link>
                 </li>
               ))}

@@ -178,9 +178,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {vendors.map((vendor) => (
-              <div
+              <Link
                 key={vendor.id}
-                className="group relative overflow-hidden cursor-pointer"
+                to={`/vendor/${vendor.id}`}
+                className="group relative overflow-hidden"
               >
                 {/* Image */}
                 <div className="relative h-72 overflow-hidden">
@@ -203,14 +204,11 @@ export default function Home() {
                   <p className="text-white/50 text-sm leading-relaxed mb-4">
                     {vendor.bio}
                   </p>
-                  <Link
-                    to={`/vendor/${vendor.id}`}
-                    className="text-white text-xs tracking-widest uppercase font-bold hover:text-white/60 transition-colors"
-                  >
+                  <span className="text-white text-xs tracking-widest uppercase font-bold group-hover:text-white/60 transition-colors">
                     Visit Store →
-                  </Link>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -230,9 +228,10 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
             {categories.map((cat) => (
-              <div
+              <Link
                 key={cat.label}
-                className="group relative overflow-hidden cursor-pointer aspect-square"
+                to={`/?category=${cat.label}`}
+                className="group relative overflow-hidden aspect-square"
               >
                 <img
                   src={cat.image}
@@ -245,7 +244,7 @@ export default function Home() {
                     {cat.label}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

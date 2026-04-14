@@ -1,6 +1,15 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import logoDark from '../assets/logo-dark.svg'
+
+const navLinks = [
+  { label: 'Shop', to: '/#products' },
+  { label: 'Clothing', to: '/?category=Clothing' },
+  { label: 'Jewelry', to: '/?category=Jewelry' },
+  { label: 'Food', to: '/?category=Food' },
+  { label: 'Art', to: '/?category=Art' },
+  { label: 'Vendors', to: '/vendors' },
+]
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -16,31 +25,22 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Shop
-          </Link>
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Clothing
-          </Link>
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Jewelry
-          </Link>
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Food
-          </Link>
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Art
-          </Link>
-          <Link to="/" className="text-white/70 hover:text-gold text-xs tracking-widest uppercase font-medium transition-colors">
-            Vendors
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              to={link.to}
+              className="text-white/70 hover:text-white text-xs tracking-widest uppercase font-medium transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
           <Link
             to="/become-a-vendor"
-            className="border border-gold text-gold text-xs tracking-widest uppercase font-bold px-5 py-2 hover:bg-gold hover:text-midnight transition-colors duration-200"
+            className="border border-white text-white text-xs tracking-widest uppercase font-bold px-5 py-2 hover:bg-white hover:text-midnight transition-colors duration-200"
           >
             Become a Vendor
           </Link>
@@ -61,20 +61,20 @@ export default function Navbar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-midnight border-t border-white/10 px-6 py-6 flex flex-col gap-5">
-          {['Shop', 'Clothing', 'Jewelry', 'Food', 'Art', 'Vendors'].map((item) => (
+          {navLinks.map((link) => (
             <Link
-              key={item}
-              to="/"
+              key={link.label}
+              to={link.to}
               onClick={() => setMenuOpen(false)}
               className="text-white/70 text-xs tracking-widest uppercase font-medium"
             >
-              {item}
+              {link.label}
             </Link>
           ))}
           <Link
             to="/become-a-vendor"
             onClick={() => setMenuOpen(false)}
-            className="border border-gold text-gold text-xs tracking-widest uppercase font-bold px-5 py-3 text-center mt-2 hover:bg-gold hover:text-midnight transition-colors"
+            className="border border-white text-white text-xs tracking-widest uppercase font-bold px-5 py-3 text-center mt-2 hover:bg-white hover:text-midnight transition-colors"
           >
             Become a Vendor
           </Link>

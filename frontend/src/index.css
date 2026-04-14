@@ -25,15 +25,15 @@ body {
 
 @layer components {
   .btn-gold {
-    @apply bg-gold text-midnight font-bold tracking-widest uppercase text-sm px-8 py-3 inline-block hover:bg-gold-muted transition-colors duration-200 cursor-pointer;
+    @apply bg-white text-midnight font-bold tracking-widest uppercase text-sm px-8 py-3 inline-block hover:bg-gold-muted transition-colors duration-200 cursor-pointer;
   }
 
   .btn-outline-gold {
-    @apply border border-gold text-gold font-bold tracking-widest uppercase text-sm px-8 py-3 inline-block hover:bg-gold hover:text-midnight transition-colors duration-200 cursor-pointer;
+    @apply border border-white text-white font-bold tracking-widest uppercase text-sm px-8 py-3 inline-block hover:bg-white hover:text-midnight transition-colors duration-200 cursor-pointer;
   }
 
   .section-label {
-    @apply text-gold uppercase tracking-widest text-xs font-semibold mb-3;
+    @apply text-white/50 uppercase tracking-widest text-xs font-semibold mb-3;
   }
 
   .section-title-dark {

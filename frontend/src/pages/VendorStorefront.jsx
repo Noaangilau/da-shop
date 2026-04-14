@@ -61,11 +61,11 @@ export default function VendorStorefront() {
 
   if (!vendor) {
     return (
-      <main className="pt-16 min-h-screen bg-midnight flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-white/40 text-xs tracking-widest uppercase mb-4">404</p>
-          <h1 className="text-white text-3xl font-black uppercase mb-6">Vendor Not Found</h1>
-          <Link to="/" className="bg-white text-midnight text-xs tracking-widest uppercase font-bold px-8 py-3 inline-block hover:bg-white/90 transition-colors">
+      <main className="pt-16 min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center px-6">
+          <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>
+          <h1 className="text-midnight text-3xl font-black uppercase mb-6 tracking-wide">Vendor Not Found</h1>
+          <Link to="/" className="bg-midnight text-white text-xs tracking-widest uppercase font-bold px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors">
             Back to Home
           </Link>
         </div>
@@ -77,15 +77,15 @@ export default function VendorStorefront() {
     <main className="pt-16">
 
       {/* ── Vendor Hero ── */}
-      <section className="relative h-80 md:h-96 overflow-hidden">
+      <section className="relative h-80 md:h-[28rem] overflow-hidden">
         <img
           src={vendor.image}
           alt={vendor.name}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-midnight/70" />
+        <div className="absolute inset-0 bg-black/55" />
         <div className="absolute inset-0 flex items-end">
-          <div className="max-w-7xl mx-auto px-6 pb-10 w-full">
+          <div className="max-w-7xl mx-auto px-6 pb-12 w-full">
             <p className="text-white/50 text-xs tracking-widest uppercase font-semibold mb-2">
               {vendor.category}
             </p>
@@ -97,21 +97,19 @@ export default function VendorStorefront() {
       </section>
 
       {/* ── Vendor Info ── */}
-      <section className="bg-midnight border-b border-white/10">
+      <section className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-10 items-start">
           <div className="flex-1">
-            <p className="text-white/40 text-xs tracking-widest uppercase mb-1">{vendor.location}</p>
-            <p className="text-white/70 text-base leading-relaxed max-w-xl mt-3">
+            <p className="text-muted text-xs tracking-widest uppercase mb-3">{vendor.location}</p>
+            <p className="text-gray-500 text-sm leading-relaxed max-w-xl">
               {vendor.bio}
             </p>
             {vendor.instagram && (
-              <p className="text-white/40 text-sm mt-4 tracking-wide">{vendor.instagram}</p>
+              <p className="text-muted text-xs tracking-wide mt-5">{vendor.instagram}</p>
             )}
           </div>
-          <div className="flex flex-col gap-3 md:items-end">
-            <div className="flex items-center gap-4 text-white/40 text-xs tracking-widest uppercase">
-              <span>{vendor.products.length} Products</span>
-            </div>
+          <div className="flex items-center gap-4 text-muted text-xs tracking-widest uppercase">
+            <span>{vendor.products.length} Products</span>
           </div>
         </div>
       </section>
@@ -119,30 +117,30 @@ export default function VendorStorefront() {
       {/* ── Products Grid ── */}
       <section className="bg-sand py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-10">
-            <p className="text-midnight/40 text-xs tracking-widest uppercase font-semibold mb-2">
+          <div className="mb-12">
+            <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-2">
               All Products
             </p>
-            <h2 className="text-midnight text-3xl font-black uppercase tracking-wide">
+            <h2 className="text-midnight text-2xl font-black uppercase tracking-wide">
               {vendor.name}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-gray-200">
             {vendor.products.map((product) => (
               <Link
                 key={product.id}
                 to={`/product/${product.id}`}
-                className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="group bg-white"
               >
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="bg-midnight text-white text-xs font-bold tracking-widest uppercase px-2 py-1">
+                    <span className="bg-white text-midnight text-xs font-bold tracking-widest uppercase px-2 py-1">
                       {product.category}
                     </span>
                   </div>
@@ -151,7 +149,7 @@ export default function VendorStorefront() {
                   <h3 className="text-midnight font-bold text-sm mb-2 leading-snug">
                     {product.name}
                   </h3>
-                  <span className="text-midnight font-black text-lg">
+                  <span className="text-midnight font-black text-base">
                     ${product.price}
                   </span>
                 </div>
@@ -162,7 +160,7 @@ export default function VendorStorefront() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section className="bg-midnight py-20 px-6 border-t border-white/10">
+      <section className="bg-midnight py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-4">
             Are you a Pacific vendor?
@@ -170,7 +168,7 @@ export default function VendorStorefront() {
           <h2 className="text-white text-3xl font-black uppercase tracking-wide mb-6">
             Sell on Da Shop
           </h2>
-          <p className="text-white/50 text-base leading-relaxed mb-10 max-w-xl mx-auto">
+          <p className="text-white/50 text-sm leading-relaxed mb-10 max-w-md mx-auto">
             Get your own storefront, reach new customers, and represent your culture.
           </p>
           <Link

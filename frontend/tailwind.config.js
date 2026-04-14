@@ -8,10 +8,13 @@ export default {
     extend: {
       colors: {
         'midnight': '#111111',
-        'gold': '#FFFFFF',
-        'sand': '#F5F5F5',
+        'sand':     '#F7F7F7',
+        'border':   '#E5E5E5',
+        'muted':    '#888888',
+        // legacy aliases kept so nothing breaks
+        'gold':      '#111111',
+        'gold-muted':'#333333',
         'isle-teal': '#111111',
-        'gold-muted': '#E5E5E5',
       },
       fontFamily: {
         sans: ['Inter', 'Arial', 'sans-serif'],

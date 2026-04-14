@@ -86,11 +86,11 @@ export default function ProductDetail() {
 
   if (!product) {
     return (
-      <main className="pt-16 min-h-screen bg-midnight flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-white/40 text-xs tracking-widest uppercase mb-4">404</p>
-          <h1 className="text-white text-3xl font-black uppercase mb-6">Product Not Found</h1>
-          <Link to="/" className="bg-white text-midnight text-xs tracking-widest uppercase font-bold px-8 py-3 inline-block hover:bg-white/90 transition-colors">
+      <main className="pt-16 min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center px-6">
+          <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>
+          <h1 className="text-midnight text-3xl font-black uppercase mb-6 tracking-wide">Product Not Found</h1>
+          <Link to="/" className="bg-midnight text-white text-xs tracking-widest uppercase font-bold px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors">
             Back to Home
           </Link>
         </div>
@@ -99,11 +99,11 @@ export default function ProductDetail() {
   }
 
   return (
-    <main className="pt-16 bg-sand min-h-screen">
+    <main className="pt-16 bg-white min-h-screen">
 
       {/* ── Breadcrumb ── */}
-      <div className="bg-white border-b border-midnight/10">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-2 text-xs tracking-widest uppercase text-midnight/40">
+      <div className="border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-2 text-xs tracking-widest uppercase text-muted">
           <Link to="/" className="hover:text-midnight transition-colors">Home</Link>
           <span>/</span>
           <Link to={`/vendor/${product.vendorId}`} className="hover:text-midnight transition-colors">{product.vendor}</Link>
@@ -114,53 +114,56 @@ export default function ProductDetail() {
 
       {/* ── Product Layout ── */}
       <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
           {/* Image */}
-          <div className="relative overflow-hidden bg-white shadow-sm">
+          <div className="relative overflow-hidden bg-sand">
             <img
               src={product.image}
               alt={product.name}
               className="w-full aspect-square object-cover"
             />
             <div className="absolute top-4 left-4">
-              <span className="bg-midnight text-white text-xs font-bold tracking-widest uppercase px-2 py-1">
+              <span className="bg-white text-midnight text-xs font-bold tracking-widest uppercase px-2.5 py-1">
                 {product.category}
               </span>
             </div>
           </div>
 
           {/* Info */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-7">
 
             {/* Vendor */}
             <Link
               to={`/vendor/${product.vendorId}`}
-              className="text-midnight/40 text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
+              className="text-muted text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
             >
               {product.vendor} →
             </Link>
 
             {/* Name + Price */}
             <div>
-              <h1 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-4">
+              <h1 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide leading-tight mb-5">
                 {product.name}
               </h1>
-              <p className="text-midnight font-black text-3xl">
+              <p className="text-midnight font-black text-2xl">
                 ${product.price}
               </p>
             </div>
 
+            {/* Divider */}
+            <div className="w-full h-px bg-gray-100" />
+
             {/* Description */}
-            <p className="text-midnight/60 text-base leading-relaxed">
+            <p className="text-gray-500 text-sm leading-relaxed">
               {product.description}
             </p>
 
             {/* Details */}
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2.5">
               {product.details.map((detail, i) => (
-                <li key={i} className="flex items-center gap-3 text-sm text-midnight/60">
-                  <div className="w-1 h-1 bg-midnight rounded-full flex-shrink-0" />
+                <li key={i} className="flex items-center gap-3 text-xs text-gray-500 uppercase tracking-wide">
+                  <div className="w-1 h-1 bg-muted rounded-full flex-shrink-0" />
                   {detail}
                 </li>
               ))}
@@ -172,7 +175,7 @@ export default function ProductDetail() {
                 onClick={handleAddToCart}
                 className={`font-black text-xs tracking-widest uppercase px-10 py-4 transition-colors duration-200 flex-1 ${
                   added
-                    ? 'bg-white text-midnight border border-midnight'
+                    ? 'bg-gray-100 text-midnight border border-gray-200'
                     : 'bg-midnight text-white hover:bg-midnight/80'
                 }`}
               >
@@ -180,18 +183,18 @@ export default function ProductDetail() {
               </button>
               <Link
                 to={`/vendor/${product.vendorId}`}
-                className="border border-midnight text-midnight font-black text-xs tracking-widest uppercase px-8 py-4 hover:bg-midnight hover:text-white transition-colors duration-200 text-center"
+                className="border border-gray-200 text-midnight font-black text-xs tracking-widest uppercase px-8 py-4 hover:border-midnight transition-colors duration-200 text-center"
               >
                 Visit Store
               </Link>
             </div>
 
-            {/* Vendor Card */}
-            <div className="border border-midnight/10 bg-white p-5 mt-2">
-              <p className="text-midnight/40 text-xs tracking-widest uppercase mb-2">Sold by</p>
+            {/* Sold by */}
+            <div className="border border-gray-100 bg-sand p-5">
+              <p className="text-muted text-xs tracking-widest uppercase mb-2">Sold by</p>
               <Link
                 to={`/vendor/${product.vendorId}`}
-                className="text-midnight font-black text-base uppercase tracking-wide hover:underline"
+                className="text-midnight font-black text-sm uppercase tracking-wide hover:text-muted transition-colors"
               >
                 {product.vendor}
               </Link>

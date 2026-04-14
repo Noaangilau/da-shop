@@ -115,102 +115,94 @@ export default function Home() {
       {/* ── Hero ── */}
       <section
         className="relative min-h-screen flex flex-col items-center justify-center text-center px-6"
-        style={{ backgroundColor: '#111111' }}
       >
-        {/* Subtle background texture overlay */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0"
           style={{
             backgroundImage: `url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         />
-        <div className="absolute inset-0 bg-midnight/70" />
+        <div className="absolute inset-0 bg-black/65" />
 
         <div className="relative z-10 max-w-3xl mx-auto">
-          {/* Gold accent line */}
-          <div className="w-16 h-0.5 bg-gold mx-auto mb-8" />
-
-          <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-6">
+          <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-medium mb-8">
             The Pacific Marketplace
           </p>
 
           <h1
             className="text-white font-black uppercase leading-none mb-6"
-            style={{ fontSize: 'clamp(3rem, 10vw, 7rem)', letterSpacing: '0.05em' }}
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 8rem)', letterSpacing: '0.04em' }}
           >
             DA SHOP
           </h1>
 
-          <p className="text-white/60 text-base md:text-lg tracking-widest uppercase mb-12">
+          <p className="text-white/50 text-sm tracking-[0.2em] uppercase mb-14">
             Pacific Culture. All in One Place.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="#products"
-              className="bg-gold text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-gold-muted transition-colors duration-200"
+              className="bg-white text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
             >
               Explore Da Shop
             </a>
             <Link
               to="/become-a-vendor"
-              className="border border-white/30 text-white text-xs tracking-widest uppercase font-bold px-10 py-4 hover:border-gold hover:text-gold transition-colors duration-200"
+              className="border border-white/40 text-white text-xs tracking-widest uppercase font-bold px-10 py-4 hover:border-white hover:bg-white/10 transition-colors duration-200"
             >
               Become a Vendor
             </Link>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
-          <div className="w-px h-12 bg-gold" />
-          <p className="text-gold text-xs tracking-widest uppercase">Scroll</p>
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+          <div className="w-px h-10 bg-white" />
+          <p className="text-white text-xs tracking-widest uppercase">Scroll</p>
         </div>
       </section>
 
-      {/* ── Vendor Strip ── */}
-      <section className="bg-midnight py-24 px-6 border-t border-white/10">
+      {/* ── Featured Stores ── */}
+      <section className="bg-white py-24 px-6 border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
-            <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-3">
+          <div className="mb-14">
+            <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-3">
               Our Vendors
             </p>
-            <h2 className="text-white text-3xl md:text-4xl font-black uppercase tracking-wide">
+            <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
               Featured Stores
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-100">
             {vendors.map((vendor) => (
               <Link
                 key={vendor.id}
                 to={`/vendor/${vendor.id}`}
-                className="group relative overflow-hidden"
+                className="group bg-white overflow-hidden"
               >
-                {/* Image */}
                 <div className="relative h-72 overflow-hidden">
                   <img
                     src={vendor.image}
                     alt={vendor.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-midnight/50 group-hover:bg-midnight/30 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300" />
                 </div>
 
-                {/* Info */}
-                <div className="bg-white/5 border border-white/10 p-6">
-                  <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-1">
+                <div className="p-6">
+                  <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-1">
                     {vendor.category}
                   </p>
-                  <h3 className="text-white text-lg font-black uppercase tracking-wide mb-2">
+                  <h3 className="text-midnight text-lg font-black uppercase tracking-wide mb-2">
                     {vendor.name}
                   </h3>
-                  <p className="text-white/50 text-sm leading-relaxed mb-4">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-5">
                     {vendor.bio}
                   </p>
-                  <span className="text-white text-xs tracking-widest uppercase font-bold group-hover:text-white/60 transition-colors">
+                  <span className="text-midnight text-xs tracking-widest uppercase font-bold group-hover:text-muted transition-colors">
                     Visit Store →
                   </span>
                 </div>
@@ -220,11 +212,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Category Grid ── */}
+      {/* ── Shop by Category ── */}
       <section className="bg-sand py-24 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12">
-            <p className="text-isle-teal text-xs tracking-widest uppercase font-semibold mb-3">
+          <div className="mb-14">
+            <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-3">
               Browse
             </p>
             <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
@@ -232,7 +224,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
             {categories.map((cat) => (
               <Link
                 key={cat.label}
@@ -242,11 +234,11 @@ export default function Home() {
                 <img
                   src={cat.image}
                   alt={cat.label}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-midnight/40 group-hover:bg-midnight/20 transition-colors duration-300" />
+                <div className="absolute inset-0 bg-black/35 group-hover:bg-black/25 transition-colors duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="text-white font-black text-sm uppercase tracking-widest">
+                  <p className="text-white font-black text-xs uppercase tracking-widest">
                     {cat.label}
                   </p>
                 </div>
@@ -257,11 +249,11 @@ export default function Home() {
       </section>
 
       {/* ── Featured Products ── */}
-      <section id="products" className="bg-sand py-24 px-6 border-t border-midnight/10">
+      <section id="products" className="bg-white py-24 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
-              <p className="text-midnight/40 text-xs tracking-widest uppercase font-semibold mb-3">
+              <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-3">
                 {selectedCategory ? selectedCategory : 'New Arrivals'}
               </p>
               <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
@@ -271,50 +263,46 @@ export default function Home() {
             {selectedCategory && (
               <Link
                 to="/"
-                className="text-midnight/40 text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
+                className="text-muted text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
               >
                 ← All Products
               </Link>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-gray-100">
             {filteredProducts.length === 0 ? (
-              <div className="col-span-3 py-16 text-center">
-                <p className="text-midnight/40 text-sm">No products found in this category.</p>
-                <Link to="/" className="text-midnight text-xs tracking-widest uppercase font-bold mt-4 inline-block hover:underline">
+              <div className="col-span-3 py-20 text-center bg-white">
+                <p className="text-muted text-sm uppercase tracking-widest">No products found in this category.</p>
+                <Link to="/" className="text-midnight text-xs tracking-widest uppercase font-bold mt-5 inline-block hover:text-muted transition-colors">
                   View All →
                 </Link>
               </div>
             ) : filteredProducts.map((product) => (
-              <Link key={product.id} to={`/product/${product.id}`} className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
-                {/* Image */}
-                <div className="relative h-64 overflow-hidden">
+              <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
+                <div className="relative overflow-hidden">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="bg-midnight text-white text-xs font-bold tracking-widest uppercase px-2 py-1">
+                    <span className="bg-white text-midnight text-xs font-bold tracking-widest uppercase px-2 py-1">
                       {product.category}
                     </span>
                   </div>
                 </div>
 
-                {/* Info */}
                 <div className="p-5">
-                  <p className="text-midnight/40 text-xs tracking-widest uppercase font-medium mb-1">
+                  <p className="text-muted text-xs tracking-widest uppercase font-medium mb-1">
                     {product.vendor}
                   </p>
-                  <h3 className="text-midnight font-bold text-base mb-3 leading-snug">
+                  <h3 className="text-midnight font-bold text-sm mb-3 leading-snug">
                     {product.name}
                   </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-midnight font-black text-lg">
-                      ${product.price}
-                    </span>
-                  </div>
+                  <span className="text-midnight font-black text-base">
+                    ${product.price}
+                  </span>
                 </div>
               </Link>
             ))}
@@ -323,20 +311,20 @@ export default function Home() {
       </section>
 
       {/* ── Vendor CTA Banner ── */}
-      <section className="bg-isle-teal py-20 px-6">
+      <section className="bg-midnight py-24 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gold text-xs tracking-widest uppercase font-semibold mb-4">
+          <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-4">
             Are you a Pacific vendor?
           </p>
-          <h2 className="text-white text-3xl md:text-4xl font-black uppercase tracking-wide mb-6">
+          <h2 className="text-white text-3xl md:text-5xl font-black uppercase tracking-wide mb-6 leading-tight">
             Sell on Da Shop
           </h2>
-          <p className="text-white/70 text-base leading-relaxed mb-10 max-w-xl mx-auto">
+          <p className="text-white/50 text-sm leading-relaxed mb-12 max-w-md mx-auto">
             Join a growing marketplace built for Pacific vendors. Get your own storefront, reach new customers, and represent your culture.
           </p>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-gold text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-gold-muted transition-colors duration-200"
+            className="inline-block bg-white text-midnight font-black text-xs tracking-widest uppercase px-12 py-4 hover:bg-white/90 transition-colors duration-200"
           >
             Apply to Sell
           </Link>

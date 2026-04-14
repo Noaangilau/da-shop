@@ -35,13 +35,13 @@ export default function Vendors() {
     <main className="pt-16">
 
       {/* ── Header ── */}
-      <section className="bg-midnight py-20 px-6 border-b border-white/10">
+      <section className="bg-white py-20 px-6 border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <div className="w-16 h-px bg-white mb-10" />
-          <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-4">
+          <div className="w-12 h-px bg-midnight mb-10" />
+          <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-4">
             The Marketplace
           </p>
-          <h1 className="text-white text-4xl md:text-6xl font-black uppercase tracking-wide">
+          <h1 className="text-midnight text-4xl md:text-6xl font-black uppercase tracking-wide">
             Our Vendors
           </h1>
         </div>
@@ -50,40 +50,38 @@ export default function Vendors() {
       {/* ── Vendors Grid ── */}
       <section className="bg-sand py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-200">
             {vendors.map((vendor) => (
               <Link
                 key={vendor.id}
                 to={`/vendor/${vendor.id}`}
-                className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="group bg-white"
               >
-                {/* Image */}
-                <div className="relative h-64 overflow-hidden">
+                <div className="relative overflow-hidden">
                   <img
                     src={vendor.image}
                     alt={vendor.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full aspect-[4/3] object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-midnight/30 group-hover:bg-midnight/10 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
                 </div>
 
-                {/* Info */}
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-midnight/40 text-xs tracking-widest uppercase font-semibold">
+                    <p className="text-muted text-xs tracking-widest uppercase font-semibold">
                       {vendor.category}
                     </p>
-                    <p className="text-midnight/30 text-xs">
+                    <p className="text-muted text-xs">
                       {vendor.productCount} products
                     </p>
                   </div>
                   <h2 className="text-midnight text-xl font-black uppercase tracking-wide mb-2">
                     {vendor.name}
                   </h2>
-                  <p className="text-midnight/50 text-sm leading-relaxed mb-4">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4">
                     {vendor.bio}
                   </p>
-                  <p className="text-midnight/40 text-xs tracking-widest uppercase">
+                  <p className="text-muted text-xs tracking-widest uppercase">
                     {vendor.location}
                   </p>
                 </div>
@@ -94,12 +92,12 @@ export default function Vendors() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-midnight py-20 px-6 border-t border-white/10">
+      <section className="bg-midnight py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-white text-3xl font-black uppercase tracking-wide mb-4">
             Want to Sell Here?
           </h2>
-          <p className="text-white/50 text-base leading-relaxed mb-10">
+          <p className="text-white/50 text-sm leading-relaxed mb-10">
             Apply to become a vendor and get your own storefront on DA SHOP.
           </p>
           <Link

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" fill="none">
+
+  <!-- Island Mark: 3 geometric triangles (Polynesian island horizon) -->
+  <!-- Left island — small -->
+  <polygon points="168,78 188,42 208,78" fill="#C49A28"/>
+  <!-- Middle island — tallest -->
+  <polygon points="206,78 228,10 250,78" fill="#C49A28"/>
+  <!-- Right island — small -->
+  <polygon points="248,78 268,42 288,78" fill="#C49A28"/>
+
+  <!-- Ocean baseline -->
+  <rect x="148" y="80" width="160" height="2" fill="#C49A28" opacity="0.35" rx="1"/>
+
+  <!-- Wordmark: DA SHOP -->
+  <text
+    x="228"
+    y="152"
+    font-family="'Arial Black', 'Arial Bold', Arial, sans-serif"
+    font-size="54"
+    font-weight="900"
+    letter-spacing="14"
+    fill="#FFFFFF"
+    text-anchor="middle"
+  >DA SHOP</text>
+
+  <!-- Tagline -->
+  <text
+    x="228"
+    y="176"
+    font-family="Arial, sans-serif"
+    font-size="11"
+    font-weight="400"
+    letter-spacing="4"
+    fill="#C49A28"
+    text-anchor="middle"
+  >PACIFIC CULTURE. ALL IN ONE PLACE.</text>
+
+</svg>

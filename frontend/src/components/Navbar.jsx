@@ -1,58 +1,57 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import logoLight from '../assets/logo-light.svg'
 import { useCart } from '../context/CartContext'
 
+// ─── Nav category links ───────────────────────────────────────────────────────
 const categoryLinks = [
-  { label: 'Clothing', to: '/category/clothing' },
-  { label: 'Jewelry', to: '/category/jewelry' },
-  { label: 'Food', to: '/category/food' },
-  { label: 'Art', to: '/category/art' },
-  { label: 'Accessories', to: '/category/accessories' },
+  { label: 'Clothing',     to: '/category/clothing' },
+  { label: 'Jewelry',      to: '/category/jewelry' },
+  { label: 'Paintings',    to: '/category/paintings' },
+  { label: 'Art Services', to: '/category/art-services' },
+  { label: 'Brands',       to: '/brands' },
 ]
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { totalItems } = useCart()
+
+  // Add border on scroll (Pro Club / Lucid Blanks pattern)
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white">
 
       {/* ── Announcement Strip ── */}
-      <div className="bg-midnight text-white text-center py-2 px-4">
-        <p className="text-xs tracking-widest uppercase font-medium">
-          Pacific Culture. All in One Place. &nbsp;·&nbsp; New vendors dropping soon
+      <div className="bg-midnight">
+        <p className="text-white text-[11px] tracking-[0.12em] uppercase text-center py-2 px-4 font-medium">
+          Free shipping on orders over $150 &nbsp;·&nbsp; New drops every week
         </p>
       </div>
 
       {/* ── Main Nav Row ── */}
-      <div className="border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-14">
+      <div className={`transition-all duration-200 ${scrolled ? 'border-b border-[#E5E5E5]' : 'border-b border-transparent'}`}>
+        <div className="max-w-[1280px] mx-auto px-6 flex items-center justify-between h-14">
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center flex-shrink-0">
+          {/* Logo — left */}
+          <Link to="/" className="flex-shrink-0">
             <img src={logoLight} alt="DA SHOP" className="h-7 w-auto" />
           </Link>
 
-          {/* Desktop — Categories */}
-          <div className="hidden md:flex items-center gap-6">
-            <NavLink
-              to="/vendors"
-              className={({ isActive }) =>
-                `text-xs tracking-widest uppercase font-medium transition-colors ${
-                  isActive ? 'text-midnight' : 'text-gray-400 hover:text-midnight'
-                }`
-              }
-            >
-              Vendors
-            </NavLink>
+          {/* Category links — center (desktop) */}
+          <div className="hidden lg:flex items-center gap-7">
             {categoryLinks.map((link) => (
               <NavLink
                 key={link.label}
                 to={link.to}
                 className={({ isActive }) =>
-                  `text-xs tracking-widest uppercase font-medium transition-colors ${
-                    isActive ? 'text-midnight' : 'text-gray-400 hover:text-midnight'
+                  `text-[11px] tracking-[0.12em] uppercase font-medium transition-colors ${
+                    isActive ? 'text-midnight' : 'text-muted hover:text-midnight'
                   }`
                 }
               >
@@ -61,16 +60,16 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop — Right actions */}
-          <div className="hidden md:flex items-center gap-5">
+          {/* Right actions — cart + become a vendor (desktop) */}
+          <div className="hidden lg:flex items-center gap-5">
             <Link
               to="/become-a-vendor"
-              className="text-xs tracking-widest uppercase font-bold text-gray-400 hover:text-midnight transition-colors"
+              className="text-[11px] tracking-[0.12em] uppercase font-medium text-muted hover:text-midnight transition-colors"
             >
               Sell
             </Link>
 
-            {/* Cart */}
+            {/* Cart icon */}
             <Link to="/cart" className="relative flex items-center" aria-label="Cart">
               <svg
                 className="w-5 h-5 text-midnight"
@@ -86,15 +85,15 @@ export default function Navbar() {
                 />
               </svg>
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-midnight text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                <span className="absolute -top-2 -right-2 bg-midnight text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
             </Link>
           </div>
 
-          {/* Mobile — Cart + Hamburger */}
-          <div className="md:hidden flex items-center gap-4">
+          {/* Mobile — cart + hamburger */}
+          <div className="lg:hidden flex items-center gap-4">
             <Link to="/cart" className="relative flex items-center" aria-label="Cart">
               <svg
                 className="w-5 h-5 text-midnight"
@@ -110,7 +109,7 @@ export default function Navbar() {
                 />
               </svg>
               {totalItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-midnight text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                <span className="absolute -top-2 -right-2 bg-midnight text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -120,39 +119,32 @@ export default function Navbar() {
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label="Toggle menu"
             >
-              <div className="w-5 h-0.5 bg-midnight mb-1.5" />
-              <div className="w-5 h-0.5 bg-midnight mb-1.5" />
-              <div className="w-5 h-0.5 bg-midnight" />
+              <div className={`w-5 h-[1.5px] bg-midnight transition-all ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
+              <div className={`w-5 h-[1.5px] bg-midnight my-[4px] transition-all ${menuOpen ? 'opacity-0' : ''}`} />
+              <div className={`w-5 h-[1.5px] bg-midnight transition-all ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu ── */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-6 flex flex-col gap-4">
-          <Link
-            to="/vendors"
-            onClick={() => setMenuOpen(false)}
-            className="text-gray-500 text-xs tracking-widest uppercase font-medium hover:text-midnight transition-colors"
-          >
-            Vendors
-          </Link>
+        <div className="lg:hidden bg-white border-t border-[#E5E5E5] px-6 py-6 flex flex-col gap-4">
           {categoryLinks.map((link) => (
             <Link
               key={link.label}
               to={link.to}
               onClick={() => setMenuOpen(false)}
-              className="text-gray-500 text-xs tracking-widest uppercase font-medium hover:text-midnight transition-colors"
+              className="text-muted text-[11px] tracking-[0.12em] uppercase font-medium hover:text-midnight transition-colors"
             >
               {link.label}
             </Link>
           ))}
-          <div className="w-full h-px bg-gray-100 my-1" />
+          <div className="w-full h-px bg-[#E5E5E5] my-1" />
           <Link
             to="/become-a-vendor"
             onClick={() => setMenuOpen(false)}
-            className="bg-midnight text-white text-xs tracking-widest uppercase font-bold px-5 py-3 text-center hover:bg-midnight/80 transition-colors"
+            className="bg-midnight text-white text-[11px] tracking-[0.12em] uppercase font-bold px-5 py-3 text-center hover:bg-midnight/80 transition-colors"
           >
             Become a Vendor
           </Link>

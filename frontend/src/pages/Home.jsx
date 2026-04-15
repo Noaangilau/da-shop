@@ -1,49 +1,37 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { products, categories } from '../data/products'
-
-const vendors = [
-  {
-    id: 1,
-    name: 'Frost City Tatau',
-    category: 'Art + Ink',
-    bio: 'Custom Polynesian tattoo art, flash prints, and original Pacific designs.',
-    image: 'https://images.unsplash.com/photo-1598971861713-54ad16a7e72e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 2,
-    name: "D's Fale Mā",
-    category: 'Food + Goods',
-    bio: 'Authentic Pacific island foods, seasonings, and homemade goods straight from the fale.',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 3,
-    name: 'ffiliku',
-    category: 'Fashion',
-    bio: 'Contemporary island fashion rooted in Polynesian identity. Wear your culture.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
-  },
-]
+import { brands } from '../data/brands'
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
+// Design references: Shaka Wear (bold hero, category tiles),
+// Lucid Blanks (filter pills, surgical grid), House of Errors (culture section),
+// Pro Club (utilitarian grid, zero decoration)
+
+// Products available for purchase (excludes art services)
+const shopProducts = products.filter((p) => p.type === 'product')
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState('All')
+  const [activeBrand, setActiveBrand] = useState('All')
   const navigate = useNavigate()
 
-  const filterOptions = ['All', ...categories.map((c) => c.label)]
+  // Category filter options
+  const categoryOptions = ['All', ...new Set(shopProducts.map((p) => p.category))]
+  // Brand filter options
+  const brandOptions = ['All', ...brands.map((b) => b.name)]
 
-  const filteredProducts =
-    activeFilter === 'All'
-      ? products
-      : products.filter((p) => p.category === activeFilter)
+  const filteredProducts = shopProducts.filter((p) => {
+    const matchCat = activeFilter === 'All' || p.category === activeFilter
+    const matchBrand = activeBrand === 'All' || p.brand === activeBrand
+    return matchCat && matchBrand
+  })
 
   return (
     <main className="pt-[88px]">
 
-      {/* ── Hero ── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6">
+      {/* ── Hero ─────────────────────────────────────────────────────────────── */}
+      <section className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -52,78 +40,93 @@ export default function Home() {
             backgroundPosition: 'center',
           }}
         />
-        <div className="absolute inset-0 bg-black/65" />
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/60" />
 
-        <div className="relative z-10 max-w-3xl mx-auto">
-          <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-medium mb-8">
+        <div className="relative z-10 max-w-4xl mx-auto">
+          {/* Overline */}
+          <p className="text-white/40 text-[11px] tracking-[0.5em] uppercase font-medium mb-8">
             The Pacific Marketplace
           </p>
 
+          {/* Display heading */}
           <h1
             className="text-white font-black uppercase leading-none mb-6"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 8rem)', letterSpacing: '0.04em' }}
+            style={{
+              fontSize: 'clamp(3.5rem, 8vw, 8rem)',
+              letterSpacing: '0.04em',
+            }}
           >
             DA SHOP
           </h1>
 
-          <p className="text-white/40 text-[10px] tracking-[0.4em] uppercase mb-14">
-            Pacific Culture. All in One Place.
+          {/* Subheadline */}
+          <p className="text-white/70 text-xs tracking-[0.2em] uppercase mb-14">
+            Pacific Culture. All In One Place.
           </p>
 
+          {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="#products"
-              className="bg-white text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
+              className="bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
             >
               Shop Now
             </a>
             <Link
-              to="/vendors"
-              className="border border-white/30 text-white/80 text-xs tracking-widest uppercase font-bold px-10 py-4 hover:border-white hover:text-white hover:bg-white/10 transition-colors duration-200"
+              to="/brands"
+              className="border border-white/40 text-white text-[11px] tracking-[0.15em] uppercase font-bold px-10 py-4 hover:border-white hover:bg-white/10 transition-colors duration-200"
             >
-              Our Vendors
+              Meet the Brands
             </Link>
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-25">
-          <div className="w-px h-10 bg-white" />
-          <p className="text-white text-[10px] tracking-widest uppercase">Scroll</p>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
+          <div className="w-px h-10 bg-white animate-pulse" />
+          <p className="text-white text-[10px] tracking-[0.3em] uppercase">Scroll</p>
         </div>
       </section>
 
-      {/* ── Shop by Category ── */}
-      <section className="bg-white py-20 px-6 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto">
+      {/* ── Shop by Category ─────────────────────────────────────────────────── */}
+      <section className="bg-white py-20 px-6 border-b border-[#E5E5E5]">
+        <div className="max-w-[1280px] mx-auto">
 
           <div className="mb-10">
             <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
               Browse
             </p>
-            <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
+            <h2
+              className="text-midnight font-black uppercase"
+              style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
+            >
               Shop by Category
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-gray-100">
+          {/* 4-column category tile grid with 1px dividers */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
             {categories.map((cat) => (
               <Link
-                key={cat.label}
-                to={`/category/${cat.label.toLowerCase()}`}
+                key={cat.slug}
+                to={`/category/${cat.slug}`}
                 className="group relative overflow-hidden aspect-square bg-white"
               >
                 <img
                   src={cat.image}
-                  alt={cat.label}
+                  alt={cat.displayLabel || cat.label}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-4">
-                  <p className="text-white font-black text-xs uppercase tracking-widest">
-                    {cat.label}
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-black/45 group-hover:bg-black/30 transition-colors duration-300" />
+                {/* Label */}
+                <div className="absolute inset-0 flex flex-col justify-end p-5">
+                  <p className="text-white font-black text-xs uppercase tracking-[0.15em]">
+                    {cat.displayLabel || cat.label}
                   </p>
-                  <p className="text-white/50 text-[10px] uppercase tracking-wider mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Shop Now →
+                  <p className="text-white/50 text-[10px] uppercase tracking-[0.1em] mt-1 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    Shop →
                   </p>
                 </div>
               </Link>
@@ -133,131 +136,227 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Featured Stores ── */}
-      <section className="bg-sand py-20 px-6 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto">
+      {/* ── Featured Brands ──────────────────────────────────────────────────── */}
+      <section className="bg-[#F7F7F7] py-20 px-6 border-b border-[#E5E5E5]">
+        <div className="max-w-[1280px] mx-auto">
+
           <div className="mb-10 flex items-end justify-between">
             <div>
               <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-                Our Vendors
+                The Marketplace
               </p>
-              <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
-                Featured Stores
+              <h2
+                className="text-midnight font-black uppercase"
+                style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
+              >
+                The Brands
               </h2>
             </div>
             <Link
-              to="/vendors"
-              className="hidden sm:block text-muted text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
+              to="/brands"
+              className="hidden sm:block text-muted text-[11px] tracking-[0.15em] uppercase font-semibold hover:text-midnight transition-colors"
             >
-              All Vendors →
+              All Brands →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-200">
-            {vendors.map((vendor) => (
+          {/* Brand grid — 4 columns with 1px dividers */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+            {brands.map((brand) => (
               <Link
-                key={vendor.id}
-                to={`/vendor/${vendor.id}`}
+                key={brand.id}
+                to={`/brand/${brand.id}`}
                 className="group bg-white overflow-hidden"
               >
-                <div className="relative h-64 overflow-hidden">
+                {/* Brand image */}
+                <div className="relative h-56 overflow-hidden">
                   <img
-                    src={vendor.image}
-                    alt={vendor.name}
+                    src={brand.cardImage}
+                    alt={brand.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-black/25 group-hover:bg-black/15 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
                 </div>
 
-                <div className="p-6 border-t border-gray-100">
+                {/* Brand info */}
+                <div className="p-5 border-t border-[#E5E5E5]">
                   <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
-                    {vendor.category}
+                    {brand.category}
                   </p>
-                  <h3 className="text-midnight text-lg font-black uppercase tracking-wide mb-2">
-                    {vendor.name}
+                  <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-1">
+                    {brand.name}
                   </h3>
-                  <p className="text-gray-400 text-xs leading-relaxed mb-4">
-                    {vendor.bio}
+                  <p className="text-muted text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-midnight transition-colors">
+                    Shop Brand →
                   </p>
-                  <span className="text-midnight text-[10px] tracking-widest uppercase font-black group-hover:text-muted transition-colors">
-                    Visit Store →
-                  </span>
                 </div>
               </Link>
             ))}
           </div>
+
         </div>
       </section>
 
-      {/* ── Featured Products ── */}
-      <section id="products" className="bg-white py-20 px-6">
-        <div className="max-w-7xl mx-auto">
+      {/* ── THE CULTURE — Dark editorial section (House of Errors-inspired) ─── */}
+      <section id="culture" className="bg-midnight py-20 px-6">
+        <div className="max-w-[1280px] mx-auto">
 
-          <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-            <div>
-              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-                New Arrivals
-              </p>
-              <h2 className="text-midnight text-3xl md:text-4xl font-black uppercase tracking-wide">
-                All Products
-              </h2>
-            </div>
+          <div className="mb-12">
+            <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">
+              Our World
+            </p>
+            <h2
+              className="text-white font-black uppercase"
+              style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
+            >
+              The Culture
+            </h2>
           </div>
 
-          {/* ── Filter Pills (Lucid Blanks style) ── */}
-          <div className="flex items-center gap-2 flex-wrap mb-10 pb-10 border-b border-gray-100">
-            {filterOptions.map((f) => (
+          {/* 3 editorial tiles with 1px dividers */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
+            {[
+              {
+                title: 'The Story',
+                body: 'DA SHOP was built to give Pacific vendors a platform that understands the culture — not just the commerce. Every brand here is Pacific-led, community-rooted, and building something real.',
+                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+                to: '/brands',
+              },
+              {
+                title: 'The Artists',
+                body: 'From tattoo artists to fine art painters, the creators behind DA SHOP brands are carrying Pacific tradition into the modern world. Each one has a story. Each one is building a legacy.',
+                image: 'https://images.unsplash.com/photo-1598971861713-54ad16a7e72e?auto=format&fit=crop&w=600&q=80',
+                to: '/brands',
+              },
+              {
+                title: 'The Gallery',
+                body: "Art, fashion, jewelry — all of it rooted in Pacific identity. Browse the editorial gallery to see how DA SHOP's brands express culture through their work.",
+                image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80',
+                to: '/gallery',
+              },
+            ].map((tile) => (
+              <Link
+                key={tile.title}
+                to={tile.to}
+                className="group relative overflow-hidden aspect-[4/5] bg-black"
+              >
+                <img
+                  src={tile.image}
+                  alt={tile.title}
+                  className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
+                />
+                {/* Text overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end p-7">
+                  <div className="w-6 h-px bg-white mb-5" />
+                  <h3 className="text-white font-black uppercase tracking-wide text-base mb-3">
+                    {tile.title}
+                  </h3>
+                  <p className="text-white/50 text-xs leading-relaxed">
+                    {tile.body}
+                  </p>
+                  <p className="text-white/40 text-[10px] tracking-[0.2em] uppercase mt-5 group-hover:text-white transition-colors">
+                    Explore →
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ── All Products with filter bar ─────────────────────────────────────── */}
+      <section id="products" className="bg-white py-20 px-6">
+        <div className="max-w-[1280px] mx-auto">
+
+          <div className="mb-10">
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
+              New Arrivals
+            </p>
+            <h2
+              className="text-midnight font-black uppercase"
+              style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
+            >
+              All Products
+            </h2>
+          </div>
+
+          {/* ── Filter pills — category (Lucid Blanks style) ── */}
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {categoryOptions.map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`text-xs tracking-widest uppercase font-bold px-5 py-2 border transition-colors duration-150 ${
+                className={`text-[11px] tracking-[0.12em] uppercase font-bold px-5 py-2 border transition-colors duration-150 ${
                   activeFilter === f
                     ? 'bg-midnight text-white border-midnight'
-                    : 'bg-white text-gray-400 border-gray-200 hover:border-midnight hover:text-midnight'
+                    : 'bg-white text-muted border-[#E5E5E5] hover:border-midnight hover:text-midnight'
                 }`}
               >
-                {f}
+                {f === 'Paintings' ? 'Paintings & Prints' : f}
               </button>
             ))}
           </div>
 
+          {/* ── Brand filter row ── */}
+          <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-[#E5E5E5]">
+            <span className="text-muted text-[10px] tracking-[0.15em] uppercase mr-2">Brand:</span>
+            {brandOptions.map((b) => (
+              <button
+                key={b}
+                onClick={() => setActiveBrand(b)}
+                className={`text-[11px] tracking-[0.1em] uppercase font-medium px-4 py-1.5 border transition-colors duration-150 ${
+                  activeBrand === b
+                    ? 'bg-midnight text-white border-midnight'
+                    : 'bg-white text-muted border-[#E5E5E5] hover:border-midnight hover:text-midnight'
+                }`}
+              >
+                {b}
+              </button>
+            ))}
+          </div>
+
+          {/* ── Product grid ── */}
           {filteredProducts.length === 0 ? (
             <div className="py-24 text-center">
               <p className="text-muted text-sm uppercase tracking-widest mb-6">
-                No products in this category yet.
+                No products match this filter.
               </p>
               <button
-                onClick={() => setActiveFilter('All')}
-                className="bg-midnight text-white font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
+                onClick={() => { setActiveFilter('All'); setActiveBrand('All') }}
+                className="bg-midnight text-white font-black text-[11px] tracking-[0.12em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
               >
-                View All
+                Clear Filters
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-gray-100">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
               {filteredProducts.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
+                  {/* Product image */}
                   <div className="relative overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name}
                       className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                     />
+                    {/* Category badge — appears on hover only */}
                     <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <span className="bg-white text-midnight text-[10px] font-black tracking-widest uppercase px-2 py-1">
-                        {product.category}
+                      <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
+                        {product.category === 'Paintings' ? 'Paintings & Prints' : product.category}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-4 border-t border-gray-100">
-                    <p className="text-muted text-[10px] tracking-widest uppercase font-medium mb-1">
-                      {product.vendor}
+                  {/* Product info */}
+                  <div className="p-4 border-t border-[#E5E5E5]">
+                    <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                      {product.brand}
                     </p>
-                    <h3 className="text-midnight font-bold text-sm mb-2 leading-snug">
+                    <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">
                       {product.name}
                     </h3>
-                    <span className="text-midnight font-black text-sm">
+                    <span className="text-midnight font-bold text-[13px]">
                       ${product.price}
                     </span>
                   </div>
@@ -266,35 +365,29 @@ export default function Home() {
             </div>
           )}
 
-          {activeFilter !== 'All' && (
-            <div className="mt-8 text-center">
-              <button
-                onClick={() => navigate(`/category/${activeFilter.toLowerCase()}`)}
-                className="text-muted text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
-              >
-                See all {activeFilter} →
-              </button>
-            </div>
-          )}
-
         </div>
       </section>
 
-      {/* ── Vendor CTA Banner ── */}
-      <section className="bg-midnight py-24 px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-5">
-            Are you a Pacific vendor?
-          </p>
-          <h2 className="text-white text-3xl md:text-5xl font-black uppercase tracking-wide mb-6 leading-tight">
-            Sell on Da Shop
-          </h2>
-          <p className="text-white/40 text-sm leading-relaxed mb-12 max-w-md mx-auto">
-            Join a growing marketplace built for Pacific vendors. Get your own storefront, reach new customers, and represent your culture.
-          </p>
+      {/* ── Become a Vendor CTA ───────────────────────────────────────────────── */}
+      <section className="bg-[#F7F7F7] py-24 px-6 border-t border-[#E5E5E5]">
+        <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+          <div>
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
+              Pacific vendors
+            </p>
+            <h2
+              className="text-midnight font-black uppercase"
+              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', letterSpacing: '0.04em' }}
+            >
+              Sell on DA SHOP
+            </h2>
+            <p className="text-muted text-sm leading-relaxed mt-4 max-w-md">
+              Get your own branded storefront, reach new customers, and represent your culture — on your terms.
+            </p>
+          </div>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-white text-midnight font-black text-xs tracking-widest uppercase px-12 py-4 hover:bg-white/90 transition-colors duration-200"
+            className="flex-shrink-0 bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-midnight/80 transition-colors duration-200"
           >
             Apply to Sell
           </Link>

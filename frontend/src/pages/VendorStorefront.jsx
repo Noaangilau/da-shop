@@ -61,7 +61,7 @@ export default function VendorStorefront() {
 
   if (!vendor) {
     return (
-      <main className="pt-16 min-h-screen bg-white flex items-center justify-center">
+      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
           <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>
           <h1 className="text-midnight text-3xl font-black uppercase mb-6 tracking-wide">Vendor Not Found</h1>
@@ -74,7 +74,7 @@ export default function VendorStorefront() {
   }
 
   return (
-    <main className="pt-16">
+    <main className="pt-[88px]">
 
       {/* ── Vendor Hero ── */}
       <section className="relative h-80 md:h-[28rem] overflow-hidden">

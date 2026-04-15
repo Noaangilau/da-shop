@@ -32,7 +32,7 @@ const vendors = [
 
 export default function Vendors() {
   return (
-    <main className="pt-16">
+    <main className="pt-[88px]">
 
       {/* ── Header ── */}
       <section className="bg-white py-20 px-6 border-b border-gray-100">

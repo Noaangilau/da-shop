@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function NotFound() {
   return (
-    <main className="pt-16 min-h-screen bg-white flex items-center justify-center px-6">
+    <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
       <div className="text-center">
         <div className="w-12 h-px bg-midnight mx-auto mb-10" />
         <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>

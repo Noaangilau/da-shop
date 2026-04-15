@@ -58,13 +58,13 @@ export default function BecomeAVendor() {
 
   if (submitted) {
     return (
-      <main className="pt-16 min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="w-12 h-px bg-midnight mx-auto mb-10" />
           <h1 className="text-midnight text-3xl font-black uppercase tracking-wide mb-4">
             Application Received
           </h1>
-          <p className="text-gray-500 text-sm leading-relaxed mb-10">
+          <p className="text-gray-400 text-sm leading-relaxed mb-10">
             Thanks for applying to sell on DA SHOP. We'll review your application and get back to you within 3–5 business days.
           </p>
           <Link
@@ -79,45 +79,45 @@ export default function BecomeAVendor() {
   }
 
   return (
-    <main className="pt-16">
+    <main className="pt-[88px]">
 
       {/* ── Hero ── */}
       <section
-        className="relative py-28 px-6 flex items-center justify-center text-center"
+        className="relative py-32 px-6 flex items-center justify-center text-center"
         style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=70')`,
+          backgroundImage: `url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1400&q=70')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/70" />
         <div className="relative z-10 max-w-2xl mx-auto">
-          <p className="text-white/50 text-xs tracking-[0.3em] uppercase font-medium mb-5">
+          <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-medium mb-6">
             Join the Marketplace
           </p>
           <h1 className="text-white text-4xl md:text-6xl font-black uppercase tracking-wide leading-tight mb-5">
             Become a Vendor
           </h1>
-          <p className="text-white/50 text-sm leading-relaxed max-w-lg mx-auto">
+          <p className="text-white/40 text-sm leading-relaxed max-w-lg mx-auto">
             DA SHOP is built for Pacific vendors. Get your own storefront, reach new customers, and represent your culture on your terms.
           </p>
         </div>
       </section>
 
       {/* ── Why DA SHOP ── */}
-      <section className="bg-sand py-16 px-6 border-b border-gray-100">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-200">
+      <section className="bg-white py-16 px-6 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-100">
           {[
             { title: 'Your Own Storefront', body: 'A dedicated page for your brand, your products, and your story — no noise from other vendors.' },
             { title: 'Built for the Culture', body: 'A marketplace made specifically for Pacific vendors. Your buyers already know what they are looking for.' },
             { title: 'Simple Setup', body: 'No tech skills needed. Apply below, we handle the rest and get you live within the week.' },
           ].map((item) => (
             <div key={item.title} className="bg-white p-8">
-              <div className="w-8 h-px bg-midnight mb-6" />
+              <div className="w-6 h-px bg-midnight mb-6" />
               <h3 className="text-midnight font-black uppercase tracking-wide text-xs mb-3">
                 {item.title}
               </h3>
-              <p className="text-gray-500 text-sm leading-relaxed">
+              <p className="text-gray-400 text-sm leading-relaxed">
                 {item.body}
               </p>
             </div>
@@ -126,10 +126,10 @@ export default function BecomeAVendor() {
       </section>
 
       {/* ── Application Form ── */}
-      <section className="bg-white py-20 px-6">
+      <section className="bg-sand py-20 px-6">
         <div className="max-w-lg mx-auto">
           <div className="mb-12">
-            <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-3">
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
               Step 1 of 1
             </p>
             <h2 className="text-midnight text-3xl font-black uppercase tracking-wide">
@@ -140,7 +140,7 @@ export default function BecomeAVendor() {
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-midnight text-xs tracking-widest uppercase font-semibold">
+              <label className="text-midnight text-[10px] tracking-widest uppercase font-semibold">
                 Business Name <span className="text-red-400">*</span>
               </label>
               <input
@@ -154,7 +154,7 @@ export default function BecomeAVendor() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-midnight text-xs tracking-widest uppercase font-semibold">
+              <label className="text-midnight text-[10px] tracking-widest uppercase font-semibold">
                 Your Name <span className="text-red-400">*</span>
               </label>
               <input
@@ -168,7 +168,7 @@ export default function BecomeAVendor() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-midnight text-xs tracking-widest uppercase font-semibold">
+              <label className="text-midnight text-[10px] tracking-widest uppercase font-semibold">
                 Email Address <span className="text-red-400">*</span>
               </label>
               <input
@@ -182,9 +182,9 @@ export default function BecomeAVendor() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-midnight text-xs tracking-widest uppercase font-semibold">
+              <label className="text-midnight text-[10px] tracking-widest uppercase font-semibold">
                 Instagram Handle{' '}
-                <span className="text-muted font-normal normal-case tracking-normal">(optional)</span>
+                <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>
               </label>
               <input
                 type="text"
@@ -197,7 +197,7 @@ export default function BecomeAVendor() {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-midnight text-xs tracking-widest uppercase font-semibold">
+              <label className="text-midnight text-[10px] tracking-widest uppercase font-semibold">
                 Product Category <span className="text-red-400">*</span>
               </label>
               <select

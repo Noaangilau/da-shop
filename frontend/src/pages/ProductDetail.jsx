@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useCart } from '../context/CartContext'
 
 // ─── Demo Data ────────────────────────────────────────────────────────────────
 
@@ -70,6 +71,72 @@ const productData = {
     description: "Named after the Sāmoan concept of relational space, the Vā tote is heavy-duty canvas with hand-printed Pacific motifs. Carry your culture, literally.",
     details: ['Heavy-duty canvas', 'Hand-printed design', 'Reinforced straps', 'One size'],
   },
+  7: {
+    id: 7,
+    name: 'Pacific Motif Sticker Set',
+    vendor: 'Frost City Tatau',
+    vendorId: 1,
+    price: 18,
+    category: 'Art',
+    image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?auto=format&fit=crop&w=1200&q=80',
+    description: 'A set of 12 die-cut vinyl stickers featuring original Pacific motifs. Weatherproof, vibrant, and made to last. Stick them everywhere — your laptop, your ride, your gear.',
+    details: ['12 stickers per set', 'Weatherproof vinyl', 'Ships within 1 business day'],
+  },
+  8: {
+    id: 8,
+    name: 'Tatau Reference Book',
+    vendor: 'Frost City Tatau',
+    vendorId: 1,
+    price: 55,
+    category: 'Art',
+    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1200&q=80',
+    description: 'A comprehensive visual reference guide to Polynesian tatau traditions. Over 200 pages of imagery, history, and symbolic meaning — written in collaboration with Pacific artists and scholars.',
+    details: ['240 pages, hardcover', 'Full-colour throughout', 'Ships within 3 business days'],
+  },
+  9: {
+    id: 9,
+    name: 'Coconut Caramel Sauce',
+    vendor: "D's Fale Mā",
+    vendorId: 2,
+    price: 16,
+    category: 'Food',
+    image: 'https://images.unsplash.com/photo-1481931098730-318b6f776db0?auto=format&fit=crop&w=1200&q=80',
+    description: "House-made from real coconut cream and raw cane sugar. Drizzle it on everything — ice cream, pancakes, fresh fruit. The taste of the islands in a jar.",
+    details: ['250ml glass jar', 'No artificial flavours', 'Refrigerate after opening'],
+  },
+  10: {
+    id: 10,
+    name: 'Island Spice Bundle',
+    vendor: "D's Fale Mā",
+    vendorId: 2,
+    price: 38,
+    category: 'Food',
+    image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1200&q=80',
+    description: "Four of D's best-selling spice blends in one bundle. Season your fish, your taro, your coconut rice — or gift it to someone who loves to cook Pacific.",
+    details: ['4 x 50g spice bags', 'Includes recipe booklet', 'Ships within 2 business days'],
+  },
+  11: {
+    id: 11,
+    name: 'Moana Linen Trousers',
+    vendor: 'ffiliku',
+    vendorId: 3,
+    price: 95,
+    category: 'Clothing',
+    image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=1200&q=80',
+    description: 'Wide-leg linen trousers with a relaxed island fit. Designed for the heat, built to move. The kind of pant you reach for first.',
+    details: ['100% linen', 'Sizes XS–3XL', 'Machine washable', 'Elastic waistband'],
+  },
+  12: {
+    id: 12,
+    name: 'Pacific Print Bucket Hat',
+    vendor: 'ffiliku',
+    vendorId: 3,
+    price: 48,
+    category: 'Accessories',
+    image: 'https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=1200&q=80',
+    description: 'A structured bucket hat in a bold Pacific print. Adjustable fit, UV-protective fabric. Made to be worn in the sun, at the beach, anywhere the vibe is right.',
+    details: ['UV-protective fabric', 'Adjustable inner band', 'One size fits most'],
+  },
 }
 
 // ─── Product Detail Page ──────────────────────────────────────────────────────
@@ -77,16 +144,18 @@ const productData = {
 export default function ProductDetail() {
   const { id } = useParams()
   const product = productData[id]
+  const { addToCart } = useCart()
   const [added, setAdded] = useState(false)
 
   function handleAddToCart() {
+    addToCart(product)
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }
 
   if (!product) {
     return (
-      <main className="pt-16 min-h-screen bg-white flex items-center justify-center">
+      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
           <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>
           <h1 className="text-midnight text-3xl font-black uppercase mb-6 tracking-wide">Product Not Found</h1>
@@ -99,14 +168,19 @@ export default function ProductDetail() {
   }
 
   return (
-    <main className="pt-16 bg-white min-h-screen">
+    <main className="pt-[88px] bg-white min-h-screen">
 
       {/* ── Breadcrumb ── */}
       <div className="border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-2 text-xs tracking-widest uppercase text-muted">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-2 text-[10px] tracking-widest uppercase text-muted">
           <Link to="/" className="hover:text-midnight transition-colors">Home</Link>
           <span>/</span>
-          <Link to={`/vendor/${product.vendorId}`} className="hover:text-midnight transition-colors">{product.vendor}</Link>
+          <Link
+            to={`/category/${product.category.toLowerCase()}`}
+            className="hover:text-midnight transition-colors"
+          >
+            {product.category}
+          </Link>
           <span>/</span>
           <span className="text-midnight">{product.name}</span>
         </div>
@@ -124,9 +198,12 @@ export default function ProductDetail() {
               className="w-full aspect-square object-cover"
             />
             <div className="absolute top-4 left-4">
-              <span className="bg-white text-midnight text-xs font-bold tracking-widest uppercase px-2.5 py-1">
+              <Link
+                to={`/category/${product.category.toLowerCase()}`}
+                className="bg-white text-midnight text-[10px] font-black tracking-widest uppercase px-2.5 py-1 hover:bg-midnight hover:text-white transition-colors"
+              >
                 {product.category}
-              </span>
+              </Link>
             </div>
           </div>
 
@@ -136,7 +213,7 @@ export default function ProductDetail() {
             {/* Vendor */}
             <Link
               to={`/vendor/${product.vendorId}`}
-              className="text-muted text-xs tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
+              className="text-muted text-[10px] tracking-widest uppercase font-semibold hover:text-midnight transition-colors"
             >
               {product.vendor} →
             </Link>
@@ -162,8 +239,8 @@ export default function ProductDetail() {
             {/* Details */}
             <ul className="flex flex-col gap-2.5">
               {product.details.map((detail, i) => (
-                <li key={i} className="flex items-center gap-3 text-xs text-gray-500 uppercase tracking-wide">
-                  <div className="w-1 h-1 bg-muted rounded-full flex-shrink-0" />
+                <li key={i} className="flex items-center gap-3 text-[10px] text-gray-400 uppercase tracking-wide">
+                  <div className="w-1 h-1 bg-gray-300 rounded-full flex-shrink-0" />
                   {detail}
                 </li>
               ))}
@@ -182,21 +259,21 @@ export default function ProductDetail() {
                 {added ? '✓ Added to Cart' : 'Add to Cart'}
               </button>
               <Link
-                to={`/vendor/${product.vendorId}`}
+                to="/cart"
                 className="border border-gray-200 text-midnight font-black text-xs tracking-widest uppercase px-8 py-4 hover:border-midnight transition-colors duration-200 text-center"
               >
-                Visit Store
+                View Cart
               </Link>
             </div>
 
             {/* Sold by */}
-            <div className="border border-gray-100 bg-sand p-5">
-              <p className="text-muted text-xs tracking-widest uppercase mb-2">Sold by</p>
+            <div className="border border-gray-100 p-5">
+              <p className="text-muted text-[10px] tracking-widest uppercase mb-2">Sold by</p>
               <Link
                 to={`/vendor/${product.vendorId}`}
                 className="text-midnight font-black text-sm uppercase tracking-wide hover:text-muted transition-colors"
               >
-                {product.vendor}
+                {product.vendor} →
               </Link>
             </div>
 

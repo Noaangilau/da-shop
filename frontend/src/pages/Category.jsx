@@ -1,39 +1,73 @@
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { products, categories } from '../data/products'
-import { brands } from '../data/brands'
+
+// ─── Clothing subcategory filters ─────────────────────────────────────────────
+const clothingSubcategories = [
+  { label: 'All',          sub: 'all' },
+  { label: 'New Arrivals', sub: 'new' },
+  { label: 'T-Shirts',     sub: 't-shirts' },
+  { label: 'Shirts',       sub: 'shirts' },
+  { label: 'Fleece',       sub: 'fleece' },
+  { label: 'Outerwear',    sub: 'outerwear' },
+  { label: 'Denim',        sub: 'denim' },
+  { label: 'Bottoms',      sub: 'bottoms' },
+  { label: 'Footwear',     sub: 'footwear' },
+  { label: 'Men',          sub: 'men' },
+  { label: 'Women',        sub: 'women' },
+  { label: 'Accessories',  sub: 'accessories' },
+]
 
 // ─── Category Page — /category/:slug ─────────────────────────────────────────
 
 export default function Category() {
   const { slug } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [activeBrand, setActiveBrand] = useState('All')
+
+  const activeSub = searchParams.get('sub') || 'all'
+  const isClothing = slug === 'clothing'
+  const isServices = slug === 'art-services'
 
   // Match slug to category
   const matched = categories.find((c) => c.slug === slug)
   const label = matched ? matched.label : slug
   const displayLabel = matched?.displayLabel || matched?.label || slug
 
-  // Filter products to this category (products only, no services)
+  // Base product list for this category
   const categoryProducts = products.filter(
     (p) => p.category.toLowerCase() === label.toLowerCase() && p.type !== 'service'
   )
-
-  // Also include Art Services if slug is art-services
-  const isServices = slug === 'art-services'
-  const serviceProducts = isServices
-    ? products.filter((p) => p.type === 'service')
-    : []
-
+  const serviceProducts = isServices ? products.filter((p) => p.type === 'service') : []
   const allRelevant = isServices ? serviceProducts : categoryProducts
 
-  // Brands in this category for the brand filter
+  // Brand filter
   const brandsInCategory = ['All', ...new Set(allRelevant.map((p) => p.brand))]
+  const brandFiltered =
+    activeBrand === 'All' ? allRelevant : allRelevant.filter((p) => p.brand === activeBrand)
 
-  const filtered =
-    activeBrand === 'All'
-      ? allRelevant
-      : allRelevant.filter((p) => p.brand === activeBrand)
+  // Subcategory filter (clothing only)
+  let filtered = brandFiltered
+  if (isClothing && activeSub !== 'all' && activeSub !== 'new') {
+    if (activeSub === 'men' || activeSub === 'women') {
+      const genderLabel = activeSub === 'men' ? 'Men' : 'Women'
+      filtered = brandFiltered.filter((p) => p.gender?.includes(genderLabel))
+    } else {
+      filtered = brandFiltered.filter(
+        (p) => p.subcategory?.toLowerCase() === activeSub
+      )
+    }
+  }
+
+  function handleSubClick(sub) {
+    if (sub === 'all') {
+      searchParams.delete('sub')
+      setSearchParams(searchParams)
+    } else {
+      setSearchParams({ sub })
+    }
+    setActiveBrand('All')
+  }
 
   return (
     <main className="pt-[88px]">
@@ -65,6 +99,29 @@ export default function Category() {
         </div>
       </section>
 
+      {/* ── Clothing subcategory nav bar ── */}
+      {isClothing && (
+        <div className="bg-white border-b border-[#E5E5E5] overflow-x-auto">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="flex items-center gap-0 min-w-max">
+              {clothingSubcategories.map((item) => (
+                <button
+                  key={item.sub}
+                  onClick={() => handleSubClick(item.sub)}
+                  className={`px-5 py-4 text-[11px] tracking-[0.1em] uppercase font-medium border-b-2 transition-colors whitespace-nowrap ${
+                    activeSub === item.sub
+                      ? 'border-midnight text-midnight'
+                      : 'border-transparent text-muted hover:text-midnight'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Products / Services ── */}
       <section className="bg-[#F7F7F7] py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
@@ -73,7 +130,18 @@ export default function Category() {
           <div className="flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase text-muted mb-10">
             <Link to="/" className="hover:text-midnight transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-midnight">{displayLabel}</span>
+            <Link to="/category/clothing" className="hover:text-midnight transition-colors">
+              {displayLabel}
+            </Link>
+            {isClothing && activeSub !== 'all' && (
+              <>
+                <span>/</span>
+                <span className="text-midnight">
+                  {clothingSubcategories.find((c) => c.sub === activeSub)?.label || activeSub}
+                </span>
+              </>
+            )}
+            {!isClothing && <span className="text-midnight">{displayLabel}</span>}
           </div>
 
           {/* ── Brand filter pills ── */}
@@ -99,15 +167,18 @@ export default function Category() {
           {/* No results */}
           {filtered.length === 0 ? (
             <div className="py-24 text-center bg-white">
-              <p className="text-muted text-sm uppercase tracking-widest mb-6">
-                No {isServices ? 'services' : 'products'} in this category yet.
+              <p className="text-muted text-sm uppercase tracking-widest mb-2">
+                No products in this section yet.
               </p>
-              <Link
-                to="/"
+              <p className="text-gray-400 text-xs mb-8">
+                Check back soon — new drops every week.
+              </p>
+              <button
+                onClick={() => handleSubClick('all')}
                 className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.12em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
               >
-                Browse All
-              </Link>
+                View All Clothing
+              </button>
             </div>
           ) : isServices ? (
             /* ── Art Services layout ── */
@@ -158,11 +229,13 @@ export default function Category() {
                       alt={product.name}
                       className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
-                        {displayLabel}
-                      </span>
-                    </div>
+                    {product.subcategory && (
+                      <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
+                          {product.subcategory}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <div className="p-4 border-t border-[#E5E5E5]">
                     <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">

@@ -1,10 +1,13 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
+import { useAuth } from '../context/AuthContext'
 
 // ─── Cart Page — /cart ────────────────────────────────────────────────────────
 
 export default function Cart() {
   const { cart, removeFromCart, updateQty, clearCart, totalItems, totalPrice } = useCart()
+  const { customer } = useAuth()
+  const navigate = useNavigate()
 
   if (cart.length === 0) {
     return (
@@ -148,7 +151,10 @@ export default function Cart() {
                 </span>
               </div>
 
-              <button className="w-full bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200 mb-3">
+              <button
+                onClick={() => customer ? navigate('/checkout') : navigate('/login?next=/checkout')}
+                className="w-full bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200 mb-3"
+              >
                 Proceed to Checkout
               </button>
 

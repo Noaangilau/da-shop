@@ -1,3 +1,8 @@
+// DEPRECATED — product data now lives in the backend database.
+// Do not add new products here. Use backend/seed_catalog.py and GET /products instead.
+// The `categories` export below is still used by Home.jsx and Category.jsx for
+// static category tile images and slugs — do not remove it.
+//
 // ─── Shared product + category data ──────────────────────────────────────────
 // Used by: Home, Category, BrandPage, ProductDetail, Cart
 // CATEGORIES: Clothing | Jewelry | Paintings | Art Services

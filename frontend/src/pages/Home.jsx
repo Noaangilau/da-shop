@@ -1,29 +1,76 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { products, categories } from '../data/products'
-import { brands } from '../data/brands'
+import axios from 'axios'
+import { categories } from '../data/products'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
-// Design references: Shaka Wear (bold hero, category tiles),
-// Lucid Blanks (filter pills, surgical grid), House of Errors (culture section),
-// Pro Club (utilitarian grid, zero decoration)
 
-// Products available for purchase (excludes art services)
-const shopProducts = products.filter((p) => p.type === 'product')
+function BrandCardSkeleton() {
+  return (
+    <div className="bg-white overflow-hidden">
+      <div className="h-56 bg-midnight/10 animate-pulse" />
+      <div className="p-5 border-t border-[#E5E5E5] flex flex-col gap-2">
+        <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
+        <div className="h-4 w-32 bg-midnight/10 animate-pulse" />
+      </div>
+    </div>
+  )
+}
+
+function ProductCardSkeleton() {
+  return (
+    <div className="bg-white">
+      <div className="aspect-[4/5] bg-midnight/10 animate-pulse" />
+      <div className="p-4 border-t border-[#E5E5E5] flex flex-col gap-2">
+        <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
+        <div className="h-4 w-full bg-midnight/10 animate-pulse" />
+        <div className="h-3.5 w-12 bg-midnight/10 animate-pulse" />
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState('All')
   const [activeBrand, setActiveBrand] = useState('All')
   const navigate = useNavigate()
 
-  // Category filter options
-  const categoryOptions = ['All', ...new Set(shopProducts.map((p) => p.category))]
-  // Brand filter options
+  const [brands, setBrands] = useState([])
+  const [products, setProducts] = useState([])
+  const [brandsLoading, setBrandsLoading] = useState(true)
+  const [productsLoading, setProductsLoading] = useState(true)
+  const [featuredBrand, setFeaturedBrand] = useState(null)
+  const [featuredProducts, setFeaturedProducts] = useState([])
+
+  useEffect(() => {
+    axios.get(`${API_URL}/brands`)
+      .then((res) => {
+        setBrands(res.data)
+        const first = res.data[0]
+        if (first) {
+          setFeaturedBrand(first)
+          axios.get(`${API_URL}/brands/${first.id}/products`)
+            .then((r) => setFeaturedProducts(r.data.filter((p) => p.type === 'product').slice(0, 4)))
+            .catch(() => {})
+        }
+      })
+      .finally(() => setBrandsLoading(false))
+  }, [])
+
+  useEffect(() => {
+    axios.get(`${API_URL}/products`)
+      .then((res) => setProducts(res.data.filter((p) => p.type === 'product')))
+      .finally(() => setProductsLoading(false))
+  }, [])
+
+  const categoryOptions = ['All', ...new Set(products.map((p) => p.category))]
   const brandOptions = ['All', ...brands.map((b) => b.name)]
 
-  const filteredProducts = shopProducts.filter((p) => {
+  const filteredProducts = products.filter((p) => {
     const matchCat = activeFilter === 'All' || p.category === activeFilter
-    const matchBrand = activeBrand === 'All' || p.brand === activeBrand
+    const matchBrand = activeBrand === 'All' || p.brand_id === brands.find((b) => b.name === activeBrand)?.id
     return matchCat && matchBrand
   })
 
@@ -40,32 +87,21 @@ export default function Home() {
             backgroundPosition: 'center',
           }}
         />
-        {/* Dark overlay */}
         <div className="absolute inset-0 bg-black/60" />
 
         <div className="relative z-10 max-w-4xl mx-auto">
-          {/* Overline */}
           <p className="text-white/40 text-[11px] tracking-[0.5em] uppercase font-medium mb-8">
             The Pacific Marketplace
           </p>
-
-          {/* Display heading */}
           <h1
             className="text-white font-black uppercase leading-none mb-6"
-            style={{
-              fontSize: 'clamp(3.5rem, 8vw, 8rem)',
-              letterSpacing: '0.04em',
-            }}
+            style={{ fontSize: 'clamp(3.5rem, 8vw, 8rem)', letterSpacing: '0.04em' }}
           >
             DA SHOP
           </h1>
-
-          {/* Subheadline */}
           <p className="text-white/70 text-xs tracking-[0.2em] uppercase mb-14">
             Pacific Culture. All In One Place.
           </p>
-
-          {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="#products"
@@ -82,7 +118,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
           <div className="w-px h-10 bg-white animate-pulse" />
           <p className="text-white text-[10px] tracking-[0.3em] uppercase">Scroll</p>
@@ -92,11 +127,8 @@ export default function Home() {
       {/* ── Shop by Category ─────────────────────────────────────────────────── */}
       <section className="bg-white py-20 px-6 border-b border-[#E5E5E5]">
         <div className="max-w-[1280px] mx-auto">
-
           <div className="mb-10">
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-              Browse
-            </p>
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Browse</p>
             <h2
               className="text-midnight font-black uppercase"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
@@ -104,8 +136,6 @@ export default function Home() {
               Shop by Category
             </h2>
           </div>
-
-          {/* 4-column category tile grid with 1px dividers */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
             {categories.map((cat) => (
               <Link
@@ -118,9 +148,7 @@ export default function Home() {
                   alt={cat.displayLabel || cat.label}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
-                {/* Overlay */}
                 <div className="absolute inset-0 bg-black/45 group-hover:bg-black/30 transition-colors duration-300" />
-                {/* Label */}
                 <div className="absolute inset-0 flex flex-col justify-end p-5">
                   <p className="text-white font-black text-xs uppercase tracking-[0.15em]">
                     {cat.displayLabel || cat.label}
@@ -132,19 +160,15 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* ── Featured Brands ──────────────────────────────────────────────────── */}
       <section className="bg-[#F7F7F7] py-20 px-6 border-b border-[#E5E5E5]">
         <div className="max-w-[1280px] mx-auto">
-
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-                The Marketplace
-              </p>
+              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">The Marketplace</p>
               <h2
                 className="text-midnight font-black uppercase"
                 style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
@@ -160,51 +184,45 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Brand grid — 4 columns with 1px dividers */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
-            {brands.map((brand) => (
-              <Link
-                key={brand.id}
-                to={`/brand/${brand.id}`}
-                className="group bg-white overflow-hidden"
-              >
-                {/* Brand image */}
-                <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={brand.cardImage}
-                    alt={brand.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
-                </div>
-
-                {/* Brand info */}
-                <div className="p-5 border-t border-[#E5E5E5]">
-                  <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
-                    {brand.category}
-                  </p>
-                  <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-1">
-                    {brand.name}
-                  </h3>
-                  <p className="text-muted text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-midnight transition-colors">
-                    Shop Brand →
-                  </p>
-                </div>
-              </Link>
-            ))}
+            {brandsLoading
+              ? [0, 1, 2, 3].map((i) => <BrandCardSkeleton key={i} />)
+              : brands.map((brand) => (
+                  <Link
+                    key={brand.id}
+                    to={`/brand/${brand.id}`}
+                    className="group bg-white overflow-hidden"
+                  >
+                    <div className="relative h-56 overflow-hidden">
+                      <img
+                        src={brand.card_image_url}
+                        alt={brand.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
+                    </div>
+                    <div className="p-5 border-t border-[#E5E5E5]">
+                      <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
+                        {brand.category}
+                      </p>
+                      <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-1">
+                        {brand.name}
+                      </h3>
+                      <p className="text-muted text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-midnight transition-colors">
+                        Shop Brand →
+                      </p>
+                    </div>
+                  </Link>
+                ))}
           </div>
-
         </div>
       </section>
 
-      {/* ── THE CULTURE — Dark editorial section (House of Errors-inspired) ─── */}
+      {/* ── THE CULTURE ──────────────────────────────────────────────────────── */}
       <section id="culture" className="bg-midnight py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
-
           <div className="mb-12">
-            <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">
-              Our World
-            </p>
+            <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">Our World</p>
             <h2
               className="text-white font-black uppercase"
               style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
@@ -212,8 +230,6 @@ export default function Home() {
               The Culture
             </h2>
           </div>
-
-          {/* 3 editorial tiles with 1px dividers */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
             {[
               {
@@ -245,15 +261,10 @@ export default function Home() {
                   alt={tile.title}
                   className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
                 />
-                {/* Text overlay */}
                 <div className="absolute inset-0 flex flex-col justify-end p-7">
                   <div className="w-6 h-px bg-white mb-5" />
-                  <h3 className="text-white font-black uppercase tracking-wide text-base mb-3">
-                    {tile.title}
-                  </h3>
-                  <p className="text-white/50 text-xs leading-relaxed">
-                    {tile.body}
-                  </p>
+                  <h3 className="text-white font-black uppercase tracking-wide text-base mb-3">{tile.title}</h3>
+                  <p className="text-white/50 text-xs leading-relaxed">{tile.body}</p>
                   <p className="text-white/40 text-[10px] tracking-[0.2em] uppercase mt-5 group-hover:text-white transition-colors">
                     Explore →
                   </p>
@@ -261,18 +272,86 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
         </div>
       </section>
 
-      {/* ── All Products with filter bar ─────────────────────────────────────── */}
+      {/* ── Featured Brand Spotlight ─────────────────────────────────────────── */}
+      {featuredBrand && (
+        <section className="bg-white border-b border-[#E5E5E5]">
+          {/* Editorial header */}
+          <div className="relative h-[24rem] md:h-[32rem] overflow-hidden bg-midnight">
+            {featuredBrand.hero_image_url && (
+              <img
+                src={featuredBrand.hero_image_url}
+                alt={featuredBrand.name}
+                className="w-full h-full object-cover"
+              />
+            )}
+            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 flex items-end">
+              <div className="max-w-[1280px] mx-auto px-6 pb-12 w-full flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+                <div>
+                  <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">
+                    Featured Brand
+                  </p>
+                  {featuredBrand.logo_white_url && (
+                    <img
+                      src={featuredBrand.logo_white_url}
+                      alt={featuredBrand.name}
+                      className="h-9 w-auto mb-4 object-contain object-left"
+                    />
+                  )}
+                  <h2
+                    className="text-white font-black uppercase leading-none"
+                    style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
+                  >
+                    {featuredBrand.name}
+                  </h2>
+                  {featuredBrand.tagline && (
+                    <p className="text-white/50 text-sm italic mt-3 max-w-md">"{featuredBrand.tagline}"</p>
+                  )}
+                </div>
+                <Link
+                  to={`/brand/${featuredBrand.id}`}
+                  className="flex-shrink-0 bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3.5 hover:bg-white/90 transition-colors duration-200 self-end"
+                >
+                  Shop {featuredBrand.name} →
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-product preview grid */}
+          {featuredProducts.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+              {featuredProducts.map((product) => (
+                <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={product.image_url}
+                      alt={product.name}
+                      className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
+                  <div className="p-4 border-t border-[#E5E5E5]">
+                    <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                      {product.collection}
+                    </p>
+                    <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
+                    <span className="text-midnight font-bold text-[13px]">${product.price}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* ── All Products ─────────────────────────────────────────────────────── */}
       <section id="products" className="bg-white py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
-
           <div className="mb-10">
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-              New Arrivals
-            </p>
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">New Arrivals</p>
             <h2
               className="text-midnight font-black uppercase"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
@@ -281,7 +360,7 @@ export default function Home() {
             </h2>
           </div>
 
-          {/* ── Filter pills — category (Lucid Blanks style) ── */}
+          {/* Category filter pills */}
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {categoryOptions.map((f) => (
               <button
@@ -298,7 +377,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/* ── Brand filter row ── */}
+          {/* Brand filter row */}
           <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-[#E5E5E5]">
             <span className="text-muted text-[10px] tracking-[0.15em] uppercase mr-2">Brand:</span>
             {brandOptions.map((b) => (
@@ -316,8 +395,12 @@ export default function Home() {
             ))}
           </div>
 
-          {/* ── Product grid ── */}
-          {filteredProducts.length === 0 ? (
+          {/* Product grid */}
+          {productsLoading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => <ProductCardSkeleton key={i} />)}
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="py-24 text-center">
               <p className="text-muted text-sm uppercase tracking-widest mb-6">
                 No products match this filter.
@@ -333,25 +416,21 @@ export default function Home() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
               {filteredProducts.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
-                  {/* Product image */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={product.image}
+                      src={product.image_url}
                       alt={product.name}
                       className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    {/* Category badge — appears on hover only */}
                     <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
-                        {product.category === 'Paintings' ? 'Paintings & Prints' : product.category}
+                        {product.category}
                       </span>
                     </div>
                   </div>
-
-                  {/* Product info */}
                   <div className="p-4 border-t border-[#E5E5E5]">
                     <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
-                      {product.brand}
+                      {product.collection}
                     </p>
                     <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">
                       {product.name}
@@ -364,7 +443,6 @@ export default function Home() {
               ))}
             </div>
           )}
-
         </div>
       </section>
 
@@ -372,9 +450,7 @@ export default function Home() {
       <section className="bg-[#F7F7F7] py-24 px-6 border-t border-[#E5E5E5]">
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-              Pacific vendors
-            </p>
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Pacific vendors</p>
             <h2
               className="text-midnight font-black uppercase"
               style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', letterSpacing: '0.04em' }}

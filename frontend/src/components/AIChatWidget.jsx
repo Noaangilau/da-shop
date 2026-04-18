@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
+function generateSessionId() {
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+}
 
 export default function AIChatWidget() {
   const [open, setOpen]         = useState(false)
@@ -10,6 +14,7 @@ export default function AIChatWidget() {
     { role: 'assistant', content: "Hi! I'm your DA SHOP assistant. Ask me about our products, brands, sizing, or shipping." }
   ])
   const [loading, setLoading]   = useState(false)
+  const sessionId = useMemo(() => generateSessionId(), [])
   const bottomRef = useRef(null)
 
   useEffect(() => {
@@ -29,7 +34,8 @@ export default function AIChatWidget() {
     try {
       const { data } = await axios.post(`${API_URL}/ai/chat`, {
         message: text,
-        history: next.slice(1, -1),  // all except the greeting and current message
+        history: next.slice(1, -1),
+        session_id: sessionId,
       })
       setMessages([...next, { role: 'assistant', content: data.reply }])
     } catch {

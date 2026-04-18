@@ -7,3 +7,6 @@ python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.9
 anthropic==0.25.8
+resend==2.4.0
+twilio==9.2.3
+stripe==10.5.0

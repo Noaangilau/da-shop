@@ -9,12 +9,33 @@ from database import engine, Base
 import models.vendor_inquiry  # noqa: F401
 import models.customer        # noqa: F401
 import models.order           # noqa: F401
+import models.brand             # noqa: F401
+import models.product           # noqa: F401
+import models.notification_log  # noqa: F401
+import models.chat_log           # noqa: F401
 
-from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin
+from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments
 
 load_dotenv()
 
 Base.metadata.create_all(bind=engine)
+
+
+def _run_migrations():
+    """Add columns introduced after initial schema creation (SQLite ALTER TABLE)."""
+    from sqlalchemy import text
+    migrations = [
+        "ALTER TABLE orders ADD COLUMN payment_intent_id TEXT",
+    ]
+    with engine.connect() as conn:
+        for sql in migrations:
+            try:
+                conn.execute(text(sql))
+                conn.commit()
+            except Exception:
+                pass  # Column already exists
+
+_run_migrations()
 
 app = FastAPI(title="DA SHOP API")
 
@@ -32,6 +53,9 @@ app.include_router(customers.router)
 app.include_router(orders.router)
 app.include_router(ai_chat.router)
 app.include_router(admin.router)
+app.include_router(brands.router)
+app.include_router(products.router)
+app.include_router(payments.router)
 
 
 @app.get("/health")

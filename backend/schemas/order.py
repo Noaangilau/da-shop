@@ -13,6 +13,7 @@ class OrderItemCreate(BaseModel):
 
 
 class OrderCreate(BaseModel):
+    payment_intent_id: Optional[str] = None   # required in prod, optional in dev (no Stripe key)
     items: List[OrderItemCreate]
     email: str
     phone: Optional[str] = None
@@ -38,6 +39,7 @@ class OrderItemResponse(BaseModel):
 class OrderResponse(BaseModel):
     id: int
     customer_id: int
+    payment_intent_id: Optional[str]
     status: str
     subtotal: float
     total: float

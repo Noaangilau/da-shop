@@ -26,10 +26,10 @@ const aboutLinks = [
 ]
 
 const supportLinks = [
-  { label: 'Shipping & Returns', to: '/' },
-  { label: 'Sizing Guide',       to: '/' },
-  { label: 'Contact Us',         to: '/' },
-  { label: 'FAQ',                to: '/' },
+  { label: 'Shipping Info',    to: '/shipping' },
+  { label: 'Returns Policy',   to: '/returns' },
+  { label: 'Terms of Service', to: '/terms' },
+  { label: 'Privacy Policy',   to: '/privacy' },
 ]
 
 function FooterColumn({ title, links }) {

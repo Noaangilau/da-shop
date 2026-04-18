@@ -27,6 +27,20 @@ body {
   text-align: left;
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-6px); }
+  30%       { transform: translateX(6px); }
+  45%       { transform: translateX(-4px); }
+  60%       { transform: translateX(4px); }
+  75%       { transform: translateX(-2px); }
+  90%       { transform: translateX(2px); }
+}
+
+.animate-shake {
+  animation: shake 0.45s ease-in-out;
+}
+
 @layer components {
   .btn-primary {
     @apply bg-midnight text-white font-bold tracking-widest uppercase text-xs px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors duration-200 cursor-pointer;

@@ -21,6 +21,10 @@ import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 import AdminDashboard from './pages/AdminDashboard'
 import NotFound from './pages/NotFound'
+import Terms from './pages/Terms'
+import Privacy from './pages/Privacy'
+import Returns from './pages/Returns'
+import Shipping from './pages/Shipping'
 
 // Redirect /vendor/:id → /brand/:id for backwards compatibility
 function VendorRedirect() {
@@ -68,6 +72,12 @@ function App() {
             {/* Utility routes */}
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/become-a-vendor" element={<BecomeAVendor />} />
+
+            {/* Legal / support */}
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/returns" element={<Returns />} />
+            <Route path="/shipping" element={<Shipping />} />
 
             {/* 404 */}
             <Route path="*" element={<NotFound />} />

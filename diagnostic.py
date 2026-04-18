@@ -17,7 +17,7 @@ import requests
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
 FRONTEND = "https://dashopf-production.up.railway.app"
-BACKEND  = "https://DASHOP.up.railway.app"
+BACKEND  = "https://dashopb-production.up.railway.app"
 PASS     = "✅ PASS"
 FAIL     = "❌ FAIL"
 
@@ -38,7 +38,6 @@ def check(label, passed, detail=""):
 def run_backend_checks():
     print("\n[ BACKEND — API ]")
 
-    # Health check
     try:
         r = requests.get(f"{BACKEND}/health", timeout=5)
         check("GET /health — backend is responding", r.status_code == 200, f"status {r.status_code}")
@@ -47,14 +46,38 @@ def run_backend_checks():
         print("  ⚠️  Backend is offline. Skipping remaining backend checks.")
         return
 
+    # Brands endpoint
+    try:
+        r = requests.get(f"{BACKEND}/brands", timeout=8)
+        check("GET /brands — returns list", r.status_code == 200 and isinstance(r.json(), list),
+              f"count: {len(r.json()) if r.status_code == 200 else 'error'}")
+    except Exception as e:
+        check("GET /brands — returns list", False, str(e))
+
+    # Products endpoint
+    try:
+        r = requests.get(f"{BACKEND}/products", timeout=8)
+        check("GET /products — returns list", r.status_code == 200 and isinstance(r.json(), list),
+              f"count: {len(r.json()) if r.status_code == 200 else 'error'}")
+    except Exception as e:
+        check("GET /products — returns list", False, str(e))
+
+    # Brand 1 products
+    try:
+        r = requests.get(f"{BACKEND}/brands/1/products", timeout=8)
+        check("GET /brands/1/products — brand 1 has products", r.status_code == 200 and len(r.json()) > 0,
+              f"count: {len(r.json()) if r.status_code == 200 else 'error'}")
+    except Exception as e:
+        check("GET /brands/1/products — brand 1 has products", False, str(e))
+
     # Vendor inquiry endpoint — valid payload
     try:
         payload = {
-            "business_name":   "Diagnostic Test Co",
-            "contact_name":    "Test Runner",
-            "email":           "test@diagnostic.com",
+            "business_name":    "Diagnostic Test Co",
+            "contact_name":     "Test Runner",
+            "email":            "test@diagnostic.com",
             "instagram_handle": "@diag",
-            "product_category": "Art + Ink",
+            "product_category": "Clothing",
         }
         r = requests.post(f"{BACKEND}/vendor-inquiry", json=payload, timeout=8)
         check("POST /vendor-inquiry — valid payload accepted", r.status_code in (200, 201),
@@ -62,18 +85,26 @@ def run_backend_checks():
     except Exception as e:
         check("POST /vendor-inquiry — valid payload accepted", False, str(e))
 
-    # Vendor inquiry endpoint — CORS headers present
+    # CORS headers
     try:
         r = requests.options(
-            f"{BACKEND}/vendor-inquiry",
-            headers={"Origin": FRONTEND, "Access-Control-Request-Method": "POST"},
+            f"{BACKEND}/brands",
+            headers={"Origin": FRONTEND, "Access-Control-Request-Method": "GET"},
             timeout=5,
         )
         allowed = r.headers.get("access-control-allow-origin", "")
-        check("OPTIONS /vendor-inquiry — CORS headers present",
+        check("OPTIONS /brands — CORS headers present",
               allowed in ("*", FRONTEND), f"Access-Control-Allow-Origin: {allowed!r}")
     except Exception as e:
-        check("OPTIONS /vendor-inquiry — CORS headers present", False, str(e))
+        check("OPTIONS /brands — CORS headers present", False, str(e))
+
+    # AI chat endpoint (no key = fallback reply)
+    try:
+        r = requests.post(f"{BACKEND}/ai/chat", json={"message": "hi"}, timeout=10)
+        check("POST /ai/chat — returns reply", r.status_code == 200 and "reply" in r.json(),
+              r.json().get("reply", "")[:60] if r.status_code == 200 else f"status {r.status_code}")
+    except Exception as e:
+        check("POST /ai/chat — returns reply", False, str(e))
 
 
 # ─── FRONTEND BROWSER CHECKS ──────────────────────────────────────────────────
@@ -89,25 +120,19 @@ def run_frontend_checks(page):
         check("/ — homepage loads", True, f"title: {title!r}")
     except PlaywrightTimeout as e:
         check("/ — homepage loads", False, str(e))
-        return  # can't continue if home is broken
+        return
 
     try:
-        page.wait_for_selector("text=Explore Da Shop", timeout=5000)
-        check("/ — hero CTA 'Explore Da Shop' visible", True)
+        page.wait_for_selector("text=Shop Now", timeout=5000)
+        check("/ — hero CTA 'Shop Now' visible", True)
     except PlaywrightTimeout:
-        check("/ — hero CTA 'Explore Da Shop' visible", False)
+        check("/ — hero CTA 'Shop Now' visible", False)
 
     try:
-        page.wait_for_selector("text=Become a Vendor", timeout=5000)
-        check("/ — hero CTA 'Become a Vendor' visible", True)
+        page.wait_for_selector("text=Meet the Brands", timeout=5000)
+        check("/ — hero CTA 'Meet the Brands' visible", True)
     except PlaywrightTimeout:
-        check("/ — hero CTA 'Become a Vendor' visible", False)
-
-    try:
-        page.wait_for_selector("text=Featured Stores", timeout=5000)
-        check("/ — vendor strip section visible", True)
-    except PlaywrightTimeout:
-        check("/ — vendor strip section visible", False)
+        check("/ — hero CTA 'Meet the Brands' visible", False)
 
     try:
         page.wait_for_selector("text=Shop by Category", timeout=5000)
@@ -116,108 +141,81 @@ def run_frontend_checks(page):
         check("/ — category grid section visible", False)
 
     try:
-        page.wait_for_selector("text=Featured Products", timeout=5000)
-        check("/ — products grid section visible", True)
+        page.wait_for_selector("text=The Brands", timeout=5000)
+        check("/ — brands section visible", True)
     except PlaywrightTimeout:
-        check("/ — products grid section visible", False)
+        check("/ — brands section visible", False)
 
     try:
-        page.wait_for_selector("text=Sell on Da Shop", timeout=5000)
+        page.wait_for_selector("text=Featured Brand", timeout=8000)
+        check("/ — featured brand spotlight section visible", True)
+    except PlaywrightTimeout:
+        check("/ — featured brand spotlight section visible", False)
+
+    try:
+        page.wait_for_selector("text=All Products", timeout=5000)
+        check("/ — all products section visible", True)
+    except PlaywrightTimeout:
+        check("/ — all products section visible", False)
+
+    try:
+        page.wait_for_selector("text=Sell on DA SHOP", timeout=5000)
         check("/ — vendor CTA banner visible", True)
     except PlaywrightTimeout:
         check("/ — vendor CTA banner visible", False)
 
-    # ── CATEGORY FILTERING ────────────────────────────────────────────────────
-    print("\n[ CATEGORY FILTERING ]")
+    # ── BRAND PAGES ───────────────────────────────────────────────────────────
+    print("\n[ BRAND PAGES ]")
 
-    for cat in ["Art", "Food", "Clothing", "Accessories"]:
+    for bid in [1, 2]:
         try:
-            page.goto(f"{FRONTEND}/?category={cat}")
-            page.wait_for_selector(f"text={cat} Products", timeout=6000)
-            cards = page.locator(".grid a").count()
-            check(f"/?category={cat} — filters to {cat} products", True,
-                  f"{cards} product card(s) visible")
-        except PlaywrightTimeout:
-            check(f"/?category={cat} — filters to {cat} products", False, "heading not found")
-        except Exception as e:
-            check(f"/?category={cat} — filters to {cat} products", False, str(e))
-
-    # Empty category (no products should show empty state)
-    try:
-        page.goto(f"{FRONTEND}/?category=Jewelry")
-        page.wait_for_selector("text=No products found", timeout=6000)
-        check("/?category=Jewelry — empty state shown for no matches", True)
-    except PlaywrightTimeout:
-        check("/?category=Jewelry — empty state shown for no matches", False)
-
-    # "All Products" clear filter link
-    try:
-        page.goto(f"{FRONTEND}/?category=Art")
-        page.wait_for_selector("text=All Products", timeout=6000)
-        page.click("text=← All Products")
-        page.wait_for_selector("text=Featured Products", timeout=6000)
-        check("/?category=Art — '← All Products' clears filter", True)
-    except PlaywrightTimeout:
-        check("/?category=Art — '← All Products' clears filter", False)
-    except Exception as e:
-        check("/?category=Art — '← All Products' clears filter", False, str(e))
-
-    # ── VENDOR STOREFRONTS ────────────────────────────────────────────────────
-    print("\n[ VENDOR STOREFRONTS ]")
-
-    vendors = [
-        (1, "Frost City Tatau"),
-        (2, "D's Fale"),
-        (3, "ffiliku"),
-    ]
-    for vid, vname in vendors:
-        try:
-            page.goto(f"{FRONTEND}/vendor/{vid}")
+            page.goto(f"{FRONTEND}/brand/{bid}")
             page.wait_for_selector("h1", timeout=8000)
-            check(f"/vendor/{vid} — {vname} storefront loads", True)
+            check(f"/brand/{bid} — brand page loads", True)
         except PlaywrightTimeout:
-            check(f"/vendor/{vid} — {vname} storefront loads", False, "h1 not found")
+            check(f"/brand/{bid} — brand page loads", False, "h1 not found")
         except Exception as e:
-            check(f"/vendor/{vid} — {vname} storefront loads", False, str(e))
+            check(f"/brand/{bid} — brand page loads", False, str(e))
 
-        # Products grid on storefront
-        try:
-            page.goto(f"{FRONTEND}/vendor/{vid}")
-            page.wait_for_selector("text=Products", timeout=8000)
-            check(f"/vendor/{vid} — products section visible", True)
-        except PlaywrightTimeout:
-            check(f"/vendor/{vid} — products section visible", False)
-        except Exception as e:
-            check(f"/vendor/{vid} — products section visible", False, str(e))
-
-    # 404 for unknown vendor
+    # Collection tabs visible on brand 1 (if multiple collections)
     try:
-        page.goto(f"{FRONTEND}/vendor/999")
-        page.wait_for_selector("text=Vendor Not Found", timeout=6000)
-        check("/vendor/999 — 404 state shows for unknown vendor", True)
+        page.goto(f"{FRONTEND}/brand/1")
+        page.wait_for_selector("text=Shop ", timeout=8000)
+        tabs = page.locator("button").all()
+        tab_texts = [t.inner_text() for t in tabs if t.inner_text().strip()]
+        check("/brand/1 — page has interactive buttons (tabs or actions)",
+              len(tab_texts) > 0, f"buttons: {tab_texts[:5]}")
+    except Exception as e:
+        check("/brand/1 — page has interactive buttons", False, str(e))
+
+    # 404 for unknown brand
+    try:
+        page.goto(f"{FRONTEND}/brand/999")
+        page.wait_for_selector("text=Brand Not Found", timeout=6000)
+        check("/brand/999 — 404 state shows for unknown brand", True)
     except PlaywrightTimeout:
-        check("/vendor/999 — 404 state shows for unknown vendor", False)
+        check("/brand/999 — 404 state shows for unknown brand", False)
+
+    # Legacy /vendor/:id redirect
+    try:
+        page.goto(f"{FRONTEND}/vendor/1")
+        page.wait_for_url(f"{FRONTEND}/brand/1", timeout=5000)
+        check("/vendor/1 — redirects to /brand/1", True)
+    except Exception as e:
+        check("/vendor/1 — redirects to /brand/1", False, str(e))
 
     # ── PRODUCT DETAIL PAGES ──────────────────────────────────────────────────
     print("\n[ PRODUCT DETAIL PAGES ]")
 
-    products = [
-        (1, "Custom Tatau Flash Sheet"),
-        (2, "Sāmoan Pe'a Art Print"),
-        (3, "Taro & Coconut Cream Bread"),
-        (4, "Oka Ika Seasoning Pack"),
-        (5, "Island Linen Tapa Shirt"),
-        (6, "Vā Collection Tote"),
-    ]
-    for pid, pname in products:
+    for pid in [1, 2, 3]:
         try:
             page.goto(f"{FRONTEND}/product/{pid}")
             page.wait_for_selector("text=Add to Cart", timeout=8000)
-            check(f"/product/{pid} — {pname} loads", True)
+            check(f"/product/{pid} — product page loads", True)
         except PlaywrightTimeout:
-            check(f"/product/{pid} — {pname} loads", False, "Add to Cart button not found")
+            check(f"/product/{pid} — product page loads", False, "Add to Cart button not found")
         except Exception as e:
-            check(f"/product/{pid} — {pname} loads", False, str(e))
+            check(f"/product/{pid} — product page loads", False, str(e))
 
     # 404 for unknown product
     try:
@@ -227,119 +225,112 @@ def run_frontend_checks(page):
     except PlaywrightTimeout:
         check("/product/999 — 404 state shows for unknown product", False)
 
-    # ── ADD TO CART INTERACTION ───────────────────────────────────────────────
-    print("\n[ ADD TO CART ]")
+    # ── SIZE VALIDATION ───────────────────────────────────────────────────────
+    print("\n[ SIZE VALIDATION ]")
     try:
         page.goto(f"{FRONTEND}/product/1")
         page.wait_for_selector("text=Add to Cart", timeout=8000)
         page.click("text=Add to Cart")
-        page.wait_for_selector("text=Added to Cart", timeout=5000)
-        check("/product/1 — Add to Cart shows confirmation", True)
+        page.wait_for_selector("text=Please select a size", timeout=3000)
+        check("/product/1 — size validation triggers without selection", True)
     except PlaywrightTimeout:
-        check("/product/1 — Add to Cart shows confirmation", False, "confirmation text not shown")
+        check("/product/1 — size validation triggers without selection", False,
+              "message not shown (product may have no sizes)")
     except Exception as e:
-        check("/product/1 — Add to Cart shows confirmation", False, str(e))
+        check("/product/1 — size validation triggers without selection", False, str(e))
+
+    # ── CATEGORY PAGES ────────────────────────────────────────────────────────
+    print("\n[ CATEGORY PAGES ]")
+
+    for slug in ["clothing", "jewelry"]:
+        try:
+            page.goto(f"{FRONTEND}/category/{slug}")
+            page.wait_for_selector("h1", timeout=8000)
+            check(f"/category/{slug} — page loads", True)
+        except PlaywrightTimeout:
+            check(f"/category/{slug} — page loads", False, "h1 not found")
+        except Exception as e:
+            check(f"/category/{slug} — page loads", False, str(e))
+
+    # ── LEGAL PAGES ───────────────────────────────────────────────────────────
+    print("\n[ LEGAL PAGES ]")
+
+    for path, heading in [
+        ("/terms",    "Terms of Service"),
+        ("/privacy",  "Privacy Policy"),
+        ("/returns",  "Returns"),
+        ("/shipping", "Shipping"),
+    ]:
+        try:
+            page.goto(f"{FRONTEND}{path}")
+            page.wait_for_selector(f"text={heading}", timeout=6000)
+            check(f"{path} — {heading} page loads", True)
+        except PlaywrightTimeout:
+            check(f"{path} — {heading} page loads", False, "heading not found")
+        except Exception as e:
+            check(f"{path} — {heading} page loads", False, str(e))
+
+    # ── FOOTER SUPPORT LINKS ──────────────────────────────────────────────────
+    print("\n[ FOOTER SUPPORT LINKS ]")
+
+    footer_links = [
+        ("Shipping Info",    f"{FRONTEND}/shipping"),
+        ("Returns Policy",   f"{FRONTEND}/returns"),
+        ("Terms of Service", f"{FRONTEND}/terms"),
+        ("Privacy Policy",   f"{FRONTEND}/privacy"),
+    ]
+    for label, expected_url in footer_links:
+        try:
+            page.goto(FRONTEND)
+            page.wait_for_selector("footer", timeout=5000)
+            page.locator(f"footer >> text={label}").click()
+            page.wait_for_url(expected_url, timeout=5000)
+            check(f"Footer → '{label}' navigates to {expected_url}", True)
+        except Exception as e:
+            check(f"Footer → '{label}' navigates to {expected_url}", False, str(e))
+
+    # ── AUTH PAGES ────────────────────────────────────────────────────────────
+    print("\n[ AUTH PAGES ]")
 
     try:
-        # Button should reset back after ~2 seconds
-        page.wait_for_selector("text=Add to Cart", timeout=5000)
-        check("/product/1 — Add to Cart resets after 2s", True)
+        page.goto(f"{FRONTEND}/login")
+        page.wait_for_selector("input[type='email']", timeout=6000)
+        check("/login — login form loads", True)
     except PlaywrightTimeout:
-        check("/product/1 — Add to Cart resets after 2s", False, "button did not reset")
-
-    # ── BREADCRUMB NAVIGATION ─────────────────────────────────────────────────
-    print("\n[ BREADCRUMB NAVIGATION ]")
-    try:
-        page.goto(f"{FRONTEND}/product/1")
-        page.wait_for_selector("text=Home", timeout=5000)
-        page.click("text=Home")
-        page.wait_for_url(lambda url: url.rstrip("/") == FRONTEND or url == f"{FRONTEND}/", timeout=5000)
-        check("/product/1 breadcrumb → Home navigates correctly", True)
+        check("/login — login form loads", False)
     except Exception as e:
-        check("/product/1 breadcrumb → Home navigates correctly", False, str(e))
+        check("/login — login form loads", False, str(e))
 
     try:
-        page.goto(f"{FRONTEND}/product/1")
-        page.wait_for_selector("text=Frost City Tatau", timeout=5000)
-        page.locator("text=Frost City Tatau").first.click()
-        page.wait_for_url(f"{FRONTEND}/vendor/1", timeout=5000)
-        check("/product/1 breadcrumb → Vendor navigates correctly", True)
-    except Exception as e:
-        check("/product/1 breadcrumb → Vendor navigates correctly", False, str(e))
-
-    # ── VENDORS LISTING PAGE ──────────────────────────────────────────────────
-    print("\n[ VENDORS LISTING PAGE ]")
-    try:
-        page.goto(f"{FRONTEND}/vendors")
-        page.wait_for_selector("h1", timeout=8000)
-        check("/vendors — page loads", True)
+        page.goto(f"{FRONTEND}/signup")
+        page.wait_for_selector("input[type='email']", timeout=6000)
+        check("/signup — signup form loads", True)
     except PlaywrightTimeout:
-        check("/vendors — page loads", False)
+        check("/signup — signup form loads", False)
     except Exception as e:
-        check("/vendors — page loads", False, str(e))
+        check("/signup — signup form loads", False, str(e))
 
-    try:
-        page.goto(f"{FRONTEND}/vendors")
-        page.wait_for_selector("text=Frost City Tatau", timeout=8000)
-        page.locator("text=Frost City Tatau").first.click()
-        page.wait_for_url(f"{FRONTEND}/vendor/1", timeout=5000)
-        check("/vendors — clicking vendor navigates to storefront", True)
-    except Exception as e:
-        check("/vendors — clicking vendor navigates to storefront", False, str(e))
+    # ── BECOME A VENDOR ───────────────────────────────────────────────────────
+    print("\n[ BECOME A VENDOR ]")
 
-    # ── BECOME A VENDOR PAGE ──────────────────────────────────────────────────
-    print("\n[ BECOME A VENDOR — PAGE ]")
     try:
         page.goto(f"{FRONTEND}/become-a-vendor")
-        page.wait_for_selector("text=Apply Now", timeout=8000)
+        page.wait_for_selector("text=Apply", timeout=8000)
         check("/become-a-vendor — page loads", True)
     except PlaywrightTimeout:
         check("/become-a-vendor — page loads", False)
     except Exception as e:
         check("/become-a-vendor — page loads", False, str(e))
 
-    # ── BECOME A VENDOR — FORM VALIDATION ────────────────────────────────────
-    print("\n[ BECOME A VENDOR — FORM VALIDATION ]")
-
-    # Submit empty form
-    try:
-        page.goto(f"{FRONTEND}/become-a-vendor")
-        page.wait_for_selector("text=Submit Application", timeout=8000)
-        page.click("text=Submit Application")
-        page.wait_for_selector("text=Please fill in all required fields", timeout=4000)
-        check("/become-a-vendor — empty submit shows required fields error", True)
-    except PlaywrightTimeout:
-        check("/become-a-vendor — empty submit shows required fields error", False)
-    except Exception as e:
-        check("/become-a-vendor — empty submit shows required fields error", False, str(e))
-
-    # Invalid email
-    try:
-        page.goto(f"{FRONTEND}/become-a-vendor")
-        page.wait_for_selector("input[name='business_name']", timeout=8000)
-        page.fill("input[name='business_name']", "Test Biz")
-        page.fill("input[name='contact_name']", "Test Name")
-        page.fill("input[name='email']", "notanemail")
-        page.select_option("select[name='product_category']", "Art + Ink")
-        page.click("text=Submit Application")
-        page.wait_for_selector("text=valid email", timeout=4000)
-        check("/become-a-vendor — invalid email shows format error", True)
-    except PlaywrightTimeout:
-        check("/become-a-vendor — invalid email shows format error", False)
-    except Exception as e:
-        check("/become-a-vendor — invalid email shows format error", False, str(e))
-
-    # ── BECOME A VENDOR — FULL FORM SUBMISSION ────────────────────────────────
-    print("\n[ BECOME A VENDOR — FORM SUBMISSION ]")
     try:
         page.goto(f"{FRONTEND}/become-a-vendor")
         page.wait_for_selector("input[name='business_name']", timeout=8000)
         page.fill("input[name='business_name']", "Diagnostic Vendor Co")
-        page.fill("input[name='contact_name']", "Test Runner")
-        page.fill("input[name='email']", f"diag+{int(time.time())}@test.com")
+        page.fill("input[name='contact_name']",  "Test Runner")
+        page.fill("input[name='email']",          f"diag+{int(time.time())}@test.com")
         page.fill("input[name='instagram_handle']", "@diagnostic")
-        page.select_option("select[name='product_category']", "Art + Ink")
-        page.click("text=Submit Application")
+        page.select_option("select[name='product_category']", index=1)
+        page.click("button[type='submit']")
         page.wait_for_selector("text=Application Received", timeout=10000)
         check("/become-a-vendor — form submits and shows success screen", True)
     except PlaywrightTimeout:
@@ -348,142 +339,45 @@ def run_frontend_checks(page):
     except Exception as e:
         check("/become-a-vendor — form submits and shows success screen", False, str(e))
 
-    # Back to Home from success screen
-    try:
-        page.wait_for_selector("text=Back to Home", timeout=5000)
-        page.click("text=Back to Home")
-        page.wait_for_url(lambda url: url.rstrip("/") == FRONTEND or url == f"{FRONTEND}/", timeout=5000)
-        check("/become-a-vendor — success screen 'Back to Home' works", True)
-    except Exception as e:
-        check("/become-a-vendor — success screen 'Back to Home' works", False, str(e))
+    # ── AI CHAT WIDGET ────────────────────────────────────────────────────────
+    print("\n[ AI CHAT WIDGET ]")
 
-    # ── NAVBAR NAVIGATION ─────────────────────────────────────────────────────
-    print("\n[ NAVBAR NAVIGATION ]")
-
-    nav_checks = [
-        ("Vendors", f"{FRONTEND}/vendors"),
-    ]
-    for label, expected_url in nav_checks:
-        try:
-            page.goto(FRONTEND)
-            page.wait_for_selector(f"text={label}", timeout=8000)
-            page.locator(f"nav >> text={label}").first.click()
-            page.wait_for_url(expected_url, timeout=5000)
-            check(f"Navbar → {label} navigates to {expected_url}", True)
-        except Exception as e:
-            check(f"Navbar → {label} navigates to {expected_url}", False, str(e))
-
-    # ── FOOTER NAVIGATION ─────────────────────────────────────────────────────
-    print("\n[ FOOTER NAVIGATION ]")
-
-    # Footer category links
-    for cat in ["Clothing", "Food", "Art"]:
-        try:
-            page.goto(FRONTEND)
-            page.wait_for_selector("footer", timeout=5000)
-            page.locator(f"footer >> text={cat}").click()
-            page.wait_for_selector(f"text={cat} Products", timeout=6000)
-            check(f"Footer → {cat} category link works", True)
-        except Exception as e:
-            check(f"Footer → {cat} category link works", False, str(e))
-
-    # Footer vendor links
-    for vid, vname in [(1, "Frost City Tatau"), (2, "D's Fale"), (3, "ffiliku")]:
-        try:
-            page.goto(FRONTEND)
-            page.wait_for_selector("footer", timeout=5000)
-            page.locator(f"footer >> text={vname}").first.click()
-            page.wait_for_url(f"{FRONTEND}/vendor/{vid}", timeout=5000)
-            check(f"Footer → {vname} link navigates to /vendor/{vid}", True)
-        except Exception as e:
-            check(f"Footer → {vname} link navigates to /vendor/{vid}", False, str(e))
-
-    # Footer Become a Vendor button
     try:
         page.goto(FRONTEND)
-        page.wait_for_selector("footer", timeout=5000)
-        page.locator("footer >> text=Become a Vendor").click()
-        page.wait_for_url(f"{FRONTEND}/become-a-vendor", timeout=5000)
-        check("Footer → 'Become a Vendor' button navigates correctly", True)
+        page.wait_for_selector("button[aria-label='Open chat']", timeout=8000)
+        page.click("button[aria-label='Open chat']")
+        page.wait_for_selector("text=DA SHOP Assistant", timeout=4000)
+        check("/ — AI chat widget opens", True)
+    except PlaywrightTimeout:
+        check("/ — AI chat widget opens", False, "widget or header not found")
     except Exception as e:
-        check("Footer → 'Become a Vendor' button navigates correctly", False, str(e))
+        check("/ — AI chat widget opens", False, str(e))
 
     # ── 404 PAGE ──────────────────────────────────────────────────────────────
     print("\n[ 404 PAGE ]")
+
     try:
         page.goto(f"{FRONTEND}/this-page-does-not-exist")
-        # Wait for our React NotFound component specifically — not a server 404 page
         page.wait_for_selector("text=Page Not Found", timeout=8000)
-        check("/nonexistent — 404 page renders (React NotFound component)", True)
+        check("/nonexistent — React 404 page renders", True)
     except PlaywrightTimeout:
-        check("/nonexistent — 404 page renders (React NotFound component)", False,
-              "React app may not be loading on unknown routes — check serve.json SPA config")
+        check("/nonexistent — React 404 page renders", False,
+              "check that server serves index.html for all routes (SPA config)")
     except Exception as e:
-        check("/nonexistent — 404 page renders (React NotFound component)", False, str(e))
+        check("/nonexistent — React 404 page renders", False, str(e))
 
-    try:
-        page.wait_for_selector("text=Back to Home", timeout=5000)
-        page.click("text=Back to Home")
-        page.wait_for_url(lambda url: url.rstrip("/") == FRONTEND or url == f"{FRONTEND}/", timeout=5000)
-        check("/404 — 'Back to Home' button works", True)
-    except Exception as e:
-        check("/404 — 'Back to Home' button works", False, str(e))
-
-    # ── PRODUCT → VENDOR CROSS-LINKS ─────────────────────────────────────────
-    print("\n[ CROSS-LINKS — PRODUCT ↔ VENDOR ]")
-
-    try:
-        page.goto(f"{FRONTEND}/product/1")
-        page.wait_for_selector("text=Visit Store", timeout=8000)
-        page.click("text=Visit Store")
-        page.wait_for_url(f"{FRONTEND}/vendor/1", timeout=5000)
-        check("/product/1 — 'Visit Store' button goes to vendor storefront", True)
-    except Exception as e:
-        check("/product/1 — 'Visit Store' button goes to vendor storefront", False, str(e))
-
-    try:
-        page.goto(f"{FRONTEND}/vendor/1")
-        page.wait_for_selector("text=Custom Tatau Flash Sheet", timeout=8000)
-        page.locator("text=Custom Tatau Flash Sheet").first.click()
-        page.wait_for_url(f"{FRONTEND}/product/1", timeout=5000)
-        check("/vendor/1 — product card links to /product/1", True)
-    except Exception as e:
-        check("/vendor/1 — product card links to /product/1", False, str(e))
-
-    # ── HOME PAGE — VENDOR CARDS ──────────────────────────────────────────────
-    print("\n[ HOME PAGE — VENDOR + PRODUCT CARDS ]")
-
-    try:
-        page.goto(FRONTEND)
-        page.wait_for_selector("text=Featured Stores", timeout=8000)
-        page.locator("text=Frost City Tatau").first.click()
-        page.wait_for_url(f"{FRONTEND}/vendor/1", timeout=5000)
-        check("/ — home vendor card links to /vendor/1", True)
-    except Exception as e:
-        check("/ — home vendor card links to /vendor/1", False, str(e))
-
-    try:
-        page.goto(FRONTEND)
-        page.wait_for_selector("text=Featured Products", timeout=8000)
-        page.locator("text=Custom Tatau Flash Sheet").first.click()
-        page.wait_for_url(f"{FRONTEND}/product/1", timeout=5000)
-        check("/ — home product card links to /product/1", True)
-    except Exception as e:
-        check("/ — home product card links to /product/1", False, str(e))
-
-    # ── SCROLL TO TOP ON ROUTE CHANGE ─────────────────────────────────────────
-    print("\n[ SCROLL BEHAVIOR ]")
+    # ── SCROLL TO TOP ─────────────────────────────────────────────────────────
+    print("\n[ SCROLL BEHAVIOUR ]")
 
     try:
         page.goto(FRONTEND)
         page.evaluate("window.scrollTo(0, 9999)")
         time.sleep(0.3)
-        scroll_before = page.evaluate("window.scrollY")
-        page.goto(f"{FRONTEND}/vendors")
+        page.goto(f"{FRONTEND}/brands")
         page.wait_for_selector("h1", timeout=6000)
         scroll_after = page.evaluate("window.scrollY")
         check("Route change — page scrolls to top", scroll_after < 50,
-              f"scrollY was {scroll_before}px, now {scroll_after}px")
+              f"scrollY after navigation: {scroll_after}px")
     except Exception as e:
         check("Route change — page scrolls to top", False, str(e))
 
@@ -495,10 +389,8 @@ def run_diagnostic():
     print("  DA SHOP — Full Site Diagnostic")
     print("=" * 60)
 
-    # Backend checks first (no browser needed)
     run_backend_checks()
 
-    # Frontend checks with real browser
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
@@ -509,7 +401,6 @@ def run_diagnostic():
         finally:
             browser.close()
 
-    # ── SUMMARY ───────────────────────────────────────────────────────────────
     print("\n" + "=" * 60)
     passed = sum(results)
     total  = len(results)

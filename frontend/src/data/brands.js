@@ -1,3 +1,7 @@
+// DEPRECATED — data now lives in the backend database.
+// Do not add new brands here. Use backend/seed_catalog.py and GET /brands instead.
+// This file is kept only as a reference for the category tiles used in Category.jsx.
+//
 // ─── Brand / Vendor data ──────────────────────────────────────────────────────
 // Each brand is an independent vendor selling under the DA SHOP platform.
 // brand_id must match brandId on products in products.js

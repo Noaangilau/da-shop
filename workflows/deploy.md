@@ -38,4 +38,4 @@ Deploy the DA SHOP frontend and backend to Railway via GitHub.
 |---|---|---|
 | DATABASE_URL | Backend | sqlite:///./dashop.db or Railway Postgres URL |
 | FRONTEND_ORIGIN | Backend | https://dashopf-production.up.railway.app |
-| VITE_API_URL | Frontend | https://DASHOP.up.railway.app |
+| VITE_API_URL | Frontend | https://dashopb-production.up.railway.app |

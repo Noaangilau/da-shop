@@ -32,7 +32,7 @@ export default function BrandPage() {
     Promise.all([brandReq, productsReq])
       .then(([brandRes, productsRes]) => {
         setBrand(brandRes.data)
-        setProducts(productsRes.data)
+        setProducts(Array.isArray(productsRes.data) ? productsRes.data : [])
       })
       .catch((err) => {
         if (err.response?.status === 404) setBrand(null)

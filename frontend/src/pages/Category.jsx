@@ -63,7 +63,7 @@ export default function Category() {
     else params.category = 'Art Services'
 
     axios.get(`${API_URL}/products`, { params })
-      .then((res) => setProducts(res.data))
+      .then((res) => setProducts(Array.isArray(res.data) ? res.data : []))
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [slug])

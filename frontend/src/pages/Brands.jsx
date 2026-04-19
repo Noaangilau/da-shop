@@ -27,7 +27,7 @@ export default function Brands() {
 
   useEffect(() => {
     axios.get(`${API_URL}/brands`)
-      .then((res) => setBrands(res.data))
+      .then((res) => setBrands(Array.isArray(res.data) ? res.data : []))
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }, [])

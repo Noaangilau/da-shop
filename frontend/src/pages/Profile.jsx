@@ -24,7 +24,7 @@ export default function Profile() {
   useEffect(() => {
     axios
       .get(`${API_URL}/customers/me/orders`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => setOrders(r.data))
+      .then((r) => setOrders(Array.isArray(r.data) ? r.data : []))
       .catch(() => {})
       .finally(() => setOrdersLoading(false))
   }, [token])
@@ -205,14 +205,14 @@ export default function Profile() {
                         <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                           Order #{order.id}
                         </p>
-                        <p className="text-midnight font-black text-lg">${order.total.toFixed(2)}</p>
+                        <p className="text-midnight font-black text-lg">${Number(order.total ?? 0).toFixed(2)}</p>
                       </div>
                       <span className="text-[10px] tracking-[0.15em] uppercase font-bold bg-midnight text-white px-3 py-1">
                         {order.status}
                       </span>
                     </div>
                     <div className="flex flex-col gap-1 mb-3">
-                      {order.items.map((item, i) => (
+                      {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
                         <p key={i} className="text-gray-500 text-xs">
                           {item.product_name} <span className="text-muted">×{item.quantity}</span>
                         </p>

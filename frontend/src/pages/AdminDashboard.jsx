@@ -28,9 +28,9 @@ export default function AdminDashboard() {
     ])
       .then(([s, o, i, c]) => {
         setStats(s.data)
-        setOrders(o.data)
-        setInquiries(i.data)
-        setCustomers(c.data)
+        setOrders(Array.isArray(o.data) ? o.data : [])
+        setInquiries(Array.isArray(i.data) ? i.data : [])
+        setCustomers(Array.isArray(c.data) ? c.data : [])
       })
       .catch(() => {})
       .finally(() => setLoading(false))
@@ -109,10 +109,10 @@ export default function AdminDashboard() {
             {/* KPI cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
               {[
-                { label: 'Total Orders',    value: stats.total_orders },
-                { label: 'Revenue',         value: `$${stats.total_revenue.toFixed(2)}` },
-                { label: 'Customers',       value: stats.total_customers },
-                { label: 'Vendor Inquiries', value: stats.total_inquiries },
+                { label: 'Total Orders',    value: stats.total_orders ?? 0 },
+                { label: 'Revenue',         value: `$${Number(stats.total_revenue ?? 0).toFixed(2)}` },
+                { label: 'Customers',       value: stats.total_customers ?? 0 },
+                { label: 'Vendor Inquiries', value: stats.total_inquiries ?? 0 },
               ].map((kpi) => (
                 <div key={kpi.label} className="bg-white p-8">
                   <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-semibold mb-3">{kpi.label}</p>
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
                       <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium">
                         Order #{order.id} · {new Date(order.created_at).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
-                      <p className="text-midnight font-black text-lg mt-1">${order.total.toFixed(2)}</p>
+                      <p className="text-midnight font-black text-lg mt-1">${Number(order.total ?? 0).toFixed(2)}</p>
                     </div>
                     <div className="text-right">
                       <span className="text-[10px] tracking-[0.15em] uppercase font-bold bg-midnight text-white px-3 py-1">
@@ -169,7 +169,7 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-x-6 gap-y-1">
-                    {order.items.map((item, i) => (
+                    {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
                       <p key={i} className="text-gray-500 text-xs">
                         <span className="text-muted">{item.brand}</span> — {item.product_name} ×{item.quantity}
                       </p>

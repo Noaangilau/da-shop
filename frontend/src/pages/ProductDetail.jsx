@@ -21,7 +21,7 @@ function RelatedProductCard({ product }) {
   const categorySlug =
     product.category === 'Paintings'    ? 'paintings'
     : product.category === 'Art Services' ? 'art-services'
-    : product.category.toLowerCase()
+    : (product.category || '').toLowerCase()
 
   return (
     <Link to={`/product/${product.id}`} className="group bg-white">
@@ -94,8 +94,9 @@ export default function ProductDetail() {
             params: { category: res.data.category, brand_id: res.data.brand_id },
           })
             .then((r) => {
+              const items = Array.isArray(r.data) ? r.data : []
               setRelated(
-                r.data
+                items
                   .filter((p) => p.id !== res.data.id && p.collection === res.data.collection)
                   .slice(0, 4)
               )
@@ -165,7 +166,7 @@ export default function ProductDetail() {
   const categorySlug =
     product.category === 'Paintings'    ? 'paintings'
     : product.category === 'Art Services' ? 'art-services'
-    : product.category.toLowerCase()
+    : (product.category || '').toLowerCase()
 
   const needsSize = product.category === 'Clothing' && product.sizes?.length > 0
 
@@ -299,7 +300,7 @@ export default function ProductDetail() {
                   }
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size) => (
+                  {(Array.isArray(product.sizes) ? product.sizes : []).map((size) => (
                     <button
                       key={size}
                       onClick={() => { setSelectedSize(size); setSizeError(false) }}

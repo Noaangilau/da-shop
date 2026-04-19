@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import ProtectedRoute from './components/ProtectedRoute'
 import AIChatWidget from './components/AIChatWidget'
+import ErrorBoundary from './components/ErrorBoundary'
 import Home from './pages/Home'
 import Brands from './pages/Brands'
 import BrandPage from './pages/BrandPage'
@@ -39,6 +40,7 @@ function App() {
         <CartProvider>
           <ScrollToTop />
           <Navbar />
+          <ErrorBoundary>
           <Routes>
             <Route path="/" element={<Home />} />
 
@@ -82,6 +84,7 @@ function App() {
             {/* 404 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </ErrorBoundary>
           <Footer />
           <AIChatWidget />
         </CartProvider>

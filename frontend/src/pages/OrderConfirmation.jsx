@@ -57,7 +57,7 @@ export default function OrderConfirmation() {
               Items Ordered
             </p>
             <div className="flex flex-col gap-4">
-              {order?.items.map((item, i) => (
+              {(Array.isArray(order?.items) ? order.items : []).map((item, i) => (
                 <div key={i} className="flex justify-between items-start gap-4">
                   <div>
                     <p className="text-muted text-[10px] tracking-wide uppercase">{item.brand}</p>
@@ -71,7 +71,7 @@ export default function OrderConfirmation() {
               ))}
               <div className="pt-4 border-t border-[#E5E5E5] flex justify-between">
                 <span className="text-midnight text-[11px] tracking-[0.15em] uppercase font-black">Total</span>
-                <span className="text-midnight font-black text-lg">${order?.total.toFixed(2)}</span>
+                <span className="text-midnight font-black text-lg">${Number(order?.total ?? 0).toFixed(2)}</span>
               </div>
             </div>
           </div>

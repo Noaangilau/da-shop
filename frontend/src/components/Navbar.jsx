@@ -1,8 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import axios from 'axios'
 import logoLight from '../assets/logo-light.svg'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 // ─── Clothing subcategories ───────────────────────────────────────────────────
 const clothingSubcategories = [
@@ -32,6 +35,8 @@ export default function Navbar() {
   const [clothingOpen, setClothingOpen] = useState(false)
   const [mobileClothingOpen, setMobileClothingOpen] = useState(false)
   const [scrolled, setScrolled]       = useState(false)
+  const [banner, setBanner]           = useState(null)
+  const [bannerDismissed, setBannerDismissed] = useState(false)
   const { totalItems } = useCart()
   const { customer, logout } = useAuth()
   const closeTimerRef = useRef(null)
@@ -41,6 +46,21 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  useEffect(() => {
+    axios.get(`${API_URL}/announcements/active`)
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : []
+        const b = data.find((a) => a.display_mode === 'banner' || a.display_mode === 'both')
+        if (b && !localStorage.getItem(`ann-dismissed-${b.id}`)) setBanner(b)
+      })
+      .catch(() => {})
+  }, [])
+
+  function dismissBanner() {
+    if (banner) localStorage.setItem(`ann-dismissed-${banner.id}`, '1')
+    setBannerDismissed(true)
+  }
 
   function openClothing() {
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current)
@@ -55,11 +75,31 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white">
 
       {/* ── Announcement Strip ── */}
-      <div className="bg-midnight">
-        <p className="text-white text-[11px] tracking-[0.12em] uppercase text-center py-2 px-4 font-medium">
-          Free shipping on orders over $150 &nbsp;·&nbsp; New drops every week
-        </p>
-      </div>
+      {banner && !bannerDismissed ? (
+        <div className="bg-midnight relative">
+          <p className="text-white text-[11px] tracking-[0.12em] uppercase text-center py-2 px-10 font-medium">
+            {banner.title}
+            {banner.cta_url && (
+              <a href={banner.cta_url} className="underline ml-2 hover:text-white/80">
+                {banner.cta_label || 'Learn more'}
+              </a>
+            )}
+          </p>
+          <button
+            onClick={dismissBanner}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-sm"
+            aria-label="Dismiss"
+          >
+            ×
+          </button>
+        </div>
+      ) : (
+        <div className="bg-midnight">
+          <p className="text-white text-[11px] tracking-[0.12em] uppercase text-center py-2 px-4 font-medium">
+            Free shipping on orders over $150 &nbsp;·&nbsp; New drops every week
+          </p>
+        </div>
+      )}
 
       {/* ── Main Nav Row ── */}
       <div className={`transition-all duration-200 ${scrolled ? 'border-b border-[#E5E5E5]' : 'border-b border-transparent'}`}>

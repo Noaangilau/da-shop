@@ -13,8 +13,9 @@ import models.brand             # noqa: F401
 import models.product           # noqa: F401
 import models.notification_log  # noqa: F401
 import models.chat_log           # noqa: F401
+import models.announcement       # noqa: F401
 
-from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments
+from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments, announcements
 
 load_dotenv()
 
@@ -26,6 +27,11 @@ def _run_migrations():
     from sqlalchemy import text
     migrations = [
         "ALTER TABLE orders ADD COLUMN payment_intent_id TEXT",
+        "ALTER TABLE customers ADD COLUMN role TEXT DEFAULT 'customer'",
+        "ALTER TABLE customers ADD COLUMN brand_id INTEGER",
+        "UPDATE customers SET role='admin' WHERE is_admin=1 OR is_admin=true",
+        "ALTER TABLE products ADD COLUMN is_featured BOOLEAN DEFAULT FALSE",
+        "ALTER TABLE products ADD COLUMN stock_count INTEGER",
     ]
     with engine.connect() as conn:
         for sql in migrations:
@@ -62,6 +68,7 @@ app.include_router(admin.router)
 app.include_router(brands.router)
 app.include_router(products.router)
 app.include_router(payments.router)
+app.include_router(announcements.router)
 
 
 @app.get("/health")

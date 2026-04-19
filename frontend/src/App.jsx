@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollToTop'
 import ProtectedRoute from './components/ProtectedRoute'
 import AIChatWidget from './components/AIChatWidget'
+import AnnouncementPopup from './components/AnnouncementBanner'
 import ErrorBoundary from './components/ErrorBoundary'
 import Home from './pages/Home'
 import Brands from './pages/Brands'
@@ -39,6 +40,7 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <ScrollToTop />
+          <AnnouncementPopup />
           <Navbar />
           <ErrorBoundary>
           <Routes>

@@ -26,11 +26,19 @@ function RelatedProductCard({ product }) {
   return (
     <Link to={`/product/${product.id}`} className="group bg-white">
       <div className="relative overflow-hidden">
-        <img
-          src={product.image_url}
-          alt={product.name}
-          className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
-        />
+        {product.image_url ? (
+          <img
+            src={product.image_url}
+            alt={product.name}
+            className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
+          />
+        ) : (
+          <div className="w-full aspect-[4/5] bg-midnight/5 flex items-center justify-center">
+            <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold">
+              Coming Soon
+            </p>
+          </div>
+        )}
         {product.collection && (
           <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
@@ -219,11 +227,19 @@ export default function ProductDetail() {
 
           {/* ── Image ── */}
           <div className="relative overflow-hidden bg-[#F7F7F7]">
-            <img
-              src={product.image_url}
-              alt={product.name}
-              className="w-full aspect-square object-cover"
-            />
+            {product.image_url ? (
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="w-full aspect-square object-cover"
+              />
+            ) : (
+              <div className="w-full aspect-square bg-midnight/5 flex items-center justify-center">
+                <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold">
+                  Coming Soon
+                </p>
+              </div>
+            )}
             {/* Collection badge — top-left overlay */}
             {product.collection && (
               <div className="absolute top-4 left-4">

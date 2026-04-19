@@ -58,8 +58,8 @@ IMAGE_URL_MAP = {
     "Utah Native Tee":                        "/products/utah-native-tee.png",
     "Life Elevation Tee":                     "/products/life-elevation-tee.png",
     "West High Tee":                          "/products/west-high-tee.png",
-    "Granger High Tee":                       "/products/granger-high-tee.png",
-    "Hunter High Tee":                        "/products/hunter-high-tee.png",
+    "Granger High Tee":                       "",
+    "Hunter High Tee":                        "",
     "East High Tee":                          "/products/east-high-tee.png",
     "Kaikefiu × Nintendo Tee":                "/products/kaikefiu-nintendo-tee.png",
     "Kaikefiu × SEGA Tee":                    "/products/kaikefiu-sega-tee.png",
@@ -512,7 +512,7 @@ def sync_product_images():
                 Product.brand_id == brand.id,
                 Product.name == name,
             ).first()
-            if p and p.image_url != url:
+            if p and (p.image_url or "") != url:
                 p.image_url = url
                 changed += 1
         if changed:

@@ -15,6 +15,8 @@ class Customer(Base):
     email_opt_in    = Column(Boolean, default=False)
     sms_opt_in      = Column(Boolean, default=False)
     is_admin        = Column(Boolean, default=False)
+    role            = Column(String, default="customer")   # admin | vendor | customer
+    brand_id        = Column(Integer, nullable=True)       # populated for vendors
     cart_data       = Column(Text, nullable=True)           # JSON string
     cart_updated_at = Column(DateTime(timezone=True), nullable=True)
     created_at      = Column(DateTime(timezone=True), server_default=func.now())

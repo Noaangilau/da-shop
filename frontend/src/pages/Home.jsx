@@ -212,6 +212,14 @@ export default function Home() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
+                      {brand.logo_white_url && (
+                        <img
+                          src={brand.logo_white_url}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute top-4 left-4 h-12 w-auto object-contain opacity-90"
+                        />
+                      )}
                     </div>
                     <div className="p-5 border-t border-[#E5E5E5]">
                       <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
@@ -310,7 +318,7 @@ export default function Home() {
                     <img
                       src={featuredBrand.logo_white_url}
                       alt={featuredBrand.name}
-                      className="h-9 w-auto mb-4 object-contain object-left"
+                      className="h-20 md:h-24 w-auto mb-5 object-contain object-left"
                     />
                   )}
                   <h2

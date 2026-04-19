@@ -82,6 +82,14 @@ export default function Brands() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-black/35 group-hover:bg-black/20 transition-colors duration-300" />
+                        {brand.logo_white_url && (
+                          <img
+                            src={brand.logo_white_url}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute top-6 left-6 h-14 w-auto object-contain opacity-90"
+                          />
+                        )}
                       </div>
 
                       {/* Brand info */}

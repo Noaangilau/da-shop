@@ -43,8 +43,8 @@ FDC_BRAND = {
     "category": "Clothing",
     "location": "Salt Lake City, Utah",
     "instagram": "@filikudesignco",
-    "logo_white_url": "/assets/fdc-logo-white.png",    # TODO: add real asset
-    "logo_navy_url": "/assets/fdc-logo-navy.png",      # TODO: add real asset
+    "logo_white_url": "/brands/fdc-logo-white.png",
+    "logo_navy_url": "/brands/fdc-logo-navy.png",
     "hero_image_url": "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=1600&q=80",  # TODO: replace with real FDC hero
     "card_image_url": "https://images.unsplash.com/photo-1556821840-3a63f15732ce?auto=format&fit=crop&w=800&q=80",   # TODO: replace with real FDC card
     "is_active": True,

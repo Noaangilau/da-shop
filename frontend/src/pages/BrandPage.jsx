@@ -109,7 +109,7 @@ export default function BrandPage() {
                   <img
                     src={brand.logo_white_url}
                     alt={brand.name}
-                    className="h-10 w-auto mb-5 object-contain object-left"
+                    className="h-20 md:h-24 w-auto mb-6 object-contain object-left"
                   />
                 )}
                 <p className="text-white/50 text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
@@ -139,6 +139,15 @@ export default function BrandPage() {
             </div>
           ) : (
             <>
+              {brand.logo_navy_url && (
+                <div className="w-full md:w-44 flex-shrink-0 flex md:justify-start">
+                  <img
+                    src={brand.logo_navy_url}
+                    alt={brand.name}
+                    className="h-28 md:h-36 w-auto object-contain object-left"
+                  />
+                </div>
+              )}
               <div className="flex-1">
                 <p className="text-muted text-[10px] tracking-[0.2em] uppercase mb-3">{brand.location}</p>
                 <p className="text-[15px] italic text-muted mb-4">"{brand.tagline}"</p>

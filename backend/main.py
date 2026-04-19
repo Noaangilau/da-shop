@@ -23,23 +23,26 @@ Base.metadata.create_all(bind=engine)
 
 
 def _run_migrations():
-    """Add columns introduced after initial schema creation (SQLite ALTER TABLE)."""
+    """Add columns introduced after initial schema creation. Each statement
+    runs in its own connection so a failure on one (e.g. column already exists)
+    doesn't poison subsequent statements on Postgres."""
     from sqlalchemy import text
     migrations = [
         "ALTER TABLE orders ADD COLUMN payment_intent_id TEXT",
         "ALTER TABLE customers ADD COLUMN role TEXT DEFAULT 'customer'",
         "ALTER TABLE customers ADD COLUMN brand_id INTEGER",
-        "UPDATE customers SET role='admin' WHERE is_admin=1 OR is_admin=true",
+        "UPDATE customers SET role='admin' WHERE is_admin=true",
         "ALTER TABLE products ADD COLUMN is_featured BOOLEAN DEFAULT FALSE",
         "ALTER TABLE products ADD COLUMN stock_count INTEGER",
+        "ALTER TABLE products ADD COLUMN kaikefiu BOOLEAN DEFAULT FALSE",
     ]
-    with engine.connect() as conn:
-        for sql in migrations:
-            try:
+    for sql in migrations:
+        try:
+            with engine.connect() as conn:
                 conn.execute(text(sql))
                 conn.commit()
-            except Exception:
-                pass  # Column already exists
+        except Exception as e:
+            print(f"  [migration skipped] {sql[:60]}... -> {type(e).__name__}")
 
 _run_migrations()
 

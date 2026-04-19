@@ -47,30 +47,42 @@ export default function Home() {
   useEffect(() => {
     axios.get(`${API_URL}/brands`)
       .then((res) => {
-        setBrands(res.data)
-        const first = res.data[0]
+        const data = Array.isArray(res.data) ? res.data : []
+        setBrands(data)
+        const first = data[0]
         if (first) {
           setFeaturedBrand(first)
           axios.get(`${API_URL}/brands/${first.id}/products`)
-            .then((r) => setFeaturedProducts(r.data.filter((p) => p.type === 'product').slice(0, 4)))
+            .then((r) => {
+              const items = Array.isArray(r.data) ? r.data : []
+              setFeaturedProducts(items.filter((p) => p.type === 'product').slice(0, 4))
+            })
             .catch(() => {})
         }
       })
+      .catch(() => setBrands([]))
       .finally(() => setBrandsLoading(false))
   }, [])
 
   useEffect(() => {
     axios.get(`${API_URL}/products`)
-      .then((res) => setProducts(res.data.filter((p) => p.type === 'product')))
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : []
+        setProducts(data.filter((p) => p.type === 'product'))
+      })
+      .catch(() => setProducts([]))
       .finally(() => setProductsLoading(false))
   }, [])
 
-  const categoryOptions = ['All', ...new Set(products.map((p) => p.category))]
-  const brandOptions = ['All', ...brands.map((b) => b.name)]
+  const safeProducts = Array.isArray(products) ? products : []
+  const safeBrands = Array.isArray(brands) ? brands : []
 
-  const filteredProducts = products.filter((p) => {
+  const categoryOptions = ['All', ...new Set(safeProducts.map((p) => p.category))]
+  const brandOptions = ['All', ...safeBrands.map((b) => b.name)]
+
+  const filteredProducts = safeProducts.filter((p) => {
     const matchCat = activeFilter === 'All' || p.category === activeFilter
-    const matchBrand = activeBrand === 'All' || p.brand_id === brands.find((b) => b.name === activeBrand)?.id
+    const matchBrand = activeBrand === 'All' || p.brand_id === safeBrands.find((b) => b.name === activeBrand)?.id
     return matchCat && matchBrand
   })
 
@@ -187,7 +199,7 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
             {brandsLoading
               ? [0, 1, 2, 3].map((i) => <BrandCardSkeleton key={i} />)
-              : brands.map((brand) => (
+              : safeBrands.map((brand) => (
                   <Link
                     key={brand.id}
                     to={`/brand/${brand.id}`}

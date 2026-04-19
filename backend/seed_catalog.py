@@ -21,9 +21,67 @@ from models.brand import Brand
 from models.product import Product
 
 SIZES = json.dumps(["S", "M", "L", "XL", "2XL", "3XL"])
-PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80"  # TODO: replace with real FDC product images
+PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80"
 TEE_PRICE = 35.0    # TODO: confirm with FDC
 LS_PRICE = 45.0     # TODO: confirm with FDC
+
+# Real FDC product-image map (files live in frontend/public/products/).
+# Keys MUST match PRODUCTS names below exactly.
+IMAGE_URL_MAP = {
+    "Alofas Script Tee — Green/Gold":         "/products/alofas-script-tee-green-gold.png",
+    "Alofas Script Long Sleeve — Green/Gold": "/products/alofas-script-long-sleeve-green-gold.png",
+    "Alofas Script Tee — Yellow/White":       "/products/alofas-script-tee-yellow-white.png",
+    "Ofas Script Tee — Green/Yellow":         "/products/ofas-script-tee-green-yellow.png",
+    "Ofas Script Tee — Black/Gold":           "/products/ofas-script-tee-black-gold.png",
+    "Ofas Script Tee — Red/Navy/White":       "/products/ofas-script-tee-red-navy-white.png",
+    "Alohas Script Tee":                      "/products/alohas-script-tee.png",
+    "Glendale Script Tee — Navy":             "/products/glendale-script-tee-navy.png",
+    "Glendale Script Tee — Black Outline":    "/products/glendale-script-tee-black-outline.png",
+    "Rose Park Script Tee":                   "/products/rose-park-script-tee.png",
+    "West Valley City Tee":                   "/products/west-valley-city-tee.png",
+    "Poplar Grove Tee":                       "/products/poplar-grove-tee.png",
+    "SLC Script Tee":                         "/products/slc-script-tee.png",
+    "SĀ Tee — White/Black":                   "/products/sā-tee-white-black.png",
+    "SĀ Tee — White/Blue/Red":                "/products/sā-tee-white-blue-red.png",
+    "Samoans × Mariners Tee":                 "/products/samoans-mariners-tee.png",
+    "Samoans × Rangers Tee":                  "/products/samoans-rangers-tee.png",
+    "Tongans × Dodgers Tee":                  "/products/tongans-dodgers-tee.png",
+    "Tongans × Utes Tee":                     "/products/tongans-utes-tee.png",
+    "Tongans × Diamondbacks Tee":             "/products/tongans-diamondbacks-tee.png",
+    "Tongans × Cougs Tee":                    "/products/tongans-cougs-tee.png",
+    "Tonga Script Tee":                       "/products/tonga-script-tee.png",
+    "Mate Ma'a Tonga Tee":                    "/products/mate-maa-tonga-tee.png",
+    "Made in Tonga Tee":                      "/products/made-in-tonga-tee.png",
+    "Nesian by Nature Tee":                   "/products/nesian-by-nature-tee.png",
+    "Nesians × Lakers Tee":                   "/products/nesians-lakers-tee.png",
+    "Nesians × Grizzy Tee":                   "/products/nesians-grizzy-tee.png",
+    "Utah Native Tee":                        "/products/utah-native-tee.png",
+    "Life Elevation Tee":                     "/products/life-elevation-tee.png",
+    "West High Tee":                          "/products/west-high-tee.png",
+    "Granger High Tee":                       "/products/granger-high-tee.png",
+    "Hunter High Tee":                        "/products/hunter-high-tee.png",
+    "East High Tee":                          "/products/east-high-tee.png",
+    "Kaikefiu × Nintendo Tee":                "/products/kaikefiu-nintendo-tee.png",
+    "Kaikefiu × SEGA Tee":                    "/products/kaikefiu-sega-tee.png",
+    "Kaikefiu × Fortnite Tee":                "/products/kaikefiu-fortnite-tee.png",
+    "Kaikefiu × TMNT Tee":                    "/products/kaikefiu-tmnt-tee.png",
+    "Kaikefiu × Newport Tee":                 "/products/kaikefiu-newport-tee.png",
+    "Kaikefiu × Gatorade Tee":                "/products/kaikefiu-gatorade-tee.png",
+    "Kaikefiu × Chuckarama Tee":              "/products/kaikefiu-chuckarama-tee.png",
+    "Kaikefiu × Saimini Tee":                 "/products/kaikefiu-saimini-tee.png",
+    "Kaikefiu × 9ers Tee":                    "/products/kaikefiu-9ers-tee.png",
+    "Kaikefiu KKF Tee":                       "/products/kaikefiu-kkf-tee.png",
+    "Hot Cheehoo Tee":                        "/products/hot-cheehoo-tee.png",
+    "Salt Lake Pokemon Tee":                  "/products/salt-lake-pokemon-tee.png",
+    "Jonah Lomu Tee":                         "/products/jonah-lomu-tee.png",
+    "Ohana Tee":                              "/products/ohana-tee.png",
+    "Aloha Tee":                              "/products/aloha-tee.png",
+    "One Love Lion Tee":                      "/products/one-love-lion-tee.png",
+    "SLC Cityscape Tee":                      "/products/slc-cityscape-tee.png",
+    "Side of Salt Lake Tee":                  "/products/side-of-salt-lake-tee.png",
+    "Salt Lake City Utah Tee":                "/products/salt-lake-city-utah-tee.png",
+    "Bay Area Cityscape Tee":                 "/products/bay-area-cityscape-tee.png",
+}
 
 KAIKEFIU_DISCLAIMER = (
     "FDC Kaikefiu Series — Pacific identity parody apparel. "
@@ -414,7 +472,7 @@ def seed():
                 subcategory=subcategory,
                 description=description,
                 sizes=SIZES,
-                image_url=PLACEHOLDER_IMAGE,
+                image_url=IMAGE_URL_MAP.get(name, PLACEHOLDER_IMAGE),
                 type="product",
                 is_active=True,
                 kaikefiu=kaikefiu,
@@ -436,6 +494,32 @@ def seed():
         db.rollback()
         print(f"\n  ERROR: {e}")
         raise
+    finally:
+        db.close()
+
+
+def sync_product_images():
+    """Lightweight idempotent migration: update image_url for existing FDC products
+    based on IMAGE_URL_MAP. Safe to call on app startup."""
+    db = SessionLocal()
+    try:
+        brand = db.query(Brand).filter(Brand.name == "Filiku Design Co.").first()
+        if not brand:
+            return
+        changed = 0
+        for name, url in IMAGE_URL_MAP.items():
+            p = db.query(Product).filter(
+                Product.brand_id == brand.id,
+                Product.name == name,
+            ).first()
+            if p and p.image_url != url:
+                p.image_url = url
+                changed += 1
+        if changed:
+            db.commit()
+            print(f"  [sync_product_images] updated {changed} rows")
+    except Exception:
+        db.rollback()
     finally:
         db.close()
 

@@ -37,6 +37,12 @@ def _run_migrations():
 
 _run_migrations()
 
+try:
+    from seed_catalog import sync_product_images
+    sync_product_images()
+except Exception as e:
+    print(f"  [startup] sync_product_images skipped: {e}")
+
 app = FastAPI(title="DA SHOP API")
 
 app.add_middleware(

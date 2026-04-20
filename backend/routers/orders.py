@@ -1,5 +1,6 @@
 import os
 import logging
+from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -8,7 +9,7 @@ from database import get_db
 from models.order import Order, OrderItem
 from models.customer import Customer
 from schemas.order import OrderCreate, OrderResponse
-from routers.auth import get_current_customer
+from routers.auth import get_current_customer, get_optional_customer
 from utils.email import send_order_confirmation_email
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,7 @@ def _verify_payment_intent(payment_intent_id: str) -> None:
 @router.post("", response_model=OrderResponse)
 def create_order(
     data: OrderCreate,
-    customer: Customer = Depends(get_current_customer),
+    customer: Optional[Customer] = Depends(get_optional_customer),
     db: Session = Depends(get_db),
 ):
     if not data.items:
@@ -66,9 +67,11 @@ def create_order(
 
     subtotal = sum(item.price * item.quantity for item in data.items)
     total = subtotal  # no tax/shipping in this version
+    is_guest = customer is None
 
     order = Order(
-        customer_id=customer.id,
+        customer_id=customer.id if customer else None,
+        is_guest=1 if is_guest else 0,
         payment_intent_id=data.payment_intent_id or None,
         status="confirmed",  # PI verified → confirmed immediately
         subtotal=subtotal,
@@ -97,8 +100,9 @@ def create_order(
             size=item.size,
         ))
 
-    customer.cart_data = None
-    customer.cart_updated_at = None
+    if customer is not None:
+        customer.cart_data = None
+        customer.cart_updated_at = None
 
     db.commit()
     db.refresh(order)
@@ -109,12 +113,12 @@ def create_order(
     ]
     send_order_confirmation_email(
         customer_email=data.email,
-        customer_name=customer.first_name,
+        customer_name=customer.first_name if customer else (data.shipping_name or "there"),
         order_id=order.id,
         total=total,
         items=items_for_email,
         db=db,
-        customer_id=customer.id,
+        customer_id=customer.id if customer else None,
     )
 
     return order

@@ -8,7 +8,8 @@ class Order(Base):
     __tablename__ = "orders"
 
     id                  = Column(Integer, primary_key=True, index=True)
-    customer_id         = Column(Integer, ForeignKey("customers.id"), nullable=False)
+    customer_id         = Column(Integer, ForeignKey("customers.id"), nullable=True)
+    is_guest            = Column(Integer, default=0)  # 0/1 flag (kept int for SQLite portability)
     payment_intent_id   = Column(String, unique=True, nullable=True, index=True)
     status              = Column(String, default="pending")   # pending | confirmed | shipped | delivered | refunded
     subtotal          = Column(Float, nullable=False)

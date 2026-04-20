@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from database import get_db
-from routers.auth import get_current_customer
+from routers.auth import get_optional_customer
 from models.customer import Customer
 
 logger = logging.getLogger(__name__)
@@ -42,20 +42,22 @@ class PaymentIntentCreate(BaseModel):
 @router.post("/create-intent")
 def create_payment_intent(
     data: PaymentIntentCreate,
-    customer: Customer = Depends(get_current_customer),
+    customer: Optional[Customer] = Depends(get_optional_customer),
 ):
     if data.amount_cents < 50:
         raise HTTPException(status_code=400, detail="Minimum order amount is $0.50")
 
     stripe = _get_stripe()
+    metadata = (
+        {"customer_id": str(customer.id), "customer_email": customer.email}
+        if customer
+        else {"guest": "1"}
+    )
     try:
         intent = stripe.PaymentIntent.create(
             amount=data.amount_cents,
             currency=data.currency,
-            metadata={
-                "customer_id": str(customer.id),
-                "customer_email": customer.email,
-            },
+            metadata=metadata,
             automatic_payment_methods={"enabled": True},
         )
     except Exception as exc:

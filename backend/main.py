@@ -39,6 +39,8 @@ def _run_migrations():
         "ALTER TABLE products ADD COLUMN variants TEXT",
         "ALTER TABLE order_items ADD COLUMN variant TEXT",
         "ALTER TABLE order_items ADD COLUMN size TEXT",
+        "ALTER TABLE orders ADD COLUMN is_guest INTEGER DEFAULT 0",
+        "ALTER TABLE orders ALTER COLUMN customer_id DROP NOT NULL",
     ]
     for sql in migrations:
         try:

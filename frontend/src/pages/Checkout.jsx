@@ -71,9 +71,9 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
             image:        item.image,
           })),
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
       )
-      onSuccess(data.id)
+      onSuccess(data)
     } catch (err) {
       setError(err.response?.data?.detail || 'Order creation failed. Please contact support.')
       setLoading(false)
@@ -136,9 +136,9 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
             image:        item.image,
           })),
         },
-        { headers: { Authorization: `Bearer ${token}` } }
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
       )
-      onSuccess(data.id)
+      onSuccess(data)
     } catch (err) {
       setError(err.response?.data?.detail || 'Something went wrong.')
       setLoading(false)
@@ -227,7 +227,7 @@ export default function Checkout() {
       const { data } = await axios.post(
         `${API_URL}/payments/create-intent`,
         { amount_cents: amountCents },
-        { headers: { Authorization: `Bearer ${token}` } }
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
       )
       setClientSecret(data.client_secret)
       setStep('payment')
@@ -238,9 +238,15 @@ export default function Checkout() {
     }
   }
 
-  function handleSuccess(orderId) {
+  function handleSuccess(orderOrId) {
     clearCart()
-    navigate(`/order-confirmation/${orderId}`)
+    // Guest flow: pass the full order payload via location.state so the
+    // confirmation page can render without a token (it can't re-fetch).
+    if (orderOrId && typeof orderOrId === 'object') {
+      navigate(`/order-confirmation/${orderOrId.id}`, { state: { order: orderOrId, guest: !token } })
+    } else {
+      navigate(`/order-confirmation/${orderOrId}`)
+    }
   }
 
   const orderSummaryPanel = (

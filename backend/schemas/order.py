@@ -42,7 +42,7 @@ class OrderItemResponse(BaseModel):
 
 class OrderResponse(BaseModel):
     id: int
-    customer_id: int
+    customer_id: Optional[int] = None
     payment_intent_id: Optional[str]
     status: str
     subtotal: float

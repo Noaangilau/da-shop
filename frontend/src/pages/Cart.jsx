@@ -152,11 +152,30 @@ export default function Cart() {
               </div>
 
               <button
-                onClick={() => customer ? navigate('/checkout') : navigate('/login?next=/checkout')}
+                onClick={() => navigate('/checkout')}
                 className="w-full bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200 mb-3"
               >
-                Proceed to Checkout
+                {customer ? 'Proceed to Checkout' : 'Checkout as Guest'}
               </button>
+
+              {!customer && (
+                <div className="mt-5 border border-[#E5E5E5] p-5 bg-[#F7F7F7]">
+                  <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-black mb-2">
+                    Members get more
+                  </p>
+                  <ul className="text-muted text-[11px] leading-relaxed mb-3 flex flex-col gap-0.5">
+                    <li>• Early access to new drops</li>
+                    <li>• Member-only discounts</li>
+                    <li>• Order history + faster checkout</li>
+                  </ul>
+                  <Link
+                    to="/login?next=/checkout"
+                    className="text-midnight text-[10px] tracking-[0.2em] uppercase font-bold hover:text-muted transition-colors"
+                  >
+                    Sign in or join →
+                  </Link>
+                </div>
+              )}
 
               <Link
                 to="/"

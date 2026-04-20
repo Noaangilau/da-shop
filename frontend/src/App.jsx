@@ -68,8 +68,9 @@ function App() {
 
             {/* Protected — customer */}
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-            <Route path="/order-confirmation/:id" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
+            {/* Checkout + confirmation are guest-accessible */}
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
 
             {/* Protected — admin only */}
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />

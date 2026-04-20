@@ -13,6 +13,7 @@ from utils.auth import hash_password, verify_password, create_access_token, deco
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 security = HTTPBearer()
+security_optional = HTTPBearer(auto_error=False)
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "").lower()
 
@@ -32,6 +33,22 @@ def get_current_customer(
     if not customer:
         raise HTTPException(status_code=401, detail="Customer not found")
     return customer
+
+
+def get_optional_customer(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security_optional),
+    db: Session = Depends(get_db),
+) -> Optional[Customer]:
+    """Returns the authenticated Customer when a valid token is present,
+    or None for guest/anonymous requests. Never raises 401."""
+    if credentials is None:
+        return None
+    try:
+        payload = decode_token(credentials.credentials)
+        customer_id = int(payload["sub"])
+    except Exception:
+        return None
+    return db.query(Customer).filter(Customer.id == customer_id).first()
 
 
 def get_admin_customer(customer: Customer = Depends(get_current_customer)) -> Customer:

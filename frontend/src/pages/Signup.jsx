@@ -11,7 +11,7 @@ export default function Signup() {
   const [form, setForm] = useState({
     first_name: '',
     last_name: '',
-    email: '',
+    email: searchParams.get('email') || '',
     password: '',
     phone: '',
     email_opt_in: false,

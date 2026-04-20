@@ -92,6 +92,9 @@ export default function AdminDashboard() {
       subcategory: data.subcategory || null,
       description: data.description || null,
       sizes: data.sizes ? data.sizes.split(',').map((s) => s.trim()).filter(Boolean) : null,
+      variants: Array.isArray(data.variants) && data.variants.length > 0
+        ? data.variants.filter((v) => v.color && v.image_url)
+        : null,
       image_url: data.image_url || null,
       type: data.type || 'product',
       is_active: data.is_active ?? true,

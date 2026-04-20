@@ -38,9 +38,11 @@ export default function ProductFormModal({
     is_active: initial.is_active ?? true,
     is_featured: initial.is_featured ?? false,
     stock_count: initial.stock_count ?? '',
+    variants: Array.isArray(initial.variants) ? initial.variants : [],
   })
   const [uploading, setUploading] = useState(false)
   const [uploadError, setUploadError] = useState('')
+  const [variantUploading, setVariantUploading] = useState(null) // index currently uploading
 
   function set(k, v) { setForm((f) => ({ ...f, [k]: v })) }
 
@@ -59,6 +61,33 @@ export default function ProductFormModal({
       setUploadError(err.response?.data?.detail || 'Upload failed')
     } finally {
       setUploading(false)
+    }
+  }
+
+  function setVariant(i, patch) {
+    setForm((f) => ({ ...f, variants: f.variants.map((v, idx) => idx === i ? { ...v, ...patch } : v) }))
+  }
+  function addVariant() {
+    setForm((f) => ({ ...f, variants: [...f.variants, { color: 'White', image_url: '' }] }))
+  }
+  function removeVariant(i) {
+    setForm((f) => ({ ...f, variants: f.variants.filter((_, idx) => idx !== i) }))
+  }
+  async function handleVariantFile(i, e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setVariantUploading(i); setUploadError('')
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const { data } = await axios.post(`${API_URL}${uploadUrl}`, fd, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' },
+      })
+      setVariant(i, { image_url: data.image_url })
+    } catch (err) {
+      setUploadError(err.response?.data?.detail || 'Upload failed')
+    } finally {
+      setVariantUploading(null)
     }
   }
 
@@ -130,6 +159,50 @@ export default function ProductFormModal({
                 />
               </div>
             </div>
+          </div>
+
+          <div className="md:col-span-2 flex flex-col gap-2 border-t border-[#E5E5E5] pt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] tracking-wide uppercase text-muted">Color Variants (optional)</span>
+              <button
+                type="button"
+                onClick={addVariant}
+                className="text-[10px] tracking-[0.1em] uppercase font-bold text-midnight hover:opacity-70"
+              >
+                + Add variant
+              </button>
+            </div>
+            {form.variants.length === 0 && (
+              <p className="text-muted text-xs">None — product will show a single image.</p>
+            )}
+            {form.variants.map((v, i) => (
+              <div key={i} className="flex items-center gap-3 border border-[#E5E5E5] p-3">
+                {v.image_url && <img src={absolutize(v.image_url)} alt="" className="w-14 h-14 object-cover border border-[#E5E5E5]" />}
+                <select
+                  value={v.color || ''}
+                  onChange={(e) => setVariant(i, { color: e.target.value })}
+                  className="border border-[#E5E5E5] px-2 py-1 text-midnight text-xs"
+                >
+                  {['White', 'Black', 'Grey'].map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={(e) => handleVariantFile(i, e)}
+                  disabled={variantUploading === i}
+                  className="text-xs flex-1"
+                />
+                {variantUploading === i && <span className="text-muted text-xs">Uploading…</span>}
+                <button
+                  type="button"
+                  onClick={() => removeVariant(i)}
+                  className="text-muted hover:text-red-400 text-lg leading-none px-1"
+                  aria-label="Remove variant"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
           </div>
 
           <label className="flex flex-col gap-1 md:col-span-2">

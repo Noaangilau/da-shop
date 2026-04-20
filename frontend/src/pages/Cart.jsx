@@ -60,8 +60,10 @@ export default function Cart() {
 
           {/* ── Items list ── */}
           <div className="lg:col-span-2 flex flex-col gap-px bg-[#E5E5E5]">
-            {cart.map((item) => (
-              <div key={item.id} className="bg-white p-6 flex gap-5 items-start">
+            {cart.map((item) => {
+              const key = item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`
+              return (
+              <div key={key} className="bg-white p-6 flex gap-5 items-start">
 
                 {/* Thumbnail */}
                 <Link to={`/product/${item.id}`} className="flex-shrink-0">
@@ -78,15 +80,23 @@ export default function Cart() {
                     {item.brand}
                   </p>
                   <Link to={`/product/${item.id}`}>
-                    <h3 className="text-midnight font-bold text-sm leading-snug mb-3 hover:text-muted transition-colors">
+                    <h3 className="text-midnight font-bold text-sm leading-snug mb-2 hover:text-muted transition-colors">
                       {item.name}
                     </h3>
                   </Link>
 
+                  {(item.variant?.color || item.selectedSize) && (
+                    <p className="text-muted text-[11px] mb-3">
+                      {item.variant?.color && <>Color: <span className="text-midnight">{item.variant.color}</span></>}
+                      {item.variant?.color && item.selectedSize && <span className="mx-2">·</span>}
+                      {item.selectedSize && <>Size: <span className="text-midnight">{item.selectedSize}</span></>}
+                    </p>
+                  )}
+
                   {/* Qty controls */}
                   <div className="flex items-center gap-3">
                     <button
-                      onClick={() => updateQty(item.id, item.qty - 1)}
+                      onClick={() => updateQty(key, item.qty - 1)}
                       className="w-7 h-7 border border-[#E5E5E5] text-midnight text-sm font-bold hover:border-midnight transition-colors flex items-center justify-center"
                     >
                       −
@@ -95,7 +105,7 @@ export default function Cart() {
                       {item.qty}
                     </span>
                     <button
-                      onClick={() => updateQty(item.id, item.qty + 1)}
+                      onClick={() => updateQty(key, item.qty + 1)}
                       className="w-7 h-7 border border-[#E5E5E5] text-midnight text-sm font-bold hover:border-midnight transition-colors flex items-center justify-center"
                     >
                       +
@@ -109,7 +119,7 @@ export default function Cart() {
                     ${(item.price * item.qty).toFixed(2)}
                   </span>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(key)}
                     className="text-muted text-[10px] tracking-[0.15em] uppercase hover:text-red-400 transition-colors"
                   >
                     Remove
@@ -117,7 +127,8 @@ export default function Cart() {
                 </div>
 
               </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* ── Order summary ── */}
@@ -129,9 +140,12 @@ export default function Cart() {
 
               <div className="flex flex-col gap-4 mb-6">
                 {cart.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
+                  <div key={item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`} className="flex justify-between text-sm">
                     <span className="text-gray-500 truncate pr-4">
-                      {item.name} <span className="text-muted">×{item.qty}</span>
+                      {item.name}
+                      {item.variant?.color && <span className="text-muted"> · {item.variant.color}</span>}
+                      {item.selectedSize && <span className="text-muted"> · {item.selectedSize}</span>}
+                      <span className="text-muted"> ×{item.qty}</span>
                     </span>
                     <span className="text-midnight font-bold flex-shrink-0">
                       ${(item.price * item.qty).toFixed(2)}

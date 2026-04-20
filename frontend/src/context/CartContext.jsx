@@ -2,6 +2,12 @@ import { createContext, useContext, useState, useEffect } from 'react'
 
 const CartContext = createContext()
 
+// Two identical products differing only in color/size should sit on separate
+// cart lines, so we key each line by a composite of product id + variant + size.
+function lineKeyFor(item) {
+  return `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`
+}
+
 export function CartProvider({ children }) {
   const [cart, setCart] = useState(() => {
     try {
@@ -16,28 +22,29 @@ export function CartProvider({ children }) {
   }, [cart])
 
   function addToCart(product) {
+    const key = lineKeyFor(product)
     setCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id)
+      const existing = prev.find((item) => lineKeyFor(item) === key)
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
+          lineKeyFor(item) === key ? { ...item, qty: item.qty + 1 } : item
         )
       }
-      return [...prev, { ...product, qty: 1 }]
+      return [...prev, { ...product, qty: 1, lineKey: key }]
     })
   }
 
-  function removeFromCart(productId) {
-    setCart((prev) => prev.filter((item) => item.id !== productId))
+  function removeFromCart(key) {
+    setCart((prev) => prev.filter((item) => (item.lineKey || lineKeyFor(item)) !== key))
   }
 
-  function updateQty(productId, qty) {
+  function updateQty(key, qty) {
     if (qty < 1) {
-      removeFromCart(productId)
+      removeFromCart(key)
       return
     }
     setCart((prev) =>
-      prev.map((item) => (item.id === productId ? { ...item, qty } : item))
+      prev.map((item) => ((item.lineKey || lineKeyFor(item)) === key ? { ...item, qty } : item))
     )
   }
 

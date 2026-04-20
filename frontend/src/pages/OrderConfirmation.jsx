@@ -94,6 +94,13 @@ export default function OrderConfirmation() {
                   <div>
                     <p className="text-muted text-[10px] tracking-wide uppercase">{item.brand}</p>
                     <p className="text-midnight font-bold text-sm">{item.product_name}</p>
+                    {(item.variant || item.size) && (
+                      <p className="text-muted text-[11px]">
+                        {item.variant && <>Color: <span className="text-midnight">{item.variant}</span></>}
+                        {item.variant && item.size && <span className="mx-1.5">·</span>}
+                        {item.size && <>Size: <span className="text-midnight">{item.size}</span></>}
+                      </p>
+                    )}
                     <p className="text-muted text-xs">×{item.quantity}</p>
                   </div>
                   <span className="text-midnight font-bold text-sm flex-shrink-0">

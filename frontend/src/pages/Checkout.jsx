@@ -69,6 +69,8 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
             price:        item.price,
             quantity:     item.qty,
             image:        item.image,
+            variant:      item.variant?.color || null,
+            size:         item.selectedSize || null,
           })),
         },
         token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
@@ -134,6 +136,8 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
             price:        item.price,
             quantity:     item.qty,
             image:        item.image,
+            variant:      item.variant?.color || null,
+            size:         item.selectedSize || null,
           })),
         },
         token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
@@ -257,11 +261,14 @@ export default function Checkout() {
         </h2>
         <div className="flex flex-col gap-px bg-[#E5E5E5] mb-6">
           {cart.map((item) => (
-            <div key={`${item.id}-${item.selectedSize}`} className="bg-white flex gap-3 p-3">
+            <div key={item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`} className="bg-white flex gap-3 p-3">
               <img src={item.image} alt={item.name} className="w-14 h-14 object-cover flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-muted text-[10px] tracking-wide uppercase">{item.brand}</p>
                 <p className="text-midnight font-bold text-xs leading-snug truncate">{item.name}</p>
+                {item.variant?.color && (
+                  <p className="text-muted text-[10px]">Color: {item.variant.color}</p>
+                )}
                 {item.selectedSize && (
                   <p className="text-muted text-[10px]">Size: {item.selectedSize}</p>
                 )}

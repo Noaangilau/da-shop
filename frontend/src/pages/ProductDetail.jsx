@@ -72,6 +72,7 @@ export default function ProductDetail() {
   const [error, setError]       = useState(false)
 
   const [selectedSize, setSelectedSize] = useState(null)
+  const [selectedVariant, setSelectedVariant] = useState(null)
   const [sizeError, setSizeError]       = useState(false)
   const [added, setAdded]               = useState(false)
   const sizeRef = useRef(null)
@@ -88,6 +89,7 @@ export default function ProductDetail() {
     setNotFound(false)
     setError(false)
     setSelectedSize(null)
+    setSelectedVariant(null)
     setSizeError(false)
     setAdded(false)
     setRelated([])
@@ -95,6 +97,8 @@ export default function ProductDetail() {
     axios.get(`${API_URL}/products/${id}`)
       .then((res) => {
         setProduct(res.data)
+        const variants = Array.isArray(res.data.variants) ? res.data.variants : null
+        if (variants && variants.length > 0) setSelectedVariant(variants[0])
         // Fetch related products from same collection
         if (res.data.collection) {
           setRelLoading(true)
@@ -190,7 +194,14 @@ export default function ProductDetail() {
       setTimeout(() => setSizeError(false), 2000)
       return
     }
-    addToCart({ ...product, image: product.image_url, selectedSize })
+    const variantImage = selectedVariant?.image_url || product.image_url
+    addToCart({
+      ...product,
+      image: variantImage,
+      image_url: variantImage,
+      selectedSize,
+      variant: selectedVariant || null,
+    })
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }
@@ -227,9 +238,9 @@ export default function ProductDetail() {
 
           {/* ── Image ── */}
           <div className="relative overflow-hidden bg-[#F7F7F7]">
-            {product.image_url ? (
+            {(selectedVariant?.image_url || product.image_url) ? (
               <img
-                src={product.image_url}
+                src={selectedVariant?.image_url || product.image_url}
                 alt={product.name}
                 className="w-full aspect-square object-cover"
               />
@@ -304,6 +315,35 @@ export default function ProductDetail() {
             )}
 
             <p className="text-gray-500 text-sm leading-relaxed">{product.description}</p>
+
+            {/* Color swatches */}
+            {Array.isArray(product.variants) && product.variants.length > 0 && (
+              <div>
+                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-midnight mb-3">
+                  Color{selectedVariant?.color && <span className="text-muted font-normal"> — {selectedVariant.color}</span>}
+                </p>
+                <div className="flex items-center gap-3">
+                  {product.variants.map((v) => {
+                    const swatch = { White: '#ffffff', Black: '#111111', Grey: '#8a8a8a' }[v.color] || '#ccc'
+                    const isSelected = selectedVariant?.color === v.color
+                    return (
+                      <button
+                        key={v.color}
+                        type="button"
+                        onClick={() => setSelectedVariant(v)}
+                        aria-label={v.color}
+                        className={`w-9 h-9 rounded-full border transition-all ${
+                          isSelected
+                            ? 'border-midnight ring-2 ring-midnight ring-offset-2'
+                            : 'border-[#E5E5E5] hover:border-midnight'
+                        }`}
+                        style={{ backgroundColor: swatch }}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             {/* Size selector */}
             {needsSize && (

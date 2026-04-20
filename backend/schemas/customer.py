@@ -35,6 +35,8 @@ class CustomerResponse(BaseModel):
     email_opt_in: bool
     sms_opt_in: bool
     is_admin: bool
+    role: Optional[str] = None
+    brand_id: Optional[int] = None
     created_at: datetime
 
     model_config = {"from_attributes": True}

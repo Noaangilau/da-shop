@@ -15,6 +15,7 @@ class Product(Base):
     subcategory = Column(String)
     description = Column(Text)
     sizes = Column(Text)  # JSON array stored as text
+    variants = Column(Text)  # JSON array: [{"color": "White", "image_url": "/media/..."}, ...]
     image_url = Column(String)
     type = Column(String, default="product")
     is_active = Column(Boolean, default=True, nullable=False)

@@ -22,6 +22,7 @@ import Profile from './pages/Profile'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 import AdminDashboard from './pages/AdminDashboard'
+import VendorDashboard from './pages/VendorDashboard'
 import NotFound from './pages/NotFound'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
@@ -72,6 +73,9 @@ function App() {
 
             {/* Protected — admin only */}
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+
+            {/* Protected — vendor only */}
+            <Route path="/vendor" element={<ProtectedRoute vendorOnly><VendorDashboard /></ProtectedRoute>} />
 
             {/* Utility routes */}
             <Route path="/gallery" element={<Gallery />} />

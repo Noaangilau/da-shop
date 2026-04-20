@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-// Updated categories — no food or beverage
 const CATEGORIES = [
   'Clothing',
   'Jewelry',
@@ -13,15 +13,15 @@ const CATEGORIES = [
   'Mixed / Multiple Categories',
 ]
 
-// ─── Become a Vendor Page ─────────────────────────────────────────────────────
-
 export default function BecomeAVendor() {
+  const navigate = useNavigate()
+  const { customer } = useAuth()
+
   const [form, setForm] = useState({
-    business_name: '',
-    contact_name: '',
-    email: '',
-    instagram_handle: '',
-    product_category: '',
+    email: '', password: '',
+    first_name: '', last_name: '', phone: '',
+    brand_name: '', tagline: '', category: '',
+    location: '', instagram: '', bio: '',
   })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -34,24 +34,46 @@ export default function BecomeAVendor() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!form.business_name || !form.contact_name || !form.email || !form.product_category) {
+    const required = ['email', 'password', 'first_name', 'last_name', 'brand_name', 'category']
+    if (required.some((f) => !form[f])) {
       setError('Please fill in all required fields.')
       return
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(form.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       setError('Please enter a valid email address.')
       return
     }
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters.')
+      return
+    }
+
     setLoading(true)
     try {
-      await axios.post(`${API_URL}/vendor-inquiry`, form)
+      const { data } = await axios.post(`${API_URL}/auth/register-vendor`, form)
+      localStorage.setItem('da_shop_token', data.token)
       setSubmitted(true)
-    } catch {
-      setError('Something went wrong. Please try again.')
+      setTimeout(() => navigate('/vendor'), 1500)
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (customer?.role === 'vendor') {
+    return (
+      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+        <div className="text-center max-w-md">
+          <div className="w-10 h-px bg-midnight mx-auto mb-10" />
+          <h1 className="text-midnight font-black uppercase tracking-wide text-3xl mb-4">You're Already a Vendor</h1>
+          <p className="text-gray-400 text-sm leading-relaxed mb-10">Go to your vendor dashboard to manage your products.</p>
+          <Link to="/vendor" className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors">
+            Go to Dashboard
+          </Link>
+        </div>
+      </main>
+    )
   }
 
   if (submitted) {
@@ -59,18 +81,11 @@ export default function BecomeAVendor() {
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="w-10 h-px bg-midnight mx-auto mb-10" />
-          <h1 className="text-midnight font-black uppercase tracking-wide text-3xl mb-4">
-            Application Received
-          </h1>
-          <p className="text-gray-400 text-sm leading-relaxed mb-10">
-            Thanks for applying to sell on DA SHOP. We'll review your application and be in touch within 3–5 business days.
+          <h1 className="text-midnight font-black uppercase tracking-wide text-3xl mb-4">Account Created</h1>
+          <p className="text-gray-400 text-sm leading-relaxed mb-4">
+            Your vendor account is ready. Your storefront is pending admin approval — in the meantime you can start adding products.
           </p>
-          <Link
-            to="/"
-            className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors duration-200"
-          >
-            Back to Home
-          </Link>
+          <p className="text-muted text-xs">Redirecting to your dashboard…</p>
         </div>
       </main>
     )
@@ -79,141 +94,101 @@ export default function BecomeAVendor() {
   return (
     <main className="pt-[88px]">
 
-      {/* ── Hero ── */}
       <section
         className="relative py-32 px-6 flex items-center justify-center text-center overflow-hidden"
         style={{
-          // Artisan/textile workshop — not hotel-like
           backgroundImage: `url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1400&q=70')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: 'cover', backgroundPosition: 'center',
         }}
       >
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative z-10 max-w-2xl mx-auto">
-          <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-medium mb-6">
-            Join the Marketplace
-          </p>
-          <h1
-            className="text-white font-black uppercase leading-tight mb-5"
-            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '0.04em' }}
-          >
+          <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-medium mb-6">Join the Marketplace</p>
+          <h1 className="text-white font-black uppercase leading-tight mb-5" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '0.04em' }}>
             Become a Vendor
           </h1>
           <p className="text-white/40 text-sm leading-relaxed max-w-lg mx-auto">
-            DA SHOP is built for Pacific vendors. Get your own branded storefront, reach new customers, and represent your culture on your terms.
+            Create your account, set up your brand page, and start adding products today. We review and activate new storefronts within 3–5 days.
           </p>
         </div>
       </section>
 
-      {/* ── Why DA SHOP ── */}
-      <section className="bg-white py-16 px-6 border-b border-[#E5E5E5]">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E5E5E5]">
-            {[
-              {
-                title: 'Your Own Storefront',
-                body: 'A branded page for your business, your products, and your story — no noise from other vendors.',
-              },
-              {
-                title: 'Built for the Culture',
-                body: 'A marketplace made specifically for Pacific vendors. Your buyers already know what they are looking for.',
-              },
-              {
-                title: 'Simple Setup',
-                body: 'No tech skills needed. Apply below, we handle the rest and get you live within the week.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="bg-white p-8">
-                <div className="w-6 h-px bg-midnight mb-6" />
-                <h3 className="text-midnight font-black uppercase tracking-wide text-xs mb-3">
-                  {item.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {item.body}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Application form ── */}
       <section className="bg-[#F7F7F7] py-20 px-6">
         <div className="max-w-lg mx-auto">
-          <div className="mb-12">
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
-              Step 1 of 1
-            </p>
-            <h2 className="text-midnight font-black uppercase tracking-wide text-3xl">
-              Apply Now
-            </h2>
+          <div className="mb-10">
+            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Vendor Sign-up</p>
+            <h2 className="text-midnight font-black uppercase tracking-wide text-3xl">Create Your Account</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold border-b border-[#E5E5E5] pb-2">You</p>
+            {renderField('first_name', 'First Name', form, handleChange, true)}
+            {renderField('last_name', 'Last Name', form, handleChange, true)}
+            {renderField('email', 'Email', form, handleChange, true, 'email')}
+            {renderField('password', 'Password', form, handleChange, true, 'password')}
+            {renderField('phone', 'Phone', form, handleChange, false, 'tel')}
 
-            {[
-              { name: 'business_name', label: 'Business Name', placeholder: 'Your brand name', required: true },
-              { name: 'contact_name', label: 'Your Name', placeholder: 'Full name', required: true },
-              { name: 'email', label: 'Email Address', placeholder: 'you@example.com', required: true },
-              { name: 'instagram_handle', label: 'Instagram Handle', placeholder: '@yourhandle', required: false },
-            ].map((field) => (
-              <div key={field.name} className="flex flex-col gap-1.5">
-                <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
-                  {field.label}{' '}
-                  {field.required
-                    ? <span className="text-red-400">*</span>
-                    : <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>
-                  }
-                </label>
-                <input
-                  type="text"
-                  name={field.name}
-                  value={form[field.name]}
-                  onChange={handleChange}
-                  placeholder={field.placeholder}
-                  className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight placeholder-gray-300 focus:outline-none focus:border-midnight transition-colors bg-white"
-                />
-              </div>
-            ))}
+            <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold border-b border-[#E5E5E5] pb-2 mt-4">Your Brand</p>
+            {renderField('brand_name', 'Brand Name', form, handleChange, true)}
+            {renderField('tagline', 'Tagline', form, handleChange, false)}
 
             <div className="flex flex-col gap-1.5">
               <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
-                Product Category <span className="text-red-400">*</span>
+                Category <span className="text-red-400">*</span>
               </label>
               <select
-                name="product_category"
-                value={form.product_category}
-                onChange={handleChange}
-                className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight focus:outline-none focus:border-midnight transition-colors bg-white appearance-none cursor-pointer"
+                name="category" value={form.category} onChange={handleChange}
+                className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight bg-white focus:outline-none focus:border-midnight"
               >
                 <option value="">Select a category</option>
-                {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
+                {CATEGORIES.map((cat) => <option key={cat} value={cat}>{cat}</option>)}
               </select>
             </div>
 
-            {error && (
-              <p className="text-red-400 text-xs tracking-wide">{error}</p>
-            )}
+            {renderField('location', 'Location', form, handleChange, false)}
+            {renderField('instagram', 'Instagram', form, handleChange, false)}
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+                Short Bio <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>
+              </label>
+              <textarea
+                name="bio" value={form.bio} onChange={handleChange} rows={3}
+                className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight bg-white focus:outline-none focus:border-midnight"
+              />
+            </div>
+
+            {error && <p className="text-red-400 text-xs tracking-wide">{error}</p>}
 
             <button
-              type="submit"
-              disabled={loading}
-              className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+              type="submit" disabled={loading}
+              className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors disabled:opacity-40 mt-2"
             >
-              {loading ? 'Submitting...' : 'Submit Application'}
+              {loading ? 'Creating…' : 'Create Vendor Account'}
             </button>
-
             <p className="text-muted text-xs leading-relaxed text-center">
-              We review every application personally. You'll hear back within 3–5 business days.
+              Already have an account? <Link to="/login" className="underline hover:text-midnight">Sign in</Link>
             </p>
-
           </form>
         </div>
       </section>
-
     </main>
+  )
+}
+
+function renderField(name, label, form, onChange, required, type = 'text') {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+        {label}{' '}
+        {required
+          ? <span className="text-red-400">*</span>
+          : <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>}
+      </label>
+      <input
+        type={type} name={name} value={form[name]} onChange={onChange}
+        className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight bg-white focus:outline-none focus:border-midnight"
+      />
+    </div>
   )
 }

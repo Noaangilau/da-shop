@@ -1,10 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi.responses import Response
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from datetime import datetime, timezone, timedelta
-from typing import Optional, List
+from typing import Optional, List, Dict
 import json
+import zipfile
+import io
 
 from database import get_db
 from models.customer import Customer
@@ -13,7 +16,10 @@ from models.vendor_inquiry import VendorInquiry
 from models.product import Product
 from models.brand import Brand
 from models.announcement import Announcement
+from models.tee_template import TeeTemplate
 from routers.auth import get_admin_customer
+from services.mockup import composite, DEFAULT_ANCHOR
+from services.media import save_upload, save_bytes
 from utils.email import send_cart_abandonment_email, send_cart_abandonment_sms
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -65,10 +71,32 @@ def get_all_customers(admin: Customer = Depends(get_admin_customer), db: Session
             "id": c.id, "email": c.email, "first_name": c.first_name, "last_name": c.last_name,
             "email_opt_in": c.email_opt_in, "sms_opt_in": c.sms_opt_in,
             "role": getattr(c, "role", None) or ("admin" if c.is_admin else "customer"),
+            "brand_id": getattr(c, "brand_id", None),
             "created_at": c.created_at.isoformat() if c.created_at else None,
         }
         for c in customers
     ]
+
+
+class CustomerRoleIn(BaseModel):
+    role: str  # customer | vendor | admin
+    brand_id: Optional[int] = None
+
+
+@router.patch("/customers/{customer_id}/role")
+def admin_set_customer_role(customer_id: int, data: CustomerRoleIn, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    if data.role not in ("customer", "vendor", "admin"):
+        raise HTTPException(400, "role must be customer | vendor | admin")
+    if data.role == "vendor" and not data.brand_id:
+        raise HTTPException(400, "brand_id required when promoting to vendor")
+    c = db.query(Customer).filter(Customer.id == customer_id).first()
+    if not c:
+        raise HTTPException(404, "Customer not found")
+    c.role = data.role
+    c.is_admin = (data.role == "admin")
+    c.brand_id = data.brand_id if data.role == "vendor" else None
+    db.commit()
+    return {"id": c.id, "role": c.role, "is_admin": c.is_admin, "brand_id": c.brand_id}
 
 
 @router.get("/vendor-inquiries")
@@ -111,6 +139,7 @@ class ProductIn(BaseModel):
     subcategory: Optional[str] = None
     description: Optional[str] = None
     sizes: Optional[List[str]] = None
+    variants: Optional[List[Dict[str, str]]] = None
     image_url: Optional[str] = None
     type: str = "product"
     is_active: bool = True
@@ -124,6 +153,7 @@ def _serialize_product(p: Product):
         "price": p.price, "category": p.category, "subcategory": p.subcategory,
         "description": p.description,
         "sizes": json.loads(p.sizes) if p.sizes else [],
+        "variants": json.loads(p.variants) if getattr(p, "variants", None) else None,
         "image_url": p.image_url, "type": p.type,
         "is_active": p.is_active,
         "is_featured": getattr(p, "is_featured", False),
@@ -142,7 +172,9 @@ def admin_create_product(data: ProductIn, admin: Customer = Depends(get_admin_cu
     p = Product(
         brand_id=data.brand_id, name=data.name, collection=data.collection, price=data.price,
         category=data.category, subcategory=data.subcategory, description=data.description,
-        sizes=json.dumps(data.sizes) if data.sizes else None, image_url=data.image_url,
+        sizes=json.dumps(data.sizes) if data.sizes else None,
+        variants=json.dumps(data.variants) if data.variants else None,
+        image_url=data.image_url,
         type=data.type, is_active=data.is_active, is_featured=data.is_featured,
         stock_count=data.stock_count,
     )
@@ -159,6 +191,7 @@ def admin_update_product(product_id: int, data: ProductIn, admin: Customer = Dep
     p.price = data.price; p.category = data.category; p.subcategory = data.subcategory
     p.description = data.description
     p.sizes = json.dumps(data.sizes) if data.sizes else None
+    p.variants = json.dumps(data.variants) if data.variants else None
     p.image_url = data.image_url; p.type = data.type
     p.is_active = data.is_active; p.is_featured = data.is_featured
     p.stock_count = data.stock_count
@@ -274,3 +307,250 @@ def admin_delete_announcement(ann_id: int, admin: Customer = Depends(get_admin_c
         raise HTTPException(404, "Announcement not found")
     db.delete(a); db.commit()
     return {"success": True}
+
+
+# ─── Image upload ─────────────────────────────────────────────────────────────
+
+@router.post("/upload-image")
+async def admin_upload_image(file: UploadFile = File(...), admin: Customer = Depends(get_admin_customer)):
+    url = await save_upload(file, prefix="admin")
+    return {"image_url": url}
+
+
+# ─── Full Brand CRUD ──────────────────────────────────────────────────────────
+
+class BrandIn(BaseModel):
+    name: str
+    tagline: Optional[str] = None
+    bio: Optional[str] = None
+    category: Optional[str] = None
+    location: Optional[str] = None
+    instagram: Optional[str] = None
+    logo_white_url: Optional[str] = None
+    logo_navy_url: Optional[str] = None
+    hero_image_url: Optional[str] = None
+    card_image_url: Optional[str] = None
+    is_active: bool = True
+
+
+def _serialize_brand(b: Brand):
+    return {
+        "id": b.id, "name": b.name, "tagline": b.tagline, "bio": b.bio,
+        "category": b.category, "location": b.location, "instagram": b.instagram,
+        "logo_white_url": b.logo_white_url, "logo_navy_url": b.logo_navy_url,
+        "hero_image_url": b.hero_image_url, "card_image_url": b.card_image_url,
+        "is_active": b.is_active,
+        "created_at": b.created_at.isoformat() if b.created_at else None,
+    }
+
+
+@router.get("/brands-full")
+def admin_list_brands_full(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    return [_serialize_brand(b) for b in db.query(Brand).order_by(Brand.name).all()]
+
+
+@router.post("/brands")
+def admin_create_brand(data: BrandIn, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    b = Brand(**data.model_dump())
+    db.add(b); db.commit(); db.refresh(b)
+    return _serialize_brand(b)
+
+
+@router.put("/brands/{brand_id}")
+def admin_update_brand(brand_id: int, data: BrandIn, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    b = db.query(Brand).filter(Brand.id == brand_id).first()
+    if not b:
+        raise HTTPException(404, "Brand not found")
+    for k, v in data.model_dump().items():
+        setattr(b, k, v)
+    db.commit(); db.refresh(b)
+    return _serialize_brand(b)
+
+
+@router.patch("/brands/{brand_id}/approve")
+def admin_approve_brand(brand_id: int, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    b = db.query(Brand).filter(Brand.id == brand_id).first()
+    if not b:
+        raise HTTPException(404, "Brand not found")
+    b.is_active = True
+    db.commit()
+    return {"id": b.id, "is_active": b.is_active}
+
+
+@router.patch("/brands/{brand_id}/revoke")
+def admin_revoke_brand(brand_id: int, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    b = db.query(Brand).filter(Brand.id == brand_id).first()
+    if not b:
+        raise HTTPException(404, "Brand not found")
+    b.is_active = False
+    db.commit()
+    return {"id": b.id, "is_active": b.is_active}
+
+
+# ─── Vendor approvals (list customers with role=vendor) ───────────────────────
+
+@router.get("/vendors")
+def admin_list_vendors(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    rows = db.query(Customer).filter(Customer.role == "vendor").order_by(Customer.created_at.desc()).all()
+    out = []
+    for c in rows:
+        brand = db.query(Brand).filter(Brand.id == c.brand_id).first() if c.brand_id else None
+        out.append({
+            "id": c.id, "email": c.email, "first_name": c.first_name, "last_name": c.last_name,
+            "brand_id": c.brand_id,
+            "brand": _serialize_brand(brand) if brand else None,
+            "created_at": c.created_at.isoformat() if c.created_at else None,
+        })
+    return out
+
+
+# ─── Tee templates ────────────────────────────────────────────────────────────
+
+def _serialize_template(t: TeeTemplate):
+    return {
+        "id": t.id, "name": t.name, "color": t.color, "image_url": t.image_url,
+        "anchor": json.loads(t.anchor_json) if t.anchor_json else None,
+        "created_at": t.created_at.isoformat() if t.created_at else None,
+    }
+
+
+@router.get("/tee-templates")
+def admin_list_tee_templates(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    return [_serialize_template(t) for t in db.query(TeeTemplate).order_by(TeeTemplate.name).all()]
+
+
+@router.post("/tee-templates")
+async def admin_create_tee_template(
+    name: str = Form(...),
+    color: Optional[str] = Form(None),
+    anchor_json: Optional[str] = Form(None),
+    file: UploadFile = File(...),
+    admin: Customer = Depends(get_admin_customer),
+    db: Session = Depends(get_db),
+):
+    image_url = await save_upload(file, prefix="tee")
+    t = TeeTemplate(name=name, color=color, image_url=image_url, anchor_json=anchor_json)
+    db.add(t); db.commit(); db.refresh(t)
+    return _serialize_template(t)
+
+
+@router.delete("/tee-templates/{template_id}")
+def admin_delete_tee_template(template_id: int, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    t = db.query(TeeTemplate).filter(TeeTemplate.id == template_id).first()
+    if not t:
+        raise HTTPException(404, "Template not found")
+    db.delete(t); db.commit()
+    return {"success": True}
+
+
+# ─── Mockup Studio ────────────────────────────────────────────────────────────
+
+def _load_template_bytes(template: TeeTemplate) -> bytes:
+    """Read bytes of a stored tee image. image_url is `/media/<filename>`."""
+    from services.media import MEDIA_DIR
+    if not template.image_url or not template.image_url.startswith("/media/"):
+        raise HTTPException(500, f"Template {template.id} has no stored image")
+    filename = template.image_url.split("/media/", 1)[1]
+    path = MEDIA_DIR / filename
+    if not path.is_file():
+        raise HTTPException(500, f"Template file missing: {filename}")
+    return path.read_bytes()
+
+
+def _resolve_anchor(override_json: Optional[str], template: Optional[TeeTemplate]) -> dict:
+    if override_json:
+        try:
+            return json.loads(override_json)
+        except Exception:
+            raise HTTPException(400, "anchor_json must be valid JSON")
+    if template and template.anchor_json:
+        return json.loads(template.anchor_json)
+    return DEFAULT_ANCHOR
+
+
+@router.post("/mockup/preview")
+async def admin_mockup_preview(
+    design: UploadFile = File(...),
+    template_id: int = Form(...),
+    anchor_json: Optional[str] = Form(None),
+    admin: Customer = Depends(get_admin_customer),
+    db: Session = Depends(get_db),
+):
+    template = db.query(TeeTemplate).filter(TeeTemplate.id == template_id).first()
+    if not template:
+        raise HTTPException(404, "Template not found")
+    anchor = _resolve_anchor(anchor_json, template)
+    design_bytes = await design.read()
+    out = composite(design_bytes, _load_template_bytes(template), anchor=anchor)
+    return Response(content=out, media_type="image/png")
+
+
+@router.post("/mockup/generate")
+async def admin_mockup_generate(
+    design: UploadFile = File(...),
+    template_ids: str = Form(...),  # comma-separated ids
+    anchor_json: Optional[str] = Form(None),
+    admin: Customer = Depends(get_admin_customer),
+    db: Session = Depends(get_db),
+):
+    ids = [int(x) for x in template_ids.split(",") if x.strip()]
+    if not ids:
+        raise HTTPException(400, "template_ids required")
+    design_bytes = await design.read()
+    results = []
+    for tid in ids:
+        template = db.query(TeeTemplate).filter(TeeTemplate.id == tid).first()
+        if not template:
+            continue
+        anchor = _resolve_anchor(anchor_json, template)
+        out = composite(design_bytes, _load_template_bytes(template), anchor=anchor)
+        url = save_bytes(out, prefix=f"mockup-t{tid}", ext="png")
+        results.append({"template_id": tid, "template_name": template.name, "image_url": url})
+    return {"results": results}
+
+
+@router.post("/mockup/bulk")
+async def admin_mockup_bulk(
+    designs_zip: UploadFile = File(...),
+    tees_zip: UploadFile = File(...),
+    combos_json: str = Form(...),
+    anchor_json: Optional[str] = Form(None),
+    admin: Customer = Depends(get_admin_customer),
+):
+    """Composite many design×tee pairs in one request. combos is a list of
+    {design_name, tee_name, output_name?} entries; names are zip-member basenames."""
+    try:
+        combos = json.loads(combos_json)
+    except Exception:
+        raise HTTPException(400, "combos_json must be valid JSON")
+    anchor = _resolve_anchor(anchor_json, None)
+
+    def _zip_index(data: bytes) -> dict:
+        zf = zipfile.ZipFile(io.BytesIO(data))
+        return {_basename(n): n for n in zf.namelist() if not n.endswith("/")}, zf
+
+    designs_data = await designs_zip.read()
+    tees_data = await tees_zip.read()
+    design_index, dzf = _zip_index(designs_data)
+    tee_index, tzf = _zip_index(tees_data)
+
+    results = []
+    for combo in combos:
+        d_name = combo.get("design_name")
+        t_name = combo.get("tee_name")
+        if d_name not in design_index or t_name not in tee_index:
+            results.append({"design_name": d_name, "tee_name": t_name, "error": "missing in zip"})
+            continue
+        d_bytes = dzf.read(design_index[d_name])
+        t_bytes = tzf.read(tee_index[t_name])
+        try:
+            out = composite(d_bytes, t_bytes, anchor=anchor)
+            url = save_bytes(out, prefix="mockup-bulk", ext="png")
+            results.append({"design_name": d_name, "tee_name": t_name, "image_url": url})
+        except Exception as e:
+            results.append({"design_name": d_name, "tee_name": t_name, "error": str(e)})
+    return {"results": results}
+
+
+def _basename(name: str) -> str:
+    return name.rsplit("/", 1)[-1]

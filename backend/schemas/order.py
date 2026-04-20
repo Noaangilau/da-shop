@@ -10,6 +10,8 @@ class OrderItemCreate(BaseModel):
     price: float
     quantity: int
     image: Optional[str] = None
+    variant: Optional[str] = None
+    size: Optional[str] = None
 
 
 class OrderCreate(BaseModel):
@@ -32,6 +34,8 @@ class OrderItemResponse(BaseModel):
     price: float
     quantity: int
     image: Optional[str]
+    variant: Optional[str] = None
+    size: Optional[str] = None
 
     model_config = {"from_attributes": True}
 

@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from typing import Optional
 import os
 
 from database import get_db
 from models.customer import Customer
+from models.brand import Brand
 from schemas.customer import CustomerRegister, CustomerLogin, CustomerResponse, AuthResponse
 from utils.auth import hash_password, verify_password, create_access_token, decode_token
 
@@ -37,6 +40,22 @@ def get_admin_customer(customer: Customer = Depends(get_current_customer)) -> Cu
     return customer
 
 
+def get_current_vendor(customer: Customer = Depends(get_current_customer)) -> Customer:
+    role = getattr(customer, "role", None)
+    if role != "vendor" or not getattr(customer, "brand_id", None):
+        raise HTTPException(status_code=403, detail="Vendor access required")
+    return customer
+
+
+def _token_claims(customer: Customer) -> dict:
+    return {
+        "sub": str(customer.id),
+        "is_admin": bool(customer.is_admin),
+        "role": getattr(customer, "role", None) or ("admin" if customer.is_admin else "customer"),
+        "brand_id": getattr(customer, "brand_id", None),
+    }
+
+
 # ─── Endpoints ────────────────────────────────────────────────────────────────
 
 @router.post("/register", response_model=AuthResponse)
@@ -55,13 +74,63 @@ def register(data: CustomerRegister, db: Session = Depends(get_db)):
         email_opt_in=data.email_opt_in,
         sms_opt_in=data.sms_opt_in,
         is_admin=is_admin,
+        role="admin" if is_admin else "customer",
     )
     db.add(customer)
     db.commit()
     db.refresh(customer)
 
-    token = create_access_token({"sub": str(customer.id), "is_admin": customer.is_admin})
-    return {"token": token, "customer": customer}
+    return {"token": create_access_token(_token_claims(customer)), "customer": customer}
+
+
+class VendorRegister(BaseModel):
+    # Customer fields
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+    phone: Optional[str] = None
+    # Brand fields
+    brand_name: str
+    tagline: Optional[str] = None
+    bio: Optional[str] = None
+    category: Optional[str] = None
+    location: Optional[str] = None
+    instagram: Optional[str] = None
+
+
+@router.post("/register-vendor", response_model=AuthResponse)
+def register_vendor(data: VendorRegister, db: Session = Depends(get_db)):
+    if db.query(Customer).filter(Customer.email == data.email.lower()).first():
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    brand = Brand(
+        name=data.brand_name,
+        tagline=data.tagline,
+        bio=data.bio,
+        category=data.category,
+        location=data.location,
+        instagram=data.instagram,
+        is_active=False,  # pending admin approval
+    )
+    db.add(brand)
+    db.flush()  # get brand.id without committing
+
+    customer = Customer(
+        email=data.email.lower(),
+        password_hash=hash_password(data.password),
+        first_name=data.first_name,
+        last_name=data.last_name,
+        phone=data.phone,
+        is_admin=False,
+        role="vendor",
+        brand_id=brand.id,
+    )
+    db.add(customer)
+    db.commit()
+    db.refresh(customer)
+
+    return {"token": create_access_token(_token_claims(customer)), "customer": customer}
 
 
 @router.post("/login", response_model=AuthResponse)
@@ -70,8 +139,7 @@ def login(data: CustomerLogin, db: Session = Depends(get_db)):
     if not customer or not verify_password(data.password, customer.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    token = create_access_token({"sub": str(customer.id), "is_admin": customer.is_admin})
-    return {"token": token, "customer": customer}
+    return {"token": create_access_token(_token_claims(customer)), "customer": customer}
 
 
 @router.get("/me", response_model=CustomerResponse)

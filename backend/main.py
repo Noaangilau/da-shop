@@ -14,8 +14,9 @@ import models.product           # noqa: F401
 import models.notification_log  # noqa: F401
 import models.chat_log           # noqa: F401
 import models.announcement       # noqa: F401
+import models.tee_template        # noqa: F401
 
-from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments, announcements
+from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments, announcements, media, vendor
 
 load_dotenv()
 
@@ -35,6 +36,9 @@ def _run_migrations():
         "ALTER TABLE products ADD COLUMN is_featured BOOLEAN DEFAULT FALSE",
         "ALTER TABLE products ADD COLUMN stock_count INTEGER",
         "ALTER TABLE products ADD COLUMN kaikefiu BOOLEAN DEFAULT FALSE",
+        "ALTER TABLE products ADD COLUMN variants TEXT",
+        "ALTER TABLE order_items ADD COLUMN variant TEXT",
+        "ALTER TABLE order_items ADD COLUMN size TEXT",
     ]
     for sql in migrations:
         try:
@@ -79,6 +83,8 @@ app.include_router(brands.router)
 app.include_router(products.router)
 app.include_router(payments.router)
 app.include_router(announcements.router)
+app.include_router(media.router)
+app.include_router(vendor.router)
 
 
 @app.get("/health")

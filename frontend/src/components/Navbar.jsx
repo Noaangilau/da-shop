@@ -182,6 +182,11 @@ export default function Navbar() {
                     Admin
                   </Link>
                 )}
+                {customer.role === 'vendor' && customer.brand_id && (
+                  <Link to="/vendor" className="text-[11px] tracking-[0.12em] uppercase font-medium text-muted hover:text-midnight transition-colors">
+                    Vendor
+                  </Link>
+                )}
                 <Link to="/profile" className="text-[11px] tracking-[0.12em] uppercase font-medium text-muted hover:text-midnight transition-colors">
                   {customer.first_name}
                 </Link>
@@ -273,6 +278,11 @@ export default function Navbar() {
               {customer.is_admin && (
                 <Link to="/admin" onClick={() => setMenuOpen(false)} className="py-2 text-muted text-[11px] tracking-[0.12em] uppercase font-medium hover:text-midnight transition-colors">
                   Admin Dashboard
+                </Link>
+              )}
+              {customer.role === 'vendor' && customer.brand_id && (
+                <Link to="/vendor" onClick={() => setMenuOpen(false)} className="py-2 text-muted text-[11px] tracking-[0.12em] uppercase font-medium hover:text-midnight transition-colors">
+                  Vendor Dashboard
                 </Link>
               )}
             </>

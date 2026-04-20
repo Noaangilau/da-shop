@@ -36,5 +36,7 @@ class OrderItem(Base):
     price        = Column(Float, nullable=False)
     quantity     = Column(Integer, nullable=False)
     image        = Column(String, nullable=True)
+    variant      = Column(String, nullable=True)
+    size         = Column(String, nullable=True)
 
     order = relationship("Order", back_populates="items")

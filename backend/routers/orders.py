@@ -93,6 +93,8 @@ def create_order(
             price=item.price,
             quantity=item.quantity,
             image=item.image,
+            variant=item.variant,
+            size=item.size,
         ))
 
     customer.cart_data = None

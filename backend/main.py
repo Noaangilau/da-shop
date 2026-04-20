@@ -52,6 +52,43 @@ def _run_migrations():
 
 _run_migrations()
 
+
+def _ensure_admin():
+    admin_email = os.getenv("ADMIN_EMAIL", "").strip().lower()
+    admin_password = os.getenv("ADMIN_PASSWORD", "").strip()
+    if not admin_email:
+        return
+    from sqlalchemy import text
+    from sqlalchemy.orm import Session
+    from models.customer import Customer
+    from utils.auth import hash_password
+    session = Session(engine)
+    try:
+        existing = session.query(Customer).filter(Customer.email == admin_email).first()
+        if existing:
+            if not existing.is_admin:
+                existing.is_admin = True
+                existing.role = "admin"
+                session.commit()
+                print(f"  [startup] promoted {admin_email} to admin")
+        elif admin_password:
+            session.add(Customer(
+                email=admin_email,
+                password_hash=hash_password(admin_password),
+                first_name="Admin",
+                last_name="",
+                is_admin=True,
+                role="admin",
+            ))
+            session.commit()
+            print(f"  [startup] created admin account: {admin_email}")
+    except Exception as e:
+        print(f"  [startup] admin setup skipped: {e}")
+    finally:
+        session.close()
+
+_ensure_admin()
+
 try:
     from seed_catalog import sync_product_images
     sync_product_images()

@@ -382,6 +382,7 @@ export default function AdminDashboard() {
               <table className="w-full text-sm">
                 <thead className="bg-[#F7F7F7] text-muted text-[10px] tracking-[0.15em] uppercase">
                   <tr>
+                    <th className="text-left p-3">ID</th>
                     <th className="text-left p-3">Name</th>
                     <th className="text-left p-3">Category</th>
                     <th className="text-left p-3">Location</th>
@@ -392,6 +393,7 @@ export default function AdminDashboard() {
                 <tbody>
                   {brands.map((b) => (
                     <tr key={b.id} className="border-t border-[#E5E5E5]">
+                      <td className="p-3 text-muted font-mono text-xs">{b.id}</td>
                       <td className="p-3 text-midnight font-semibold">{b.name}</td>
                       <td className="p-3 text-muted">{b.category || '—'}</td>
                       <td className="p-3 text-muted">{b.location || '—'}</td>

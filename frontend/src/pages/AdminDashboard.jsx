@@ -811,7 +811,7 @@ function MockupStudio({ token, templates, onTemplateChange }) {
             {templates.map((t) => (
               <div key={t.id} className={`border p-3 flex flex-col gap-2 ${selectedIds.includes(t.id) ? 'border-midnight' : 'border-[#E5E5E5]'}`}>
                 <img src={absolutize(t.image_url)} alt={t.name} className="w-full aspect-[4/5] object-cover bg-[#F7F7F7]" />
-                <p className="text-midnight font-semibold text-xs">{t.name}</p>
+                <p className="text-midnight font-semibold text-xs">{t.name} <span className="text-muted font-mono">#{t.id}</span></p>
                 {t.color && <p className="text-muted text-[10px] uppercase tracking-wide">{t.color}</p>}
                 <div className="flex justify-between items-center gap-2 mt-1">
                   <label className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted">

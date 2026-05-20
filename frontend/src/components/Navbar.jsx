@@ -261,7 +261,7 @@ export default function Navbar() {
           <Link
             to="/become-a-vendor"
             onClick={() => setMenuOpen(false)}
-            className="bg-ink text-paper font-mono text-[11px] tracking-[0.12em] uppercase font-medium px-5 py-3 text-center hover:bg-accent transition-colors mt-2"
+            className="bg-ink text-paper font-mono text-[11px] tracking-[0.12em] uppercase font-medium px-5 py-3 text-center hover:opacity-80 transition-opacity mt-2"
           >
             Become a Vendor
           </Link>

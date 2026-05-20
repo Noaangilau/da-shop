@@ -27,7 +27,7 @@ export default {
         'rule-2':   '#ebe6dc',
         'paper':    '#f5f1ea',
         'paper-2':  '#eee8dc',
-        'accent':   '#b04b3a',
+        'accent':   '#0a0a0a',
       },
       fontFamily: {
         display: ['Archivo', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],

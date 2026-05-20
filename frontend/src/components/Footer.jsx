@@ -54,7 +54,7 @@ export default function Footer() {
 
           <div className="md:col-span-2">
             <p className="font-display font-black text-[64px] leading-[0.95] tracking-[-0.03em] uppercase text-paper">
-              DA SHOP<span className="text-accent">.</span>
+              DA SHOP<span className="text-paper/40">.</span>
             </p>
             <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-paper/30 mt-4 max-w-[200px]">
               A multi-brand catalog of basics.

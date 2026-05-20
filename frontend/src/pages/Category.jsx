@@ -95,7 +95,7 @@ export default function Category() {
   }
 
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Category hero ── */}
       <section

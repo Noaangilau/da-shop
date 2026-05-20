@@ -32,7 +32,7 @@ export default function Login() {
   }
 
   return (
-    <main className="pt-[88px] min-h-screen bg-paper flex items-center justify-center px-6">
+    <main className="min-h-screen bg-paper flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         <div className="bg-white p-10">
 

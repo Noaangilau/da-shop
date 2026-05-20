@@ -126,7 +126,7 @@ export default function ProductDetail() {
 
   if (loading) {
     return (
-      <main className="pt-[88px] bg-white min-h-screen">
+      <main className="bg-white min-h-screen">
         <div className="max-w-[1280px] mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             <div className="aspect-square bg-ink/10 animate-pulse" />
@@ -146,7 +146,7 @@ export default function ProductDetail() {
 
   if (notFound || (!loading && !product)) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
           <p className="text-mute text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
           <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-6">
@@ -162,7 +162,7 @@ export default function ProductDetail() {
 
   if (error) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
           <p className="text-mute text-sm uppercase tracking-widest">
             Something went wrong. Try refreshing.
@@ -217,7 +217,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <main className="pt-[88px] bg-white min-h-screen">
+    <main className="bg-white min-h-screen">
 
       {/* ── Breadcrumb ── */}
       <div className="border-b border-rule">

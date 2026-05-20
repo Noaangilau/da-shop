@@ -56,7 +56,7 @@ export default function Support() {
   }
 
   return (
-    <main className="pt-[88px] bg-white min-h-screen">
+    <main className="bg-white min-h-screen">
 
       {/* ── Header ── */}
       <div className="bg-white border-b border-rule">

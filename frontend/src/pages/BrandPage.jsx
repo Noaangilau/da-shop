@@ -57,7 +57,7 @@ export default function BrandPage() {
 
   if (!loading && !error && brand === null) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
           <p className="text-mute text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
           <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-6">Brand Not Found</h1>
@@ -74,14 +74,14 @@ export default function BrandPage() {
 
   if (error) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <p className="text-mute text-sm uppercase tracking-widest">Something went wrong. Try refreshing.</p>
       </main>
     )
   }
 
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Brand hero ── */}
       <section className="relative h-[28rem] md:h-[36rem] overflow-hidden bg-ink">

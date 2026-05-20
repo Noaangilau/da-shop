@@ -87,7 +87,7 @@ export default function Home() {
   })
 
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">

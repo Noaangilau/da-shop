@@ -33,7 +33,7 @@ export default function SchoolPage() {
 
   if (!school) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase text-2xl mb-4">School Not Found</h1>
@@ -46,7 +46,7 @@ export default function SchoolPage() {
   }
 
   return (
-    <main className="pt-[88px] min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
 
       {/* ── School Hero ── */}
       <section

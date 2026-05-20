@@ -72,7 +72,7 @@ const editorialImages = [
 
 export default function Gallery() {
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Header ── */}
       <section className="bg-white py-20 px-6 border-b border-rule">

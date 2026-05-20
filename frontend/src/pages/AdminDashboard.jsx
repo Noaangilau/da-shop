@@ -212,7 +212,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-ink border-t-transparent rounded-full animate-spin" />
       </main>
     )
@@ -232,7 +232,7 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <main className="pt-[88px] min-h-screen bg-paper">
+    <main className="min-h-screen bg-paper">
       <div className="bg-ink">
         <div className="max-w-[1280px] mx-auto px-6 py-12">
           <div className="w-8 h-px bg-white/30 mb-6" />

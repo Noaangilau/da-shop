@@ -29,7 +29,7 @@ export default function OrderConfirmation() {
 
   if (loading) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-ink border-t-transparent rounded-full animate-spin" />
       </main>
     )
@@ -37,7 +37,7 @@ export default function OrderConfirmation() {
 
   if (!order) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase text-2xl mb-4">
@@ -60,7 +60,7 @@ export default function OrderConfirmation() {
   }
 
   return (
-    <main className="pt-[88px] min-h-screen bg-paper">
+    <main className="min-h-screen bg-paper">
 
       {/* ── Confirmation header ── */}
       <div className="bg-ink py-20 px-6 text-center">

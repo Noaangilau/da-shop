@@ -46,7 +46,7 @@ export default function Profile() {
   }
 
   return (
-    <main className="pt-[88px] min-h-screen bg-paper">
+    <main className="min-h-screen bg-paper">
 
       {/* ── Header ── */}
       <div className="bg-white border-b border-rule">

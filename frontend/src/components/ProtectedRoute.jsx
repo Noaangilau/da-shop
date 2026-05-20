@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children, adminOnly = false, vendorOnly
 
   if (loading) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <div className="w-6 h-6 border-2 border-ink border-t-transparent rounded-full animate-spin" />
       </main>
     )

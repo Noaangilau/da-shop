@@ -33,7 +33,7 @@ export default function Brands() {
   }, [])
 
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Page header ── */}
       <section className="bg-white py-20 px-6 border-b border-rule">

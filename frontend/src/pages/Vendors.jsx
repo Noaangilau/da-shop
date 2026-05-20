@@ -32,7 +32,7 @@ const vendors = [
 
 export default function Vendors() {
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       {/* ── Header ── */}
       <section className="bg-white py-20 px-6 border-b border-gray-100">
@@ -48,7 +48,7 @@ export default function Vendors() {
       </section>
 
       {/* ── Vendors Grid ── */}
-      <section className="bg-sand py-20 px-6">
+      <section className="bg-paper py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-gray-200">
             {vendors.map((vendor) => (

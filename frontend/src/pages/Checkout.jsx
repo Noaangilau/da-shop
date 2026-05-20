@@ -299,7 +299,7 @@ export default function Checkout() {
 
   if (cart.length === 0 && step === 'shipping') {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase text-2xl mb-4">Cart is Empty</h1>
@@ -312,7 +312,7 @@ export default function Checkout() {
   }
 
   return (
-    <main className="pt-[88px] bg-paper min-h-screen">
+    <main className="bg-paper min-h-screen">
 
       {/* ── Header ── */}
       <div className="bg-white border-b border-rule">

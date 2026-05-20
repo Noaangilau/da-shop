@@ -63,7 +63,7 @@ export default function BecomeAVendor() {
 
   if (customer?.role === 'vendor') {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-4">You're Already a Vendor</h1>
@@ -78,7 +78,7 @@ export default function BecomeAVendor() {
 
   if (submitted) {
     return (
-      <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
+      <main className="min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-md">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-4">Account Created</h1>
@@ -92,7 +92,7 @@ export default function BecomeAVendor() {
   }
 
   return (
-    <main className="pt-[88px]">
+    <main className="">
 
       <section
         className="relative py-32 px-6 flex items-center justify-center text-center overflow-hidden"

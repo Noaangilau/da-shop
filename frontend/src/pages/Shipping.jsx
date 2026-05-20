@@ -34,7 +34,7 @@ const SECTIONS = [
 
 export default function Shipping() {
   return (
-    <main className="pt-[88px] min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       <div className="max-w-[900px] mx-auto px-6 py-20">
         <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">Support</p>
         <h1 className="text-ink font-black uppercase tracking-wide mb-3"

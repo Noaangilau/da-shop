@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+﻿import { Link, useParams } from 'react-router-dom'
 
 // ─── Demo Data ────────────────────────────────────────────────────────────────
 
@@ -63,9 +63,9 @@ export default function VendorStorefront() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
-          <p className="text-muted text-xs tracking-widest uppercase mb-4">404</p>
-          <h1 className="text-midnight text-3xl font-black uppercase mb-6 tracking-wide">Vendor Not Found</h1>
-          <Link to="/" className="bg-midnight text-white text-xs tracking-widest uppercase font-bold px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors">
+          <p className="text-mute text-xs tracking-widest uppercase mb-4">404</p>
+          <h1 className="text-ink text-3xl font-black uppercase mb-6 tracking-wide">Vendor Not Found</h1>
+          <Link to="/" className="bg-ink text-white text-xs tracking-widest uppercase font-bold px-8 py-3.5 inline-block hover:bg-ink/80 transition-colors">
             Back to Home
           </Link>
         </div>
@@ -100,15 +100,15 @@ export default function VendorStorefront() {
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row gap-10 items-start">
           <div className="flex-1">
-            <p className="text-muted text-xs tracking-widest uppercase mb-3">{vendor.location}</p>
+            <p className="text-mute text-xs tracking-widest uppercase mb-3">{vendor.location}</p>
             <p className="text-gray-500 text-sm leading-relaxed max-w-xl">
               {vendor.bio}
             </p>
             {vendor.instagram && (
-              <p className="text-muted text-xs tracking-wide mt-5">{vendor.instagram}</p>
+              <p className="text-mute text-xs tracking-wide mt-5">{vendor.instagram}</p>
             )}
           </div>
-          <div className="flex items-center gap-4 text-muted text-xs tracking-widest uppercase">
+          <div className="flex items-center gap-4 text-mute text-xs tracking-widest uppercase">
             <span>{vendor.products.length} Products</span>
           </div>
         </div>
@@ -118,10 +118,10 @@ export default function VendorStorefront() {
       <section className="bg-sand py-20 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
-            <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-2">
+            <p className="text-mute text-xs tracking-widest uppercase font-semibold mb-2">
               All Products
             </p>
-            <h2 className="text-midnight text-2xl font-black uppercase tracking-wide">
+            <h2 className="text-ink text-2xl font-black uppercase tracking-wide">
               {vendor.name}
             </h2>
           </div>
@@ -140,16 +140,16 @@ export default function VendorStorefront() {
                     className="w-full aspect-square object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute top-3 left-3">
-                    <span className="bg-white text-midnight text-xs font-bold tracking-widest uppercase px-2 py-1">
+                    <span className="bg-white text-ink text-xs font-bold tracking-widest uppercase px-2 py-1">
                       {product.category}
                     </span>
                   </div>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-midnight font-bold text-sm mb-2 leading-snug">
+                  <h3 className="text-ink font-bold text-sm mb-2 leading-snug">
                     {product.name}
                   </h3>
-                  <span className="text-midnight font-black text-base">
+                  <span className="text-ink font-black text-base">
                     ${product.price}
                   </span>
                 </div>
@@ -160,7 +160,7 @@ export default function VendorStorefront() {
       </section>
 
       {/* ── CTA Banner ── */}
-      <section className="bg-midnight py-20 px-6">
+      <section className="bg-ink py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-white/40 text-xs tracking-widest uppercase font-semibold mb-4">
             Are you a Pacific vendor?
@@ -173,7 +173,7 @@ export default function VendorStorefront() {
           </p>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-white text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
+            className="inline-block bg-white text-ink font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
           >
             Apply to Sell
           </Link>

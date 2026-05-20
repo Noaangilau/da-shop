@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 
 const SECTIONS = [
   {
@@ -39,40 +39,40 @@ export default function Returns() {
   return (
     <main className="pt-[88px] min-h-screen bg-white">
       <div className="max-w-[800px] mx-auto px-6 py-20">
-        <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">Support</p>
-        <h1 className="text-midnight font-black uppercase tracking-wide mb-3"
+        <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">Support</p>
+        <h1 className="text-ink font-black uppercase tracking-wide mb-3"
           style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
           Returns & Refunds
         </h1>
-        <p className="text-muted text-sm mb-16">14-day returns on eligible items</p>
+        <p className="text-mute text-sm mb-16">14-day returns on eligible items</p>
 
         <div className="flex flex-col gap-12">
           {SECTIONS.map((s) => (
-            <div key={s.title} className="border-t border-[#E5E5E5] pt-8">
-              <h2 className="text-midnight font-black uppercase tracking-wide text-sm mb-4">{s.title}</h2>
+            <div key={s.title} className="border-t border-rule pt-8">
+              <h2 className="text-ink font-black uppercase tracking-wide text-sm mb-4">{s.title}</h2>
               <p className="text-gray-500 text-sm leading-relaxed">{s.body}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-16 bg-[#F7F7F7] border border-[#E5E5E5] p-8">
-          <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-3">Need help?</p>
-          <p className="text-midnight font-black uppercase tracking-wide text-sm mb-4">Contact Our Team</p>
+        <div className="mt-16 bg-paper border border-rule p-8">
+          <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold mb-3">Need help?</p>
+          <p className="text-ink font-black uppercase tracking-wide text-sm mb-4">Contact Our Team</p>
           <p className="text-gray-500 text-sm leading-relaxed mb-6">
-            For any returns, refunds, or order issues email us at <span className="text-midnight font-semibold">hello@dashop.co.nz</span> — we typically respond within 1 business day.
+            For any returns, refunds, or order issues email us at <span className="text-ink font-semibold">hello@dashop.co.nz</span> — we typically respond within 1 business day.
           </p>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.12em] uppercase px-8 py-3 hover:bg-midnight/80 transition-colors"
+            className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.12em] uppercase px-8 py-3 hover:bg-ink/80 transition-colors"
           >
             Contact Us
           </Link>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-[#E5E5E5] flex flex-wrap gap-6">
-          <Link to="/shipping" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Shipping Info</Link>
-          <Link to="/terms" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Terms of Service</Link>
-          <Link to="/privacy" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Privacy Policy</Link>
+        <div className="mt-12 pt-8 border-t border-rule flex flex-wrap gap-6">
+          <Link to="/shipping" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Shipping Info</Link>
+          <Link to="/terms" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Terms of Service</Link>
+          <Link to="/privacy" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Privacy Policy</Link>
         </div>
       </div>
     </main>

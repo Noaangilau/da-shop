@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+﻿import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 
@@ -13,10 +13,10 @@ export default function Cart() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <div className="w-10 h-px bg-midnight mx-auto mb-10" />
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase mb-4">Your Cart</p>
+          <div className="w-10 h-px bg-ink mx-auto mb-10" />
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase mb-4">Your Cart</p>
           <h1
-            className="text-midnight font-black uppercase mb-4"
+            className="text-ink font-black uppercase mb-4"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
           >
             Cart is Empty
@@ -26,7 +26,7 @@ export default function Cart() {
           </p>
           <Link
             to="/"
-            className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
+            className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors"
           >
             Shop Now
           </Link>
@@ -39,14 +39,14 @@ export default function Cart() {
     <main className="pt-[88px] bg-white min-h-screen">
 
       {/* ── Header ── */}
-      <div className="border-b border-[#E5E5E5]">
+      <div className="border-b border-rule">
         <div className="max-w-[1280px] mx-auto px-6 py-12">
-          <div className="w-10 h-px bg-midnight mb-8" />
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
+          <div className="w-10 h-px bg-ink mb-8" />
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
             {totalItems} {totalItems === 1 ? 'item' : 'items'}
           </p>
           <h1
-            className="text-midnight font-black uppercase"
+            className="text-ink font-black uppercase"
             style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
           >
             Your Cart
@@ -59,7 +59,7 @@ export default function Cart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
 
           {/* ── Items list ── */}
-          <div className="lg:col-span-2 flex flex-col gap-px bg-[#E5E5E5]">
+          <div className="lg:col-span-2 flex flex-col gap-px bg-rule">
             {cart.map((item) => {
               const key = item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`
               return (
@@ -76,20 +76,20 @@ export default function Cart() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                  <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                     {item.brand}
                   </p>
                   <Link to={`/product/${item.id}`}>
-                    <h3 className="text-midnight font-bold text-sm leading-snug mb-2 hover:text-muted transition-colors">
+                    <h3 className="text-ink font-bold text-sm leading-snug mb-2 hover:text-mute transition-colors">
                       {item.name}
                     </h3>
                   </Link>
 
                   {(item.variant?.color || item.selectedSize) && (
-                    <p className="text-muted text-[11px] mb-3">
-                      {item.variant?.color && <>Color: <span className="text-midnight">{item.variant.color}</span></>}
+                    <p className="text-mute text-[11px] mb-3">
+                      {item.variant?.color && <>Color: <span className="text-ink">{item.variant.color}</span></>}
                       {item.variant?.color && item.selectedSize && <span className="mx-2">·</span>}
-                      {item.selectedSize && <>Size: <span className="text-midnight">{item.selectedSize}</span></>}
+                      {item.selectedSize && <>Size: <span className="text-ink">{item.selectedSize}</span></>}
                     </p>
                   )}
 
@@ -97,16 +97,16 @@ export default function Cart() {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => updateQty(key, item.qty - 1)}
-                      className="w-7 h-7 border border-[#E5E5E5] text-midnight text-sm font-bold hover:border-midnight transition-colors flex items-center justify-center"
+                      className="w-7 h-7 border border-rule text-ink text-sm font-bold hover:border-ink transition-colors flex items-center justify-center"
                     >
                       −
                     </button>
-                    <span className="text-midnight text-sm font-bold w-5 text-center">
+                    <span className="text-ink text-sm font-bold w-5 text-center">
                       {item.qty}
                     </span>
                     <button
                       onClick={() => updateQty(key, item.qty + 1)}
-                      className="w-7 h-7 border border-[#E5E5E5] text-midnight text-sm font-bold hover:border-midnight transition-colors flex items-center justify-center"
+                      className="w-7 h-7 border border-rule text-ink text-sm font-bold hover:border-ink transition-colors flex items-center justify-center"
                     >
                       +
                     </button>
@@ -115,12 +115,12 @@ export default function Cart() {
 
                 {/* Price + remove */}
                 <div className="flex flex-col items-end gap-4 flex-shrink-0">
-                  <span className="text-midnight font-black text-base">
+                  <span className="text-ink font-black text-base">
                     ${(item.price * item.qty).toFixed(2)}
                   </span>
                   <button
                     onClick={() => removeFromCart(key)}
-                    className="text-muted text-[10px] tracking-[0.15em] uppercase hover:text-red-400 transition-colors"
+                    className="text-mute text-[10px] tracking-[0.15em] uppercase hover:text-red-400 transition-colors"
                   >
                     Remove
                   </button>
@@ -133,8 +133,8 @@ export default function Cart() {
 
           {/* ── Order summary ── */}
           <div className="lg:col-span-1">
-            <div className="border border-[#E5E5E5] p-8 sticky top-24">
-              <h2 className="text-midnight text-[11px] tracking-[0.2em] uppercase font-black mb-8">
+            <div className="border border-rule p-8 sticky top-24">
+              <h2 className="text-ink text-[11px] tracking-[0.2em] uppercase font-black mb-8">
                 Order Summary
               </h2>
 
@@ -143,48 +143,48 @@ export default function Cart() {
                   <div key={item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`} className="flex justify-between text-sm">
                     <span className="text-gray-500 truncate pr-4">
                       {item.name}
-                      {item.variant?.color && <span className="text-muted"> · {item.variant.color}</span>}
-                      {item.selectedSize && <span className="text-muted"> · {item.selectedSize}</span>}
-                      <span className="text-muted"> ×{item.qty}</span>
+                      {item.variant?.color && <span className="text-mute"> · {item.variant.color}</span>}
+                      {item.selectedSize && <span className="text-mute"> · {item.selectedSize}</span>}
+                      <span className="text-mute"> ×{item.qty}</span>
                     </span>
-                    <span className="text-midnight font-bold flex-shrink-0">
+                    <span className="text-ink font-bold flex-shrink-0">
                       ${(item.price * item.qty).toFixed(2)}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="w-full h-px bg-[#E5E5E5] mb-6" />
+              <div className="w-full h-px bg-rule mb-6" />
 
               <div className="flex justify-between items-center mb-8">
-                <span className="text-midnight text-[11px] tracking-[0.15em] uppercase font-semibold">
+                <span className="text-ink text-[11px] tracking-[0.15em] uppercase font-semibold">
                   Total
                 </span>
-                <span className="text-midnight font-black text-xl">
+                <span className="text-ink font-black text-xl">
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
 
               <button
                 onClick={() => navigate('/checkout')}
-                className="w-full bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200 mb-3"
+                className="w-full bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-ink/80 transition-colors duration-200 mb-3"
               >
                 {customer ? 'Proceed to Checkout' : 'Checkout as Guest'}
               </button>
 
               {!customer && (
-                <div className="mt-5 border border-[#E5E5E5] p-5 bg-[#F7F7F7]">
-                  <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-black mb-2">
+                <div className="mt-5 border border-rule p-5 bg-paper">
+                  <p className="text-ink text-[10px] tracking-[0.2em] uppercase font-black mb-2">
                     Members get more
                   </p>
-                  <ul className="text-muted text-[11px] leading-relaxed mb-3 flex flex-col gap-0.5">
+                  <ul className="text-mute text-[11px] leading-relaxed mb-3 flex flex-col gap-0.5">
                     <li>• Early access to new drops</li>
                     <li>• Member-only discounts</li>
                     <li>• Order history + faster checkout</li>
                   </ul>
                   <Link
                     to="/login?next=/checkout"
-                    className="text-midnight text-[10px] tracking-[0.2em] uppercase font-bold hover:text-muted transition-colors"
+                    className="text-ink text-[10px] tracking-[0.2em] uppercase font-bold hover:text-mute transition-colors"
                   >
                     Sign in or join →
                   </Link>
@@ -193,14 +193,14 @@ export default function Cart() {
 
               <Link
                 to="/"
-                className="block text-center text-muted text-[10px] tracking-[0.15em] uppercase hover:text-midnight transition-colors mt-4"
+                className="block text-center text-mute text-[10px] tracking-[0.15em] uppercase hover:text-ink transition-colors mt-4"
               >
                 ← Continue Shopping
               </Link>
 
               <button
                 onClick={clearCart}
-                className="block w-full text-center text-muted text-[10px] tracking-[0.15em] uppercase hover:text-red-400 transition-colors mt-5"
+                className="block w-full text-center text-mute text-[10px] tracking-[0.15em] uppercase hover:text-red-400 transition-colors mt-5"
               >
                 Clear Cart
               </button>

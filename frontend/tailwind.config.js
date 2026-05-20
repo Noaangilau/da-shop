@@ -5,8 +5,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    // Override Tailwind's default borderRadius to enforce zero everywhere sitewide.
-    // Use 'rounded-full' only for circles (e.g. notification badge).
     borderRadius: {
       'none': '0',
       DEFAULT: '0',
@@ -20,13 +18,21 @@ export default {
     },
     extend: {
       colors: {
-        'midnight': '#111111',
-        'sand':     '#F7F7F7',
-        'border':   '#E5E5E5',
-        'muted':    '#888888',
+        'ink':      '#0a0a0a',
+        'ink-2':    '#1a1a1a',
+        'ink-3':    '#2a2a2a',
+        'mute':     '#6b6b6b',
+        'mute-2':   '#9a9a9a',
+        'rule':     '#d9d4ca',
+        'rule-2':   '#ebe6dc',
+        'paper':    '#f5f1ea',
+        'paper-2':  '#eee8dc',
+        'accent':   '#b04b3a',
       },
       fontFamily: {
-        sans: ['Inter', 'Arial', 'sans-serif'],
+        display: ['Archivo', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        sans:    ['Inter', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        mono:    ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },
   },

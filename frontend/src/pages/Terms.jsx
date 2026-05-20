@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 
 const SECTIONS = [
   {
@@ -43,26 +43,26 @@ export default function Terms() {
   return (
     <main className="pt-[88px] min-h-screen bg-white">
       <div className="max-w-[800px] mx-auto px-6 py-20">
-        <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">Legal</p>
-        <h1 className="text-midnight font-black uppercase tracking-wide mb-3"
+        <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">Legal</p>
+        <h1 className="text-ink font-black uppercase tracking-wide mb-3"
           style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
           Terms of Service
         </h1>
-        <p className="text-muted text-sm mb-16">Last updated April 2026</p>
+        <p className="text-mute text-sm mb-16">Last updated April 2026</p>
 
         <div className="flex flex-col gap-12">
           {SECTIONS.map((s) => (
-            <div key={s.title} className="border-t border-[#E5E5E5] pt-8">
-              <h2 className="text-midnight font-black uppercase tracking-wide text-sm mb-4">{s.title}</h2>
+            <div key={s.title} className="border-t border-rule pt-8">
+              <h2 className="text-ink font-black uppercase tracking-wide text-sm mb-4">{s.title}</h2>
               <p className="text-gray-500 text-sm leading-relaxed">{s.body}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-20 pt-8 border-t border-[#E5E5E5] flex flex-wrap gap-6">
-          <Link to="/privacy" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Privacy Policy</Link>
-          <Link to="/returns" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Returns Policy</Link>
-          <Link to="/shipping" className="text-muted text-[11px] tracking-[0.12em] uppercase hover:text-midnight transition-colors">Shipping Info</Link>
+        <div className="mt-20 pt-8 border-t border-rule flex flex-wrap gap-6">
+          <Link to="/privacy" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Privacy Policy</Link>
+          <Link to="/returns" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Returns Policy</Link>
+          <Link to="/shipping" className="text-mute text-[11px] tracking-[0.12em] uppercase hover:text-ink transition-colors">Shipping Info</Link>
         </div>
       </div>
     </main>

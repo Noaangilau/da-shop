@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/CartContext'
@@ -33,28 +33,28 @@ function RelatedProductCard({ product }) {
             className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
           />
         ) : (
-          <div className="w-full aspect-[4/5] bg-midnight/5 flex items-center justify-center">
-            <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold">
+          <div className="w-full aspect-[4/5] bg-ink/5 flex items-center justify-center">
+            <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold">
               Coming Soon
             </p>
           </div>
         )}
         {product.collection && (
           <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
+            <span className="bg-ink text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
               {product.collection}
             </span>
           </div>
         )}
       </div>
-      <div className="p-4 border-t border-[#E5E5E5]">
-        <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+      <div className="p-4 border-t border-rule">
+        <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
           {product.collection}
         </p>
-        <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug line-clamp-2">
+        <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug line-clamp-2">
           {product.name}
         </h3>
-        <span className="text-midnight font-bold text-[13px]">${product.price}</span>
+        <span className="text-ink font-bold text-[13px]">${product.price}</span>
       </div>
     </Link>
   )
@@ -129,14 +129,14 @@ export default function ProductDetail() {
       <main className="pt-[88px] bg-white min-h-screen">
         <div className="max-w-[1280px] mx-auto px-6 py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div className="aspect-square bg-midnight/10 animate-pulse" />
+            <div className="aspect-square bg-ink/10 animate-pulse" />
             <div className="flex flex-col gap-5 pt-4">
-              <div className="h-3 w-32 bg-midnight/10 animate-pulse" />
-              <div className="h-10 w-3/4 bg-midnight/10 animate-pulse" />
-              <div className="h-6 w-20 bg-midnight/10 animate-pulse" />
-              <div className="h-px w-full bg-[#E5E5E5]" />
-              <div className="h-3 w-full bg-midnight/10 animate-pulse" />
-              <div className="h-3 w-5/6 bg-midnight/10 animate-pulse" />
+              <div className="h-3 w-32 bg-ink/10 animate-pulse" />
+              <div className="h-10 w-3/4 bg-ink/10 animate-pulse" />
+              <div className="h-6 w-20 bg-ink/10 animate-pulse" />
+              <div className="h-px w-full bg-rule" />
+              <div className="h-3 w-full bg-ink/10 animate-pulse" />
+              <div className="h-3 w-5/6 bg-ink/10 animate-pulse" />
             </div>
           </div>
         </div>
@@ -148,11 +148,11 @@ export default function ProductDetail() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
-          <h1 className="text-midnight font-black uppercase tracking-wide text-3xl mb-6">
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
+          <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-6">
             Product Not Found
           </h1>
-          <Link to="/" className="bg-midnight text-white text-[11px] tracking-[0.15em] uppercase font-bold px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors">
+          <Link to="/" className="bg-ink text-white text-[11px] tracking-[0.15em] uppercase font-bold px-8 py-3.5 inline-block hover:bg-ink/80 transition-colors">
             Back to Home
           </Link>
         </div>
@@ -164,7 +164,7 @@ export default function ProductDetail() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
-          <p className="text-muted text-sm uppercase tracking-widest">
+          <p className="text-mute text-sm uppercase tracking-widest">
             Something went wrong. Try refreshing.
           </p>
         </div>
@@ -220,15 +220,15 @@ export default function ProductDetail() {
     <main className="pt-[88px] bg-white min-h-screen">
 
       {/* ── Breadcrumb ── */}
-      <div className="border-b border-[#E5E5E5]">
-        <div className="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase text-muted">
-          <Link to="/" className="hover:text-midnight transition-colors">Home</Link>
+      <div className="border-b border-rule">
+        <div className="max-w-[1280px] mx-auto px-6 py-4 flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase text-mute">
+          <Link to="/" className="hover:text-ink transition-colors">Home</Link>
           <span>/</span>
-          <Link to={`/category/${categorySlug}`} className="hover:text-midnight transition-colors">
+          <Link to={`/category/${categorySlug}`} className="hover:text-ink transition-colors">
             {categoryDisplay}
           </Link>
           <span>/</span>
-          <span className="text-midnight truncate max-w-[200px]">{product.name}</span>
+          <span className="text-ink truncate max-w-[200px]">{product.name}</span>
         </div>
       </div>
 
@@ -237,7 +237,7 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
           {/* ── Image ── */}
-          <div className="relative overflow-hidden bg-[#F7F7F7]">
+          <div className="relative overflow-hidden bg-paper">
             {(selectedVariant?.image_url || product.image_url) ? (
               <img
                 src={selectedVariant?.image_url || product.image_url}
@@ -245,8 +245,8 @@ export default function ProductDetail() {
                 className="w-full aspect-square object-cover"
               />
             ) : (
-              <div className="w-full aspect-square bg-midnight/5 flex items-center justify-center">
-                <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold">
+              <div className="w-full aspect-square bg-ink/5 flex items-center justify-center">
+                <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold">
                   Coming Soon
                 </p>
               </div>
@@ -254,7 +254,7 @@ export default function ProductDetail() {
             {/* Collection badge — top-left overlay */}
             {product.collection && (
               <div className="absolute top-4 left-4">
-                <span className="bg-midnight text-white text-[10px] font-black tracking-[0.15em] uppercase px-3 py-1.5">
+                <span className="bg-ink text-white text-[10px] font-black tracking-[0.15em] uppercase px-3 py-1.5">
                   {product.collection}
                 </span>
               </div>
@@ -262,7 +262,7 @@ export default function ProductDetail() {
             {/* Shirt type badge — bottom-left */}
             {typeLabel && (
               <div className="absolute bottom-4 left-4">
-                <span className="bg-white/90 text-midnight text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1.5">
+                <span className="bg-white/90 text-ink text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1.5">
                   {typeLabel}
                 </span>
               </div>
@@ -271,7 +271,7 @@ export default function ProductDetail() {
             <div className="absolute top-4 right-4">
               <Link
                 to={`/category/${categorySlug}`}
-                className="bg-white/90 text-midnight text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1.5 hover:bg-midnight hover:text-white transition-colors"
+                className="bg-white/90 text-ink text-[10px] font-bold tracking-[0.12em] uppercase px-3 py-1.5 hover:bg-ink hover:text-white transition-colors"
               >
                 {categoryDisplay}
               </Link>
@@ -284,30 +284,30 @@ export default function ProductDetail() {
             {/* Brand link */}
             <Link
               to={`/brand/${product.brand_id}`}
-              className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold hover:text-midnight transition-colors"
+              className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold hover:text-ink transition-colors"
             >
               Filiku Design Co. →
             </Link>
 
             <div>
               <h1
-                className="text-midnight font-black uppercase leading-tight mb-5"
+                className="text-ink font-black uppercase leading-tight mb-5"
                 style={{ fontSize: 'clamp(1.75rem, 3.5vw, 3rem)', letterSpacing: '0.04em' }}
               >
                 {product.name}
               </h1>
-              <p className="text-midnight font-black text-2xl">${product.price}</p>
+              <p className="text-ink font-black text-2xl">${product.price}</p>
             </div>
 
-            <div className="w-full h-px bg-[#E5E5E5]" />
+            <div className="w-full h-px bg-rule" />
 
             {/* Kaikefiu disclaimer */}
             {product.kaikefiu && (
-              <div className="border border-[#E5E5E5] p-4 bg-[#F7F7F7]">
-                <p className="text-[10px] tracking-[0.15em] uppercase font-black text-midnight mb-1">
+              <div className="border border-rule p-4 bg-paper">
+                <p className="text-[10px] tracking-[0.15em] uppercase font-black text-ink mb-1">
                   Kaikefiu Series
                 </p>
-                <p className="text-muted text-xs leading-relaxed">
+                <p className="text-mute text-xs leading-relaxed">
                   Pacific identity parody apparel. These designs are commentary on the cultural mashup of growing up Polynesian in America.{' '}
                   <em>Kaikefiu</em> (n.) — one who indulges excessively in American things.
                 </p>
@@ -319,8 +319,8 @@ export default function ProductDetail() {
             {/* Color swatches */}
             {Array.isArray(product.variants) && product.variants.length > 0 && (
               <div>
-                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-midnight mb-3">
-                  Color{selectedVariant?.color && <span className="text-muted font-normal"> — {selectedVariant.color}</span>}
+                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-ink mb-3">
+                  Color{selectedVariant?.color && <span className="text-mute font-normal"> — {selectedVariant.color}</span>}
                 </p>
                 <div className="flex items-center gap-3">
                   {product.variants.map((v) => {
@@ -334,8 +334,8 @@ export default function ProductDetail() {
                         aria-label={v.color}
                         className={`w-9 h-9 rounded-full border transition-all ${
                           isSelected
-                            ? 'border-midnight ring-2 ring-midnight ring-offset-2'
-                            : 'border-[#E5E5E5] hover:border-midnight'
+                            ? 'border-ink ring-2 ring-ink ring-offset-2'
+                            : 'border-rule hover:border-ink'
                         }`}
                         style={{ backgroundColor: swatch }}
                       />
@@ -348,10 +348,10 @@ export default function ProductDetail() {
             {/* Size selector */}
             {needsSize && (
               <div ref={sizeRef}>
-                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-midnight mb-3">
+                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-ink mb-3">
                   Size{' '}
                   {selectedSize
-                    ? <span className="text-muted font-normal">— {selectedSize}</span>
+                    ? <span className="text-mute font-normal">— {selectedSize}</span>
                     : sizeError && <span className="text-red-500 font-normal normal-case tracking-normal">— Please select a size</span>
                   }
                 </p>
@@ -362,10 +362,10 @@ export default function ProductDetail() {
                       onClick={() => { setSelectedSize(size); setSizeError(false) }}
                       className={`text-[11px] tracking-[0.1em] uppercase font-bold px-4 py-2 border transition-colors ${
                         selectedSize === size
-                          ? 'bg-midnight text-white border-midnight'
+                          ? 'bg-ink text-white border-ink'
                           : sizeError
-                            ? 'border-red-400 text-red-400 hover:border-midnight hover:text-midnight'
-                            : 'border-[#E5E5E5] text-muted hover:border-midnight hover:text-midnight'
+                            ? 'border-red-400 text-red-400 hover:border-ink hover:text-ink'
+                            : 'border-rule text-mute hover:border-ink hover:text-ink'
                       }`}
                     >
                       {size}
@@ -382,32 +382,32 @@ export default function ProductDetail() {
                   onClick={handleAddToCart}
                   className={`font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 transition-colors duration-200 flex-1 ${
                     added
-                      ? 'bg-[#F7F7F7] text-midnight border border-[#E5E5E5]'
-                      : 'bg-midnight text-white hover:bg-midnight/80'
+                      ? 'bg-paper text-ink border border-rule'
+                      : 'bg-ink text-white hover:bg-ink/80'
                   }`}
                 >
                   {added ? '✓ Added to Cart' : 'Add to Cart'}
                 </button>
                 <Link
                   to="/cart"
-                  className="border border-[#E5E5E5] text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:border-midnight transition-colors duration-200 text-center"
+                  className="border border-rule text-ink font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:border-ink transition-colors duration-200 text-center"
                 >
                   View Cart
                 </Link>
               </div>
             ) : inquirySubmitted ? (
-              <div className="border border-[#E5E5E5] p-6 text-center">
-                <div className="w-8 h-px bg-midnight mx-auto mb-4" />
-                <p className="text-midnight font-black uppercase tracking-wide text-sm mb-2">
+              <div className="border border-rule p-6 text-center">
+                <div className="w-8 h-px bg-ink mx-auto mb-4" />
+                <p className="text-ink font-black uppercase tracking-wide text-sm mb-2">
                   Inquiry Sent
                 </p>
-                <p className="text-muted text-xs leading-relaxed">
+                <p className="text-mute text-xs leading-relaxed">
                   We'll be in touch within 2–3 business days.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4 pt-2">
-                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-midnight">
+                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-ink">
                   Request a Quote
                 </p>
                 {[
@@ -426,12 +426,12 @@ export default function ProductDetail() {
                     required={field.required}
                     value={inquiry[field.name]}
                     onChange={handleInquiryChange}
-                    className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight placeholder-gray-300 focus:outline-none focus:border-midnight transition-colors bg-white"
+                    className="border border-rule px-4 py-3 text-sm text-ink placeholder-gray-300 focus:outline-none focus:border-ink transition-colors bg-white"
                   />
                 ))}
                 <button
                   type="submit"
-                  className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors duration-200"
+                  className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-ink/80 transition-colors duration-200"
                 >
                   Send Inquiry
                 </button>
@@ -439,15 +439,15 @@ export default function ProductDetail() {
             )}
 
             {/* ── Sold by strip ── */}
-            <div className="border border-[#E5E5E5] p-5">
-              <p className="text-muted text-[10px] tracking-[0.2em] uppercase mb-2">Sold by</p>
+            <div className="border border-rule p-5">
+              <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-2">Sold by</p>
               <Link
                 to={`/brand/${product.brand_id}`}
-                className="text-midnight font-black text-sm uppercase tracking-wide hover:text-muted transition-colors"
+                className="text-ink font-black text-sm uppercase tracking-wide hover:text-mute transition-colors"
               >
                 Filiku Design Co. →
               </Link>
-              <p className="text-muted text-xs mt-1">Salt Lake City, Utah</p>
+              <p className="text-mute text-xs mt-1">Salt Lake City, Utah</p>
             </div>
 
           </div>
@@ -456,40 +456,40 @@ export default function ProductDetail() {
 
       {/* ── Related products ── */}
       {(relatedLoading || related.length > 0) && (
-        <section className="bg-[#F7F7F7] py-16 px-6 border-t border-[#E5E5E5]">
+        <section className="bg-paper py-16 px-6 border-t border-rule">
           <div className="max-w-[1280px] mx-auto">
             <div className="flex items-baseline justify-between mb-8">
               <div>
-                <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
+                <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
                   More from
                 </p>
-                <h2 className="text-midnight font-black uppercase tracking-wide text-xl">
+                <h2 className="text-ink font-black uppercase tracking-wide text-xl">
                   {product.collection}
                 </h2>
               </div>
               <Link
                 to={`/category/${categorySlug}`}
-                className="text-[11px] tracking-[0.1em] uppercase font-bold text-muted hover:text-midnight transition-colors"
+                className="text-[11px] tracking-[0.1em] uppercase font-bold text-mute hover:text-ink transition-colors"
               >
                 View All →
               </Link>
             </div>
 
             {relatedLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#E5E5E5]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-rule">
                 {[0, 1, 2, 3].map((i) => (
                   <div key={i} className="bg-white">
-                    <div className="aspect-[4/5] bg-midnight/10 animate-pulse" />
-                    <div className="p-4 border-t border-[#E5E5E5] flex flex-col gap-2">
-                      <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
-                      <div className="h-4 w-full bg-midnight/10 animate-pulse" />
-                      <div className="h-3.5 w-12 bg-midnight/10 animate-pulse" />
+                    <div className="aspect-[4/5] bg-ink/10 animate-pulse" />
+                    <div className="p-4 border-t border-rule flex flex-col gap-2">
+                      <div className="h-2.5 w-16 bg-ink/10 animate-pulse" />
+                      <div className="h-4 w-full bg-ink/10 animate-pulse" />
+                      <div className="h-3.5 w-12 bg-ink/10 animate-pulse" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-[#E5E5E5]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-rule">
                 {related.map((p) => <RelatedProductCard key={p.id} product={p} />)}
               </div>
             )}

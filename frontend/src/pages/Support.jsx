@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const faqs = [
@@ -59,14 +59,14 @@ export default function Support() {
     <main className="pt-[88px] bg-white min-h-screen">
 
       {/* ── Header ── */}
-      <div className="bg-white border-b border-[#E5E5E5]">
+      <div className="bg-white border-b border-rule">
         <div className="max-w-[1280px] mx-auto px-6 py-12">
-          <div className="w-8 h-px bg-midnight mb-8" />
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">
+          <div className="w-8 h-px bg-ink mb-8" />
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">
             Support
           </p>
           <h1
-            className="text-midnight font-black uppercase"
+            className="text-ink font-black uppercase"
             style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', letterSpacing: '0.04em' }}
           >
             How Can We Help?
@@ -80,31 +80,31 @@ export default function Support() {
           {/* LEFT: FAQ Accordion */}
           <div className="lg:col-span-2">
             <div className="mb-8">
-              <h2 className="text-midnight font-black uppercase text-xl mb-3">
+              <h2 className="text-ink font-black uppercase text-xl mb-3">
                 Frequently Asked Questions
               </h2>
-              <p className="text-muted text-sm">
+              <p className="text-mute text-sm">
                 Find answers below. Can't find what you need? Use the contact form.
               </p>
             </div>
 
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {faqs.map((faq) => (
                 <div key={faq.id} className="bg-white">
                   <button
                     onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
-                    className="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-[#F7F7F7] transition-colors"
+                    className="w-full px-6 py-5 flex justify-between items-center text-left hover:bg-paper transition-colors"
                   >
-                    <span className="text-midnight font-bold text-sm uppercase tracking-wide pr-4">
+                    <span className="text-ink font-bold text-sm uppercase tracking-wide pr-4">
                       {faq.question}
                     </span>
-                    <span className="text-midnight text-xl flex-shrink-0">
+                    <span className="text-ink text-xl flex-shrink-0">
                       {openFaq === faq.id ? '−' : '+'}
                     </span>
                   </button>
                   {openFaq === faq.id && (
-                    <div className="px-6 pb-6 pt-2 border-t border-[#E5E5E5]">
-                      <p className="text-muted text-sm leading-relaxed">{faq.answer}</p>
+                    <div className="px-6 pb-6 pt-2 border-t border-rule">
+                      <p className="text-mute text-sm leading-relaxed">{faq.answer}</p>
                     </div>
                   )}
                 </div>
@@ -112,8 +112,8 @@ export default function Support() {
             </div>
 
             {/* Quick links */}
-            <div className="mt-8 p-6 border border-[#E5E5E5] bg-[#F7F7F7]">
-              <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-black mb-4">
+            <div className="mt-8 p-6 border border-rule bg-paper">
+              <p className="text-ink text-[10px] tracking-[0.2em] uppercase font-black mb-4">
                 Helpful Links
               </p>
               <div className="flex flex-col gap-2">
@@ -125,7 +125,7 @@ export default function Support() {
                   { label: 'Become a Vendor',      to: '/become-a-vendor' },
                   { label: 'School Partnerships',  to: '/schools' },
                 ].map((link) => (
-                  <Link key={link.label} to={link.to} className="text-midnight text-sm hover:underline">
+                  <Link key={link.label} to={link.to} className="text-ink text-sm hover:underline">
                     {link.label}
                   </Link>
                 ))}
@@ -135,19 +135,19 @@ export default function Support() {
 
           {/* RIGHT: Contact form (sticky) */}
           <aside className="lg:sticky lg:top-24">
-            <div className="bg-white border border-[#E5E5E5]">
-              <div className="px-6 py-5 border-b border-[#E5E5E5] bg-[#F7F7F7]">
-                <h3 className="text-midnight font-black uppercase text-lg">Contact Us</h3>
+            <div className="bg-white border border-rule">
+              <div className="px-6 py-5 border-b border-rule bg-paper">
+                <h3 className="text-ink font-black uppercase text-lg">Contact Us</h3>
               </div>
 
               {sent ? (
                 <div className="p-8 text-center">
-                  <div className="w-8 h-px bg-midnight mx-auto mb-6" />
-                  <p className="text-midnight font-black uppercase text-sm mb-2">Message Sent</p>
-                  <p className="text-muted text-xs">We'll respond within 24 hours.</p>
+                  <div className="w-8 h-px bg-ink mx-auto mb-6" />
+                  <p className="text-ink font-black uppercase text-sm mb-2">Message Sent</p>
+                  <p className="text-mute text-xs">We'll respond within 24 hours.</p>
                   <button
                     onClick={() => setSent(false)}
-                    className="mt-6 text-muted text-[10px] tracking-[0.15em] uppercase hover:text-midnight transition-colors"
+                    className="mt-6 text-mute text-[10px] tracking-[0.15em] uppercase hover:text-ink transition-colors"
                   >
                     Send Another →
                   </button>
@@ -160,10 +160,10 @@ export default function Support() {
                     { key: 'orderNumber', label: 'Order Number',   type: 'text',  required: false, placeholder: 'DS-0000' },
                   ].map((f) => (
                     <div key={f.key} className="flex flex-col gap-1.5">
-                      <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+                      <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">
                         {f.label}{' '}
                         {!f.required && (
-                          <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>
+                          <span className="text-mute font-normal normal-case tracking-normal text-xs">(optional)</span>
                         )}
                       </label>
                       <input
@@ -172,13 +172,13 @@ export default function Support() {
                         value={formData[f.key]}
                         placeholder={f.placeholder}
                         onChange={(e) => setFormData({ ...formData, [f.key]: e.target.value })}
-                        className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight focus:outline-none focus:border-midnight transition-colors bg-white"
+                        className="border border-rule px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors bg-white"
                       />
                     </div>
                   ))}
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+                    <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">
                       Message
                     </label>
                     <textarea
@@ -187,37 +187,37 @@ export default function Support() {
                       value={formData.message}
                       placeholder="Describe your issue or question..."
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight focus:outline-none focus:border-midnight transition-colors bg-white resize-vertical"
+                      className="border border-rule px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors bg-white resize-vertical"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:bg-midnight/80 transition-colors"
+                    className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:bg-ink/80 transition-colors"
                   >
                     Send Message
                   </button>
-                  <p className="text-muted text-[10px] tracking-[0.15em] uppercase text-center">
+                  <p className="text-mute text-[10px] tracking-[0.15em] uppercase text-center">
                     We respond within 24 hours
                   </p>
                 </form>
               )}
             </div>
 
-            <div className="mt-6 p-6 border border-[#E5E5E5] bg-white">
-              <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-black mb-4">
+            <div className="mt-6 p-6 border border-rule bg-white">
+              <p className="text-ink text-[10px] tracking-[0.2em] uppercase font-black mb-4">
                 Other Ways to Reach Us
               </p>
               <div className="flex flex-col gap-3">
                 <div>
-                  <p className="text-muted text-[9px] tracking-[0.15em] uppercase mb-1">Email</p>
-                  <a href="mailto:support@dashop.com" className="text-midnight text-sm hover:underline">
+                  <p className="text-mute text-[9px] tracking-[0.15em] uppercase mb-1">Email</p>
+                  <a href="mailto:support@dashop.com" className="text-ink text-sm hover:underline">
                     support@dashop.com
                   </a>
                 </div>
                 <div>
-                  <p className="text-muted text-[9px] tracking-[0.15em] uppercase mb-1">Hours</p>
-                  <p className="text-midnight text-sm">Mon–Fri 9AM–6PM</p>
+                  <p className="text-mute text-[9px] tracking-[0.15em] uppercase mb-1">Hours</p>
+                  <p className="text-ink text-sm">Mon–Fri 9AM–6PM</p>
                 </div>
               </div>
             </div>

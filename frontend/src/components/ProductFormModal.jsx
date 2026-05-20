@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -98,90 +98,90 @@ export default function ProductFormModal({
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-6 overflow-y-auto" onClick={onClose}>
       <div className="bg-white max-w-2xl w-full p-8 my-8" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-lg">
+          <h3 className="text-ink font-black uppercase tracking-wide text-lg">
             {form.id ? 'Edit Product' : 'Add Product'}
           </h3>
-          <button onClick={onClose} className="text-muted text-xl hover:text-midnight">×</button>
+          <button onClick={onClose} className="text-mute text-xl hover:text-ink">×</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           {showBrand && (
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] tracking-wide uppercase text-muted">Brand</span>
-              <select value={form.brand_id} onChange={(e) => set('brand_id', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight">
+              <span className="text-[10px] tracking-wide uppercase text-mute">Brand</span>
+              <select value={form.brand_id} onChange={(e) => set('brand_id', e.target.value)} className="border border-rule px-3 py-2 text-ink">
                 {brands.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
               </select>
             </label>
           )}
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Name</span>
-            <input value={form.name} onChange={(e) => set('name', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Name</span>
+            <input value={form.name} onChange={(e) => set('name', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Collection</span>
-            <input value={form.collection} onChange={(e) => set('collection', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Collection</span>
+            <input value={form.collection} onChange={(e) => set('collection', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Price (USD)</span>
-            <input type="number" step="0.01" value={form.price} onChange={(e) => set('price', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Price (USD)</span>
+            <input type="number" step="0.01" value={form.price} onChange={(e) => set('price', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Category</span>
-            <input value={form.category} onChange={(e) => set('category', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Category</span>
+            <input value={form.category} onChange={(e) => set('category', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Subcategory</span>
-            <input value={form.subcategory} onChange={(e) => set('subcategory', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Subcategory</span>
+            <input value={form.subcategory} onChange={(e) => set('subcategory', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Sizes (comma-separated)</span>
-            <input value={form.sizes} onChange={(e) => set('sizes', e.target.value)} placeholder="S, M, L, XL" className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Sizes (comma-separated)</span>
+            <input value={form.sizes} onChange={(e) => set('sizes', e.target.value)} placeholder="S, M, L, XL" className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Stock (blank = untracked)</span>
-            <input type="number" value={form.stock_count} onChange={(e) => set('stock_count', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Stock (blank = untracked)</span>
+            <input type="number" value={form.stock_count} onChange={(e) => set('stock_count', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
 
           <div className="md:col-span-2 flex flex-col gap-2">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Product Image</span>
+            <span className="text-[10px] tracking-wide uppercase text-mute">Product Image</span>
             <div className="flex items-start gap-4">
               {form.image_url && (
-                <img src={absolutize(form.image_url)} alt="" className="w-28 h-auto border border-[#E5E5E5] object-cover" />
+                <img src={absolutize(form.image_url)} alt="" className="w-28 h-auto border border-rule object-cover" />
               )}
               <div className="flex-1 flex flex-col gap-2">
                 <input type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFile} disabled={uploading} className="text-xs" />
-                {uploading && <p className="text-muted text-xs">Uploading…</p>}
+                {uploading && <p className="text-mute text-xs">Uploading…</p>}
                 {uploadError && <p className="text-red-500 text-xs">{uploadError}</p>}
                 <input
                   value={form.image_url}
                   onChange={(e) => set('image_url', e.target.value)}
                   placeholder="Or paste an image URL"
-                  className="border border-[#E5E5E5] px-3 py-2 text-midnight text-sm"
+                  className="border border-rule px-3 py-2 text-ink text-sm"
                 />
               </div>
             </div>
           </div>
 
-          <div className="md:col-span-2 flex flex-col gap-2 border-t border-[#E5E5E5] pt-4">
+          <div className="md:col-span-2 flex flex-col gap-2 border-t border-rule pt-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] tracking-wide uppercase text-muted">Color Variants (optional)</span>
+              <span className="text-[10px] tracking-wide uppercase text-mute">Color Variants (optional)</span>
               <button
                 type="button"
                 onClick={addVariant}
-                className="text-[10px] tracking-[0.1em] uppercase font-bold text-midnight hover:opacity-70"
+                className="text-[10px] tracking-[0.1em] uppercase font-bold text-ink hover:opacity-70"
               >
                 + Add variant
               </button>
             </div>
             {form.variants.length === 0 && (
-              <p className="text-muted text-xs">None — product will show a single image.</p>
+              <p className="text-mute text-xs">None — product will show a single image.</p>
             )}
             {form.variants.map((v, i) => (
-              <div key={i} className="flex items-center gap-3 border border-[#E5E5E5] p-3">
-                {v.image_url && <img src={absolutize(v.image_url)} alt="" className="w-14 h-14 object-cover border border-[#E5E5E5]" />}
+              <div key={i} className="flex items-center gap-3 border border-rule p-3">
+                {v.image_url && <img src={absolutize(v.image_url)} alt="" className="w-14 h-14 object-cover border border-rule" />}
                 <select
                   value={v.color || ''}
                   onChange={(e) => setVariant(i, { color: e.target.value })}
-                  className="border border-[#E5E5E5] px-2 py-1 text-midnight text-xs"
+                  className="border border-rule px-2 py-1 text-ink text-xs"
                 >
                   {['White', 'Black', 'Grey'].map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
@@ -192,11 +192,11 @@ export default function ProductFormModal({
                   disabled={variantUploading === i}
                   className="text-xs flex-1"
                 />
-                {variantUploading === i && <span className="text-muted text-xs">Uploading…</span>}
+                {variantUploading === i && <span className="text-mute text-xs">Uploading…</span>}
                 <button
                   type="button"
                   onClick={() => removeVariant(i)}
-                  className="text-muted hover:text-red-400 text-lg leading-none px-1"
+                  className="text-mute hover:text-red-400 text-lg leading-none px-1"
                   aria-label="Remove variant"
                 >
                   ×
@@ -206,30 +206,30 @@ export default function ProductFormModal({
           </div>
 
           <label className="flex flex-col gap-1 md:col-span-2">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Description</span>
-            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Description</span>
+            <textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows={3} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Type</span>
-            <select value={form.type} onChange={(e) => set('type', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight">
+            <span className="text-[10px] tracking-wide uppercase text-mute">Type</span>
+            <select value={form.type} onChange={(e) => set('type', e.target.value)} className="border border-rule px-3 py-2 text-ink">
               <option value="product">Product</option>
               <option value="service">Service</option>
             </select>
           </label>
           <div className="flex items-center gap-6 pt-6">
-            <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-muted">
+            <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-mute">
               <input type="checkbox" checked={form.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Active
             </label>
             {showFeatured && (
-              <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-muted">
+              <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-mute">
                 <input type="checkbox" checked={form.is_featured} onChange={(e) => set('is_featured', e.target.checked)} /> Featured
               </label>
             )}
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-8">
-          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-muted px-6 py-3 hover:text-midnight">Cancel</button>
-          <button onClick={() => onSave(form)} disabled={uploading} className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 disabled:opacity-40">
+          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-mute px-6 py-3 hover:text-ink">Cancel</button>
+          <button onClick={() => onSave(form)} disabled={uploading} className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 disabled:opacity-40">
             Save
           </button>
         </div>

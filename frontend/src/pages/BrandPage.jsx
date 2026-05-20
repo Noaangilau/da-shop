@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+﻿import { useState, useEffect, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 
@@ -7,11 +7,11 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 function ProductSkeleton() {
   return (
     <div className="bg-white">
-      <div className="aspect-[4/5] bg-midnight/10 animate-pulse" />
-      <div className="p-4 border-t border-[#E5E5E5] flex flex-col gap-2">
-        <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
-        <div className="h-4 w-full bg-midnight/10 animate-pulse" />
-        <div className="h-3.5 w-12 bg-midnight/10 animate-pulse" />
+      <div className="aspect-[4/5] bg-ink/10 animate-pulse" />
+      <div className="p-4 border-t border-rule flex flex-col gap-2">
+        <div className="h-2.5 w-16 bg-ink/10 animate-pulse" />
+        <div className="h-4 w-full bg-ink/10 animate-pulse" />
+        <div className="h-3.5 w-12 bg-ink/10 animate-pulse" />
       </div>
     </div>
   )
@@ -59,11 +59,11 @@ export default function BrandPage() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
         <div className="text-center px-6">
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
-          <h1 className="text-midnight font-black uppercase tracking-wide text-3xl mb-6">Brand Not Found</h1>
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase mb-4">404</p>
+          <h1 className="text-ink font-black uppercase tracking-wide text-3xl mb-6">Brand Not Found</h1>
           <Link
             to="/brands"
-            className="bg-midnight text-white text-[11px] tracking-[0.15em] uppercase font-bold px-8 py-3.5 inline-block hover:bg-midnight/80 transition-colors"
+            className="bg-ink text-white text-[11px] tracking-[0.15em] uppercase font-bold px-8 py-3.5 inline-block hover:bg-ink/80 transition-colors"
           >
             All Brands
           </Link>
@@ -75,7 +75,7 @@ export default function BrandPage() {
   if (error) {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
-        <p className="text-muted text-sm uppercase tracking-widest">Something went wrong. Try refreshing.</p>
+        <p className="text-mute text-sm uppercase tracking-widest">Something went wrong. Try refreshing.</p>
       </main>
     )
   }
@@ -84,7 +84,7 @@ export default function BrandPage() {
     <main className="pt-[88px]">
 
       {/* ── Brand hero ── */}
-      <section className="relative h-[28rem] md:h-[36rem] overflow-hidden bg-midnight">
+      <section className="relative h-[28rem] md:h-[36rem] overflow-hidden bg-ink">
         {brand?.hero_image_url && (
           <img
             src={brand.hero_image_url}
@@ -128,14 +128,14 @@ export default function BrandPage() {
       </section>
 
       {/* ── Brand info strip ── */}
-      <section className="bg-white border-b border-[#E5E5E5]">
+      <section className="bg-white border-b border-rule">
         <div className="max-w-[1280px] mx-auto px-6 py-12 flex flex-col md:flex-row gap-10 items-start">
           {loading ? (
             <div className="flex-1 flex flex-col gap-3">
-              <div className="h-3 w-32 bg-midnight/10 animate-pulse" />
-              <div className="h-4 w-64 bg-midnight/10 animate-pulse" />
-              <div className="h-3 w-full bg-midnight/10 animate-pulse" />
-              <div className="h-3 w-3/4 bg-midnight/10 animate-pulse" />
+              <div className="h-3 w-32 bg-ink/10 animate-pulse" />
+              <div className="h-4 w-64 bg-ink/10 animate-pulse" />
+              <div className="h-3 w-full bg-ink/10 animate-pulse" />
+              <div className="h-3 w-3/4 bg-ink/10 animate-pulse" />
             </div>
           ) : (
             <>
@@ -149,14 +149,14 @@ export default function BrandPage() {
                 </div>
               )}
               <div className="flex-1">
-                <p className="text-muted text-[10px] tracking-[0.2em] uppercase mb-3">{brand.location}</p>
-                <p className="text-[15px] italic text-muted mb-4">"{brand.tagline}"</p>
+                <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-3">{brand.location}</p>
+                <p className="text-[15px] italic text-mute mb-4">"{brand.tagline}"</p>
                 <p className="text-gray-500 text-sm leading-relaxed max-w-xl">{brand.bio}</p>
                 {brand.instagram && (
-                  <p className="text-muted text-[10px] tracking-[0.15em] uppercase mt-5">{brand.instagram}</p>
+                  <p className="text-mute text-[10px] tracking-[0.15em] uppercase mt-5">{brand.instagram}</p>
                 )}
               </div>
-              <div className="flex flex-col items-end gap-2 text-muted text-[10px] tracking-[0.15em] uppercase text-right">
+              <div className="flex flex-col items-end gap-2 text-mute text-[10px] tracking-[0.15em] uppercase text-right">
                 <span>{forSale.length} Products</span>
                 {services.length > 0 && <span>{services.length} Services</span>}
               </div>
@@ -166,13 +166,13 @@ export default function BrandPage() {
       </section>
 
       {/* ── Products grid ── */}
-      <section className="bg-[#F7F7F7] py-20 px-6">
+      <section className="bg-paper py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
 
           <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">All Products</p>
-              <h2 className="text-midnight font-black uppercase tracking-wide text-2xl">
+              <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">All Products</p>
+              <h2 className="text-ink font-black uppercase tracking-wide text-2xl">
                 {loading ? 'Loading...' : `Shop ${brand.name}`}
               </h2>
             </div>
@@ -186,8 +186,8 @@ export default function BrandPage() {
                     onClick={() => setActiveCollection(col)}
                     className={`text-[11px] tracking-[0.12em] uppercase font-bold px-5 py-2 border transition-colors duration-150 ${
                       activeCollection === col
-                        ? 'bg-midnight text-white border-midnight'
-                        : 'bg-white text-muted border-[#E5E5E5] hover:border-midnight hover:text-midnight'
+                        ? 'bg-ink text-white border-ink'
+                        : 'bg-white text-mute border-rule hover:border-ink hover:text-ink'
                     }`}
                   >
                     {col}
@@ -197,13 +197,13 @@ export default function BrandPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-rule">
             {loading
               ? [0, 1, 2, 3, 4, 5, 6, 7].map((i) => <ProductSkeleton key={i} />)
               : visibleProducts.length === 0
               ? (
                 <div className="col-span-full py-20 text-center bg-white">
-                  <p className="text-muted text-sm uppercase tracking-widest">No products in this collection.</p>
+                  <p className="text-mute text-sm uppercase tracking-widest">No products in this collection.</p>
                 </div>
               )
               : visibleProducts.map((product) => (
@@ -216,26 +216,26 @@ export default function BrandPage() {
                           className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       ) : (
-                        <div className="w-full aspect-[4/5] bg-midnight/5 flex items-center justify-center">
-                          <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold">
+                        <div className="w-full aspect-[4/5] bg-ink/5 flex items-center justify-center">
+                          <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold">
                             Coming Soon
                           </p>
                         </div>
                       )}
                       {product.collection && (
                         <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                          <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
+                          <span className="bg-ink text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
                             {product.collection}
                           </span>
                         </div>
                       )}
                     </div>
-                    <div className="p-4 border-t border-[#E5E5E5]">
-                      <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                    <div className="p-4 border-t border-rule">
+                      <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                         {product.collection}
                       </p>
-                      <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
-                      <span className="text-midnight font-bold text-[13px]">${product.price}</span>
+                      <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
+                      <span className="text-ink font-bold text-[13px]">${product.price}</span>
                     </div>
                   </Link>
                 ))}
@@ -245,13 +245,13 @@ export default function BrandPage() {
 
       {/* ── Art Services section ── */}
       {!loading && services.length > 0 && (
-        <section className="bg-white py-20 px-6 border-t border-[#E5E5E5]">
+        <section className="bg-white py-20 px-6 border-t border-rule">
           <div className="max-w-[1280px] mx-auto">
             <div className="mb-10">
-              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">Custom Work</p>
-              <h2 className="text-midnight font-black uppercase tracking-wide text-2xl">Art Services</h2>
+              <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">Custom Work</p>
+              <h2 className="text-ink font-black uppercase tracking-wide text-2xl">Art Services</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E5E5E5]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-rule">
               {services.map((service) => (
                 <Link key={service.id} to={`/product/${service.id}`} className="group bg-white overflow-hidden">
                   <div className="relative h-56 overflow-hidden">
@@ -262,11 +262,11 @@ export default function BrandPage() {
                     />
                     <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
                   </div>
-                  <div className="p-6 border-t border-[#E5E5E5]">
-                    <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-2">Art Service</p>
-                    <h3 className="text-midnight font-black uppercase tracking-wide text-base mb-2">{service.name}</h3>
+                  <div className="p-6 border-t border-rule">
+                    <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold mb-2">Art Service</p>
+                    <h3 className="text-ink font-black uppercase tracking-wide text-base mb-2">{service.name}</h3>
                     <p className="text-gray-400 text-xs leading-relaxed mb-4">{service.description?.substring(0, 100)}...</p>
-                    <p className="text-midnight font-bold text-sm">From ${service.price}</p>
+                    <p className="text-ink font-bold text-sm">From ${service.price}</p>
                   </div>
                 </Link>
               ))}
@@ -276,7 +276,7 @@ export default function BrandPage() {
       )}
 
       {/* ── CTA banner ── */}
-      <section className="bg-midnight py-20 px-6">
+      <section className="bg-ink py-20 px-6">
         <div className="max-w-[1280px] mx-auto text-center">
           <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-4">Are you a Pacific vendor?</p>
           <h2
@@ -287,7 +287,7 @@ export default function BrandPage() {
           </h2>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors duration-200"
+            className="inline-block bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors duration-200"
           >
             Apply to Sell
           </Link>

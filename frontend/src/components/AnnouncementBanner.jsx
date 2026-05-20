@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -48,13 +48,13 @@ export default function AnnouncementPopup() {
       >
         <button
           onClick={close}
-          className="absolute top-4 right-4 text-muted hover:text-midnight text-xl"
+          className="absolute top-4 right-4 text-mute hover:text-ink text-xl"
           aria-label="Close"
         >
           ×
         </button>
-        <div className="w-8 h-px bg-midnight mb-6" />
-        <h3 className="text-midnight font-black uppercase tracking-wide text-2xl mb-4">
+        <div className="w-8 h-px bg-ink mb-6" />
+        <h3 className="text-ink font-black uppercase tracking-wide text-2xl mb-4">
           {popup.title}
         </h3>
         {popup.body && (
@@ -63,7 +63,7 @@ export default function AnnouncementPopup() {
         {popup.cta_url && (
           <a
             href={popup.cta_url}
-            className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 transition-colors"
+            className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 transition-colors"
           >
             {popup.cta_label || 'Shop now'}
           </a>

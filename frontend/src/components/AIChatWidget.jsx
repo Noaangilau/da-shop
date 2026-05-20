@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+﻿import { useState, useRef, useEffect, useMemo } from 'react'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -53,11 +53,11 @@ export default function AIChatWidget() {
     <>
       {/* ── Chat panel ── */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 flex flex-col bg-white border border-[#E5E5E5] shadow-xl"
+        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 flex flex-col bg-white border border-rule shadow-xl"
           style={{ maxHeight: '70vh' }}
         >
           {/* Header */}
-          <div className="bg-midnight px-5 py-4 flex items-center justify-between flex-shrink-0">
+          <div className="bg-ink px-5 py-4 flex items-center justify-between flex-shrink-0">
             <div>
               <p className="text-white font-black text-[11px] tracking-[0.15em] uppercase">DA SHOP Assistant</p>
               <p className="text-white/40 text-[10px] tracking-wide">Ask about products, shipping, sizing</p>
@@ -78,8 +78,8 @@ export default function AIChatWidget() {
                 <div
                   className={`max-w-[85%] px-4 py-3 text-sm leading-relaxed ${
                     msg.role === 'user'
-                      ? 'bg-midnight text-white'
-                      : 'bg-[#F7F7F7] text-midnight border border-[#E5E5E5]'
+                      ? 'bg-ink text-white'
+                      : 'bg-paper text-ink border border-rule'
                   }`}
                 >
                   {msg.content}
@@ -88,7 +88,7 @@ export default function AIChatWidget() {
             ))}
             {loading && (
               <div className="flex justify-start">
-                <div className="bg-[#F7F7F7] border border-[#E5E5E5] px-4 py-3 flex gap-1.5 items-center">
+                <div className="bg-paper border border-rule px-4 py-3 flex gap-1.5 items-center">
                   {[0, 1, 2].map((i) => (
                     <div
                       key={i}
@@ -103,19 +103,19 @@ export default function AIChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="border-t border-[#E5E5E5] p-3 flex gap-2 flex-shrink-0">
+          <div className="border-t border-rule p-3 flex gap-2 flex-shrink-0">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKey}
               placeholder="Ask anything…"
-              className="flex-1 border border-[#E5E5E5] px-3 py-2 text-sm text-midnight placeholder-gray-300 focus:outline-none focus:border-midnight transition-colors bg-white"
+              className="flex-1 border border-rule px-3 py-2 text-sm text-ink placeholder-gray-300 focus:outline-none focus:border-ink transition-colors bg-white"
               disabled={loading}
             />
             <button
               onClick={send}
               disabled={!input.trim() || loading}
-              className="bg-midnight text-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] hover:bg-midnight/80 transition-colors disabled:opacity-40"
+              className="bg-ink text-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] hover:bg-ink/80 transition-colors disabled:opacity-40"
             >
               Send
             </button>
@@ -126,7 +126,7 @@ export default function AIChatWidget() {
       {/* ── Floating toggle button ── */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 bg-midnight text-white w-14 h-14 flex items-center justify-center shadow-lg hover:bg-midnight/80 transition-colors"
+        className="fixed bottom-6 right-6 z-50 bg-ink text-white w-14 h-14 flex items-center justify-center shadow-lg hover:bg-ink/80 transition-colors"
         aria-label="Open chat"
       >
         {open ? (

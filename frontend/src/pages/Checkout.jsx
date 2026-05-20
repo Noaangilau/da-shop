@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
@@ -87,7 +87,7 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
   return (
     <form onSubmit={handlePay} className="flex flex-col gap-5">
       <div className="bg-white p-8">
-        <h2 className="text-midnight font-black uppercase tracking-wide text-[11px] mb-6">
+        <h2 className="text-ink font-black uppercase tracking-wide text-[11px] mb-6">
           Payment Details
         </h2>
         <PaymentElement />
@@ -98,7 +98,7 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
       <button
         type="submit"
         disabled={loading || !stripe}
-        className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors disabled:opacity-40"
+        className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-ink/80 transition-colors disabled:opacity-40"
       >
         {loading ? 'Processing…' : `Pay $${total.toFixed(2)}`}
       </button>
@@ -106,7 +106,7 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
       <button
         type="button"
         onClick={onBack}
-        className="text-muted text-[10px] tracking-[0.15em] uppercase text-center hover:text-midnight transition-colors"
+        className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors"
       >
         ← Back to Shipping
       </button>
@@ -153,11 +153,11 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-      <div className="bg-white p-8 border border-[#E5E5E5]">
-        <p className="text-[10px] tracking-[0.2em] uppercase font-black text-midnight mb-2">
+      <div className="bg-white p-8 border border-rule">
+        <p className="text-[10px] tracking-[0.2em] uppercase font-black text-ink mb-2">
           Dev Mode — Payment Skipped
         </p>
-        <p className="text-muted text-xs leading-relaxed">
+        <p className="text-mute text-xs leading-relaxed">
           <code>VITE_STRIPE_PK</code> is not set. Orders are created without payment verification.
           Set the env var to enable real Stripe payments.
         </p>
@@ -168,7 +168,7 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
       <button
         type="submit"
         disabled={loading}
-        className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors disabled:opacity-40"
+        className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-ink/80 transition-colors disabled:opacity-40"
       >
         {loading ? 'Placing Order…' : `Place Order — $${total.toFixed(2)}`}
       </button>
@@ -176,7 +176,7 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
       <button
         type="button"
         onClick={onBack}
-        className="text-muted text-[10px] tracking-[0.15em] uppercase text-center hover:text-midnight transition-colors"
+        className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors"
       >
         ← Back to Shipping
       </button>
@@ -255,40 +255,40 @@ export default function Checkout() {
 
   const orderSummaryPanel = (
     <div className="lg:col-span-1">
-      <div className="bg-white border border-[#E5E5E5] p-8 sticky top-24">
-        <h2 className="text-midnight text-[11px] tracking-[0.2em] uppercase font-black mb-6">
+      <div className="bg-white border border-rule p-8 sticky top-24">
+        <h2 className="text-ink text-[11px] tracking-[0.2em] uppercase font-black mb-6">
           Order Summary
         </h2>
-        <div className="flex flex-col gap-px bg-[#E5E5E5] mb-6">
+        <div className="flex flex-col gap-px bg-rule mb-6">
           {cart.map((item) => (
             <div key={item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`} className="bg-white flex gap-3 p-3">
               <img src={item.image} alt={item.name} className="w-14 h-14 object-cover flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-muted text-[10px] tracking-wide uppercase">{item.brand}</p>
-                <p className="text-midnight font-bold text-xs leading-snug truncate">{item.name}</p>
+                <p className="text-mute text-[10px] tracking-wide uppercase">{item.brand}</p>
+                <p className="text-ink font-bold text-xs leading-snug truncate">{item.name}</p>
                 {item.variant?.color && (
-                  <p className="text-muted text-[10px]">Color: {item.variant.color}</p>
+                  <p className="text-mute text-[10px]">Color: {item.variant.color}</p>
                 )}
                 {item.selectedSize && (
-                  <p className="text-muted text-[10px]">Size: {item.selectedSize}</p>
+                  <p className="text-mute text-[10px]">Size: {item.selectedSize}</p>
                 )}
-                <p className="text-muted text-[10px]">×{item.qty}</p>
+                <p className="text-mute text-[10px]">×{item.qty}</p>
               </div>
-              <span className="text-midnight font-bold text-xs flex-shrink-0">
+              <span className="text-ink font-bold text-xs flex-shrink-0">
                 ${(item.price * item.qty).toFixed(2)}
               </span>
             </div>
           ))}
         </div>
-        <div className="w-full h-px bg-[#E5E5E5] mb-4" />
+        <div className="w-full h-px bg-rule mb-4" />
         <div className="flex justify-between items-center">
-          <span className="text-midnight text-[11px] tracking-[0.15em] uppercase font-semibold">Total</span>
-          <span className="text-midnight font-black text-xl">${totalPrice.toFixed(2)}</span>
+          <span className="text-ink text-[11px] tracking-[0.15em] uppercase font-semibold">Total</span>
+          <span className="text-ink font-black text-xl">${totalPrice.toFixed(2)}</span>
         </div>
         {step === 'shipping' && (
           <Link
             to="/cart"
-            className="block text-center text-muted text-[10px] tracking-[0.15em] uppercase hover:text-midnight transition-colors mt-6"
+            className="block text-center text-mute text-[10px] tracking-[0.15em] uppercase hover:text-ink transition-colors mt-6"
           >
             ← Edit Cart
           </Link>
@@ -301,9 +301,9 @@ export default function Checkout() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <div className="w-10 h-px bg-midnight mx-auto mb-10" />
-          <h1 className="text-midnight font-black uppercase text-2xl mb-4">Cart is Empty</h1>
-          <Link to="/" className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors">
+          <div className="w-10 h-px bg-ink mx-auto mb-10" />
+          <h1 className="text-ink font-black uppercase text-2xl mb-4">Cart is Empty</h1>
+          <Link to="/" className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors">
             Shop Now
           </Link>
         </div>
@@ -312,14 +312,14 @@ export default function Checkout() {
   }
 
   return (
-    <main className="pt-[88px] bg-[#F7F7F7] min-h-screen">
+    <main className="pt-[88px] bg-paper min-h-screen">
 
       {/* ── Header ── */}
-      <div className="bg-white border-b border-[#E5E5E5]">
+      <div className="bg-white border-b border-rule">
         <div className="max-w-[1280px] mx-auto px-6 py-10">
-          <div className="w-8 h-px bg-midnight mb-6" />
+          <div className="w-8 h-px bg-ink mb-6" />
           <h1
-            className="text-midnight font-black uppercase"
+            className="text-ink font-black uppercase"
             style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
           >
             Checkout
@@ -328,10 +328,10 @@ export default function Checkout() {
           <div className="flex items-center gap-3 mt-4">
             {['shipping', 'payment'].map((s, i) => (
               <div key={s} className="flex items-center gap-3">
-                <span className={`text-[10px] tracking-[0.15em] uppercase font-bold ${step === s ? 'text-midnight' : 'text-muted'}`}>
+                <span className={`text-[10px] tracking-[0.15em] uppercase font-bold ${step === s ? 'text-ink' : 'text-mute'}`}>
                   {i + 1}. {s === 'shipping' ? 'Shipping' : 'Payment'}
                 </span>
-                {i === 0 && <span className="text-muted text-[10px]">/</span>}
+                {i === 0 && <span className="text-mute text-[10px]">/</span>}
               </div>
             ))}
           </div>
@@ -345,7 +345,7 @@ export default function Checkout() {
           {step === 'shipping' && (
             <form onSubmit={handleShippingSubmit} className="lg:col-span-2 flex flex-col gap-5">
               <div className="bg-white p-8">
-                <h2 className="text-midnight font-black uppercase tracking-wide text-[11px] mb-6">
+                <h2 className="text-ink font-black uppercase tracking-wide text-[11px] mb-6">
                   Contact Information
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -354,11 +354,11 @@ export default function Checkout() {
                     { name: 'phone', label: 'Phone Number',  type: 'tel',   required: false },
                   ].map((f) => (
                     <div key={f.name} className="flex flex-col gap-1.5">
-                      <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+                      <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">
                         {f.label}{' '}
                         {f.required
                           ? <span className="text-red-400">*</span>
-                          : <span className="text-muted font-normal normal-case tracking-normal text-xs">(optional)</span>
+                          : <span className="text-mute font-normal normal-case tracking-normal text-xs">(optional)</span>
                         }
                       </label>
                       <input
@@ -366,7 +366,7 @@ export default function Checkout() {
                         name={f.name}
                         value={form[f.name]}
                         onChange={handleChange}
-                        className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight focus:outline-none focus:border-midnight transition-colors bg-white"
+                        className="border border-rule px-4 py-3 text-sm text-ink focus:outline-none focus:border-ink transition-colors bg-white"
                       />
                     </div>
                   ))}
@@ -374,7 +374,7 @@ export default function Checkout() {
               </div>
 
               <div className="bg-white p-8">
-                <h2 className="text-midnight font-black uppercase tracking-wide text-[11px] mb-6">
+                <h2 className="text-ink font-black uppercase tracking-wide text-[11px] mb-6">
                   Shipping Address
                 </h2>
                 <div className="flex flex-col gap-4">
@@ -386,7 +386,7 @@ export default function Checkout() {
                     { name: 'shipping_country',  label: 'Country',        placeholder: 'United States' },
                   ].map((f) => (
                     <div key={f.name} className="flex flex-col gap-1.5">
-                      <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">
+                      <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">
                         {f.label} <span className="text-red-400">*</span>
                       </label>
                       <input
@@ -395,7 +395,7 @@ export default function Checkout() {
                         value={form[f.name]}
                         onChange={handleChange}
                         placeholder={f.placeholder}
-                        className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight placeholder-gray-300 focus:outline-none focus:border-midnight transition-colors bg-white"
+                        className="border border-rule px-4 py-3 text-sm text-ink placeholder-gray-300 focus:outline-none focus:border-ink transition-colors bg-white"
                       />
                     </div>
                   ))}
@@ -407,7 +407,7 @@ export default function Checkout() {
               <button
                 type="submit"
                 disabled={intentLoading}
-                className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-midnight/80 transition-colors disabled:opacity-40"
+                className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase py-4 hover:bg-ink/80 transition-colors disabled:opacity-40"
               >
                 {intentLoading ? 'Loading Payment…' : 'Continue to Payment →'}
               </button>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import { schools } from '../data/schools'
 
 const COMING_SOON_COUNT = Math.max(0, 3 - schools.length)
@@ -51,16 +51,16 @@ function SchoolCard({ school }) {
 
 function ComingSoonCard({ index }) {
   return (
-    <div className="aspect-square border border-dashed border-[#E5E5E5] p-6 flex flex-col justify-between bg-[#F7F7F7]">
-      <span className="text-muted text-[10px] tracking-[0.14em] uppercase font-mono">
+    <div className="aspect-square border border-dashed border-rule p-6 flex flex-col justify-between bg-paper">
+      <span className="text-mute text-[10px] tracking-[0.14em] uppercase font-mono">
         SCHOOL / 0{schools.length + index + 1}
       </span>
       <div>
-        <p className="text-muted font-black uppercase" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', letterSpacing: '0.04em', lineHeight: 1 }}>
+        <p className="text-mute font-black uppercase" style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', letterSpacing: '0.04em', lineHeight: 1 }}>
           COMING<br />SOON.
         </p>
       </div>
-      <span className="text-muted text-[10px] tracking-[0.12em] uppercase font-mono">
+      <span className="text-mute text-[10px] tracking-[0.12em] uppercase font-mono">
         YOUR SCHOOL?<br />APPLY BELOW →
       </span>
     </div>
@@ -72,19 +72,19 @@ export default function Schools() {
     <main className="pt-[88px] bg-white min-h-screen">
 
       {/* ── Header ── */}
-      <div className="bg-white border-b border-[#E5E5E5]">
+      <div className="bg-white border-b border-rule">
         <div className="max-w-[1280px] mx-auto px-6 py-12">
-          <div className="w-8 h-px bg-midnight mb-8" />
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
+          <div className="w-8 h-px bg-ink mb-8" />
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
             School + Club Stores
           </p>
           <h1
-            className="text-midnight font-black uppercase"
+            className="text-ink font-black uppercase"
             style={{ fontSize: 'clamp(2.5rem, 7vw, 7rem)', letterSpacing: '0.04em', lineHeight: 0.95 }}
           >
             Schools.
           </h1>
-          <p className="text-muted text-sm leading-relaxed mt-5 max-w-2xl">
+          <p className="text-mute text-sm leading-relaxed mt-5 max-w-2xl">
             Official school stores. We partner with schools to produce a small catalog of school-branded basics — tees, long sleeves, crew necks, and hoodies — in your colors, with your mark, shipped direct.
           </p>
         </div>
@@ -92,10 +92,10 @@ export default function Schools() {
 
       {/* ── Schools grid ── */}
       <section className="max-w-[1280px] mx-auto px-6 py-16">
-        <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-6">
+        <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-6">
           Current Partners · {String(schools.length).padStart(2, '0')}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-[#E5E5E5]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-px bg-rule">
           {schools.map((school) => (
             <SchoolCard key={school.id} school={school} />
           ))}
@@ -106,25 +106,25 @@ export default function Schools() {
       </section>
 
       {/* ── How it works ── */}
-      <section className="bg-[#F7F7F7] border-t border-b border-[#E5E5E5] py-20 px-6">
+      <section className="bg-paper border-t border-b border-rule py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">How It Works</p>
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">How It Works</p>
           <h2
-            className="text-midnight font-black uppercase mb-12"
+            className="text-ink font-black uppercase mb-12"
             style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
           >
             From Sample to Shipped.
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-rule">
             {[
               ['01', 'DESIGN', 'Bring your school mark, your colors, your fits. We finalize a small catalog — usually 4–6 items: a tee, long sleeve, crew, hoodie.'],
               ['02', 'OPEN STORE', "We build a dedicated school page in DA SHOP. Students, families, and supporters order direct — no order forms, no chasing payments."],
               ['03', 'SHIP', 'We produce in batches and ship direct. Reorders open every season.'],
             ].map(([num, title, body]) => (
               <div key={num} className="bg-white p-8">
-                <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-mono mb-4">STEP / {num}</p>
-                <h3 className="text-midnight font-black uppercase text-xl mb-3">{title}</h3>
-                <p className="text-muted text-sm leading-relaxed">{body}</p>
+                <p className="text-mute text-[10px] tracking-[0.2em] uppercase font-mono mb-4">STEP / {num}</p>
+                <h3 className="text-ink font-black uppercase text-xl mb-3">{title}</h3>
+                <p className="text-mute text-sm leading-relaxed">{body}</p>
               </div>
             ))}
           </div>
@@ -132,7 +132,7 @@ export default function Schools() {
       </section>
 
       {/* ── Apply CTA ── */}
-      <section className="bg-midnight py-20 px-6">
+      <section className="bg-ink py-20 px-6">
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
             <p className="text-white/40 text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">
@@ -150,7 +150,7 @@ export default function Schools() {
           </div>
           <Link
             to="/become-a-vendor"
-            className="flex-shrink-0 bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors"
+            className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors"
           >
             Apply for Your School →
           </Link>

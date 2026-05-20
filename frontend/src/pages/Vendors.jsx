@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 
 const vendors = [
   {
@@ -37,11 +37,11 @@ export default function Vendors() {
       {/* ── Header ── */}
       <section className="bg-white py-20 px-6 border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <div className="w-12 h-px bg-midnight mb-10" />
-          <p className="text-muted text-xs tracking-widest uppercase font-semibold mb-4">
+          <div className="w-12 h-px bg-ink mb-10" />
+          <p className="text-mute text-xs tracking-widest uppercase font-semibold mb-4">
             The Marketplace
           </p>
-          <h1 className="text-midnight text-4xl md:text-6xl font-black uppercase tracking-wide">
+          <h1 className="text-ink text-4xl md:text-6xl font-black uppercase tracking-wide">
             Our Vendors
           </h1>
         </div>
@@ -68,20 +68,20 @@ export default function Vendors() {
 
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-muted text-xs tracking-widest uppercase font-semibold">
+                    <p className="text-mute text-xs tracking-widest uppercase font-semibold">
                       {vendor.category}
                     </p>
-                    <p className="text-muted text-xs">
+                    <p className="text-mute text-xs">
                       {vendor.productCount} products
                     </p>
                   </div>
-                  <h2 className="text-midnight text-xl font-black uppercase tracking-wide mb-2">
+                  <h2 className="text-ink text-xl font-black uppercase tracking-wide mb-2">
                     {vendor.name}
                   </h2>
                   <p className="text-gray-500 text-sm leading-relaxed mb-4">
                     {vendor.bio}
                   </p>
-                  <p className="text-muted text-xs tracking-widest uppercase">
+                  <p className="text-mute text-xs tracking-widest uppercase">
                     {vendor.location}
                   </p>
                 </div>
@@ -92,7 +92,7 @@ export default function Vendors() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-midnight py-20 px-6">
+      <section className="bg-ink py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-white text-3xl font-black uppercase tracking-wide mb-4">
             Want to Sell Here?
@@ -102,7 +102,7 @@ export default function Vendors() {
           </p>
           <Link
             to="/become-a-vendor"
-            className="inline-block bg-white text-midnight font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors"
+            className="inline-block bg-white text-ink font-black text-xs tracking-widest uppercase px-10 py-4 hover:bg-white/90 transition-colors"
           >
             Apply Now
           </Link>

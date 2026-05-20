@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
@@ -57,12 +57,12 @@ export default function BrandFormModal({
   function imageField(key, label) {
     return (
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] tracking-wide uppercase text-muted">{label}</span>
+        <span className="text-[10px] tracking-wide uppercase text-mute">{label}</span>
         <div className="flex items-start gap-3">
-          {form[key] && <img src={absolutize(form[key])} alt="" className="w-20 h-20 object-contain border border-[#E5E5E5] bg-[#F7F7F7]" />}
+          {form[key] && <img src={absolutize(form[key])} alt="" className="w-20 h-20 object-contain border border-rule bg-paper" />}
           <div className="flex-1 flex flex-col gap-1">
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => handleFile(key, e)} disabled={uploadingKey === key} className="text-xs" />
-            <input value={form[key]} onChange={(e) => set(key, e.target.value)} placeholder="Or paste URL" className="border border-[#E5E5E5] px-3 py-1.5 text-midnight text-xs" />
+            <input value={form[key]} onChange={(e) => set(key, e.target.value)} placeholder="Or paste URL" className="border border-rule px-3 py-1.5 text-ink text-xs" />
           </div>
         </div>
       </div>
@@ -73,35 +73,35 @@ export default function BrandFormModal({
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-6 overflow-y-auto" onClick={onClose}>
       <div className="bg-white max-w-2xl w-full p-8 my-8" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-lg">
+          <h3 className="text-ink font-black uppercase tracking-wide text-lg">
             {mode === 'vendor' ? 'Edit Your Brand' : (form.id ? 'Edit Brand' : 'New Brand')}
           </h3>
-          <button onClick={onClose} className="text-muted text-xl hover:text-midnight">×</button>
+          <button onClick={onClose} className="text-mute text-xl hover:text-ink">×</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Name</span>
-            <input value={form.name} onChange={(e) => set('name', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Name</span>
+            <input value={form.name} onChange={(e) => set('name', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Tagline</span>
-            <input value={form.tagline} onChange={(e) => set('tagline', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Tagline</span>
+            <input value={form.tagline} onChange={(e) => set('tagline', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Category</span>
-            <input value={form.category} onChange={(e) => set('category', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Category</span>
+            <input value={form.category} onChange={(e) => set('category', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Location</span>
-            <input value={form.location} onChange={(e) => set('location', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Location</span>
+            <input value={form.location} onChange={(e) => set('location', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1 md:col-span-2">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Instagram</span>
-            <input value={form.instagram} onChange={(e) => set('instagram', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Instagram</span>
+            <input value={form.instagram} onChange={(e) => set('instagram', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1 md:col-span-2">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Bio</span>
-            <textarea value={form.bio} onChange={(e) => set('bio', e.target.value)} rows={4} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Bio</span>
+            <textarea value={form.bio} onChange={(e) => set('bio', e.target.value)} rows={4} className="border border-rule px-3 py-2 text-ink" />
           </label>
 
           {imageField('logo_white_url', 'Logo (white)')}
@@ -110,15 +110,15 @@ export default function BrandFormModal({
           {imageField('card_image_url', 'Card image')}
 
           {mode === 'admin' && (
-            <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-muted md:col-span-2">
+            <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-mute md:col-span-2">
               <input type="checkbox" checked={form.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Active (visible on site)
             </label>
           )}
         </div>
         {error && <p className="text-red-500 text-xs mt-4">{error}</p>}
         <div className="flex justify-end gap-3 mt-8">
-          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-muted px-6 py-3 hover:text-midnight">Cancel</button>
-          <button onClick={() => onSave(form)} disabled={!!uploadingKey} className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 disabled:opacity-40">
+          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-mute px-6 py-3 hover:text-ink">Cancel</button>
+          <button onClick={() => onSave(form)} disabled={!!uploadingKey} className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 disabled:opacity-40">
             Save
           </button>
         </div>

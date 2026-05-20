@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { getSchoolById } from '../data/schools'
@@ -35,9 +35,9 @@ export default function SchoolPage() {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center px-6">
         <div className="text-center max-w-sm">
-          <div className="w-10 h-px bg-midnight mx-auto mb-10" />
-          <h1 className="text-midnight font-black uppercase text-2xl mb-4">School Not Found</h1>
-          <Link to="/schools" className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors">
+          <div className="w-10 h-px bg-ink mx-auto mb-10" />
+          <h1 className="text-ink font-black uppercase text-2xl mb-4">School Not Found</h1>
+          <Link to="/schools" className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors">
             All Schools
           </Link>
         </div>
@@ -103,7 +103,7 @@ export default function SchoolPage() {
       </section>
 
       {/* ── Info strip ── */}
-      <div className="border-b border-[#E5E5E5] bg-[#F7F7F7]">
+      <div className="border-b border-rule bg-paper">
         <div className="max-w-[1280px] mx-auto px-6 py-6 grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             ['OFFICIAL SCHOOL STORE', 'Approved by the school. Each order supports school programs.'],
@@ -111,8 +111,8 @@ export default function SchoolPage() {
             ['SHIP TO YOU',           'Direct to your home, or pick up at the front office.'],
           ].map(([title, body]) => (
             <div key={title}>
-              <p className="text-midnight font-bold text-xs uppercase tracking-wide mb-1">{title}</p>
-              <p className="text-muted text-xs leading-relaxed">{body}</p>
+              <p className="text-ink font-bold text-xs uppercase tracking-wide mb-1">{title}</p>
+              <p className="text-mute text-xs leading-relaxed">{body}</p>
             </div>
           ))}
         </div>
@@ -121,33 +121,33 @@ export default function SchoolPage() {
       {/* ── Products ── */}
       <section className="max-w-[1280px] mx-auto px-6 py-16">
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
             {[0,1,2,3].map((i) => (
               <div key={i} className="bg-white">
-                <div className="aspect-[4/5] bg-midnight/10 animate-pulse" />
-                <div className="p-4 border-t border-[#E5E5E5] flex flex-col gap-2">
-                  <div className="h-3 w-24 bg-midnight/10 animate-pulse" />
-                  <div className="h-4 w-32 bg-midnight/10 animate-pulse" />
+                <div className="aspect-[4/5] bg-ink/10 animate-pulse" />
+                <div className="p-4 border-t border-rule flex flex-col gap-2">
+                  <div className="h-3 w-24 bg-ink/10 animate-pulse" />
+                  <div className="h-4 w-32 bg-ink/10 animate-pulse" />
                 </div>
               </div>
             ))}
           </div>
         ) : products.length === 0 ? (
           <div className="py-24 text-center max-w-md mx-auto">
-            <div className="w-8 h-px bg-midnight mx-auto mb-8" />
-            <p className="text-midnight font-black uppercase text-lg mb-3">Products Coming Soon</p>
-            <p className="text-muted text-sm leading-relaxed mb-10">
+            <div className="w-8 h-px bg-ink mx-auto mb-8" />
+            <p className="text-ink font-black uppercase text-lg mb-3">Products Coming Soon</p>
+            <p className="text-mute text-sm leading-relaxed mb-10">
               The {school.name} store is being set up. Products will be available here soon. Sign up to be notified when the store launches.
             </p>
             <Link
               to="/"
-              className="inline-block bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
+              className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors"
             >
               Shop All Products
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-rule">
             {products.map((product) => (
               <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
                 <div className="relative overflow-hidden">
@@ -157,12 +157,12 @@ export default function SchoolPage() {
                     className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>
-                <div className="p-4 border-t border-[#E5E5E5]">
-                  <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                <div className="p-4 border-t border-rule">
+                  <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                     {product.collection}
                   </p>
-                  <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
-                  <span className="text-midnight font-bold text-[13px]">${product.price}</span>
+                  <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
+                  <span className="text-ink font-bold text-[13px]">${product.price}</span>
                 </div>
               </Link>
             ))}
@@ -171,7 +171,7 @@ export default function SchoolPage() {
       </section>
 
       {/* ── Bulk orders CTA ── */}
-      <section className="bg-midnight py-16 px-6">
+      <section className="bg-ink py-16 px-6">
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <p className="text-white/40 text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">Group Orders</p>
@@ -182,7 +182,7 @@ export default function SchoolPage() {
           </div>
           <Link
             to="/support"
-            className="flex-shrink-0 bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors"
+            className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors"
           >
             Bulk Inquiry →
           </Link>

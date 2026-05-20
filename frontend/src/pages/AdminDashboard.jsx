@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
 import ProductFormModal from '../components/ProductFormModal'
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <main className="pt-[88px] min-h-screen bg-white flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-midnight border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-ink border-t-transparent rounded-full animate-spin" />
       </main>
     )
   }
@@ -232,8 +232,8 @@ export default function AdminDashboard() {
   ]
 
   return (
-    <main className="pt-[88px] min-h-screen bg-[#F7F7F7]">
-      <div className="bg-midnight">
+    <main className="pt-[88px] min-h-screen bg-paper">
+      <div className="bg-ink">
         <div className="max-w-[1280px] mx-auto px-6 py-12">
           <div className="w-8 h-px bg-white/30 mb-6" />
           <p className="text-white/40 text-[10px] tracking-[0.4em] uppercase font-semibold mb-2">Admin</p>
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'overview' && stats && (
           <div className="flex flex-col gap-10">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
               {[
                 { label: 'Total Orders',     value: stats.total_orders ?? 0 },
                 { label: 'Revenue',          value: `$${Number(stats.total_revenue ?? 0).toFixed(2)}` },
@@ -268,26 +268,26 @@ export default function AdminDashboard() {
                 { label: 'Vendor Inquiries', value: stats.total_inquiries ?? 0 },
               ].map((kpi) => (
                 <div key={kpi.label} className="bg-white p-8">
-                  <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-semibold mb-3">{kpi.label}</p>
-                  <p className="text-midnight font-black text-3xl">{kpi.value}</p>
+                  <p className="text-mute text-[10px] tracking-[0.2em] uppercase font-semibold mb-3">{kpi.label}</p>
+                  <p className="text-ink font-black text-3xl">{kpi.value}</p>
                 </div>
               ))}
             </div>
 
-            <div className="bg-white border border-[#E5E5E5] p-8 max-w-lg">
-              <div className="w-6 h-px bg-midnight mb-5" />
-              <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-2">Cart Abandonment</h3>
+            <div className="bg-white border border-rule p-8 max-w-lg">
+              <div className="w-6 h-px bg-ink mb-5" />
+              <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-2">Cart Abandonment</h3>
               <p className="text-gray-400 text-xs leading-relaxed mb-6">
                 Sends notifications to opted-in customers with carts &gt;2 hours old.
               </p>
               <button
                 onClick={triggerAbandonment}
                 disabled={abandoning}
-                className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 transition-colors disabled:opacity-40"
+                className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 transition-colors disabled:opacity-40"
               >
                 {abandoning ? 'Running…' : 'Trigger Notifications'}
               </button>
-              {abandonResult && <p className="text-muted text-xs mt-4">{abandonResult}</p>}
+              {abandonResult && <p className="text-mute text-xs mt-4">{abandonResult}</p>}
             </div>
           </div>
         )}
@@ -295,20 +295,20 @@ export default function AdminDashboard() {
         {activeTab === 'products' && (
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-semibold">
+              <p className="text-mute text-[10px] tracking-[0.2em] uppercase font-semibold">
                 {products.length} products
               </p>
               <button
                 onClick={() => setProductForm({})}
-                className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-midnight/80 transition-colors"
+                className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-ink/80 transition-colors"
               >
                 + Add Product
               </button>
             </div>
 
-            <div className="bg-white border border-[#E5E5E5] overflow-x-auto">
+            <div className="bg-white border border-rule overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-[#F7F7F7] text-muted text-[10px] tracking-[0.15em] uppercase">
+                <thead className="bg-paper text-mute text-[10px] tracking-[0.15em] uppercase">
                   <tr>
                     <th className="text-left p-3">Image</th>
                     <th className="text-left p-3">Name</th>
@@ -323,27 +323,27 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {products.map((p) => (
-                    <tr key={p.id} className="border-t border-[#E5E5E5]">
+                    <tr key={p.id} className="border-t border-rule">
                       <td className="p-3">
-                        {p.image_url && <img src={absolutize(p.image_url)} alt="" className="w-10 h-10 object-cover border border-[#E5E5E5]" />}
+                        {p.image_url && <img src={absolutize(p.image_url)} alt="" className="w-10 h-10 object-cover border border-rule" />}
                       </td>
-                      <td className="p-3 text-midnight font-semibold">{p.name}</td>
-                      <td className="p-3 text-muted">{brands.find((b) => b.id === p.brand_id)?.name || p.brand_id}</td>
-                      <td className="p-3 text-muted">{p.collection || '—'}</td>
+                      <td className="p-3 text-ink font-semibold">{p.name}</td>
+                      <td className="p-3 text-mute">{brands.find((b) => b.id === p.brand_id)?.name || p.brand_id}</td>
+                      <td className="p-3 text-mute">{p.collection || '—'}</td>
                       <td className="p-3 text-right">${p.price}</td>
                       <td className="p-3 text-right">{p.stock_count ?? '∞'}</td>
                       <td className="p-3 text-center">
-                        <button onClick={() => toggleActive(p.id)} className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${p.is_active ? 'bg-midnight text-white' : 'bg-[#F7F7F7] text-muted'}`}>
+                        <button onClick={() => toggleActive(p.id)} className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${p.is_active ? 'bg-ink text-white' : 'bg-paper text-mute'}`}>
                           {p.is_active ? 'On' : 'Off'}
                         </button>
                       </td>
                       <td className="p-3 text-center">
-                        <button onClick={() => toggleFeatured(p.id)} className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${p.is_featured ? 'bg-midnight text-white' : 'bg-[#F7F7F7] text-muted'}`}>
+                        <button onClick={() => toggleFeatured(p.id)} className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${p.is_featured ? 'bg-ink text-white' : 'bg-paper text-mute'}`}>
                           {p.is_featured ? '★' : '☆'}
                         </button>
                       </td>
                       <td className="p-3 text-right flex gap-2 justify-end">
-                        <button onClick={() => setProductForm({ ...p, sizes: (p.sizes || []).join(', ') })} className="text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline">Edit</button>
+                        <button onClick={() => setProductForm({ ...p, sizes: (p.sizes || []).join(', ') })} className="text-[10px] tracking-wide uppercase font-bold text-ink hover:underline">Edit</button>
                         <button onClick={() => deleteProduct(p.id)} className="text-[10px] tracking-wide uppercase font-bold text-red-500 hover:underline">Delete</button>
                       </td>
                     </tr>
@@ -369,18 +369,18 @@ export default function AdminDashboard() {
         {activeTab === 'brands' && (
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-semibold">{brands.length} brands</p>
+              <p className="text-mute text-[10px] tracking-[0.2em] uppercase font-semibold">{brands.length} brands</p>
               <button
                 onClick={() => setBrandForm({})}
-                className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-midnight/80 transition-colors"
+                className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-ink/80 transition-colors"
               >
                 + New Brand
               </button>
             </div>
 
-            <div className="bg-white border border-[#E5E5E5] overflow-x-auto">
+            <div className="bg-white border border-rule overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-[#F7F7F7] text-muted text-[10px] tracking-[0.15em] uppercase">
+                <thead className="bg-paper text-mute text-[10px] tracking-[0.15em] uppercase">
                   <tr>
                     <th className="text-left p-3">ID</th>
                     <th className="text-left p-3">Name</th>
@@ -392,18 +392,18 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {brands.map((b) => (
-                    <tr key={b.id} className="border-t border-[#E5E5E5]">
-                      <td className="p-3 text-muted font-mono text-xs">{b.id}</td>
-                      <td className="p-3 text-midnight font-semibold">{b.name}</td>
-                      <td className="p-3 text-muted">{b.category || '—'}</td>
-                      <td className="p-3 text-muted">{b.location || '—'}</td>
+                    <tr key={b.id} className="border-t border-rule">
+                      <td className="p-3 text-mute font-mono text-xs">{b.id}</td>
+                      <td className="p-3 text-ink font-semibold">{b.name}</td>
+                      <td className="p-3 text-mute">{b.category || '—'}</td>
+                      <td className="p-3 text-mute">{b.location || '—'}</td>
                       <td className="p-3 text-center">
-                        <span className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${b.is_active ? 'bg-midnight text-white' : 'bg-[#F7F7F7] text-muted'}`}>
+                        <span className={`text-[10px] tracking-wide uppercase font-bold px-2 py-1 ${b.is_active ? 'bg-ink text-white' : 'bg-paper text-mute'}`}>
                           {b.is_active ? 'Active' : 'Pending'}
                         </span>
                       </td>
                       <td className="p-3 text-right flex gap-2 justify-end">
-                        <button onClick={() => setBrandForm(b)} className="text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline">Edit</button>
+                        <button onClick={() => setBrandForm(b)} className="text-[10px] tracking-wide uppercase font-bold text-ink hover:underline">Edit</button>
                         {b.is_active ? (
                           <button onClick={() => revokeBrand(b.id)} className="text-[10px] tracking-wide uppercase font-bold text-red-500 hover:underline">Revoke</button>
                         ) : (
@@ -439,32 +439,32 @@ export default function AdminDashboard() {
 
         {activeTab === 'orders' && (
           orders.length === 0 ? <EmptyState message="No orders yet." /> : (
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {orders.map((order) => (
                 <div key={order.id} className="bg-white p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
                     <div>
-                      <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium">
+                      <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium">
                         Order #{order.id} · {new Date(order.created_at).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </p>
-                      <p className="text-midnight font-black text-lg mt-1">${Number(order.total ?? 0).toFixed(2)}</p>
+                      <p className="text-ink font-black text-lg mt-1">${Number(order.total ?? 0).toFixed(2)}</p>
                     </div>
                     <div className="text-right flex flex-col gap-2 items-end">
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                        className="text-[10px] tracking-[0.1em] uppercase font-bold bg-midnight text-white px-3 py-1 border-0"
+                        className="text-[10px] tracking-[0.1em] uppercase font-bold bg-ink text-white px-3 py-1 border-0"
                       >
                         {ORDER_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
-                      <p className="text-muted text-xs">{order.shipping_name} · {order.shipping_city}</p>
-                      <p className="text-muted text-[10px]">{order.email}</p>
+                      <p className="text-mute text-xs">{order.shipping_name} · {order.shipping_city}</p>
+                      <p className="text-mute text-[10px]">{order.email}</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-x-6 gap-y-1">
                     {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
                       <p key={i} className="text-gray-500 text-xs">
-                        <span className="text-muted">{item.brand}</span> — {item.product_name} ×{item.quantity}
+                        <span className="text-mute">{item.brand}</span> — {item.product_name} ×{item.quantity}
                       </p>
                     ))}
                   </div>
@@ -477,28 +477,28 @@ export default function AdminDashboard() {
         {activeTab === 'announcements' && (
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
-              <p className="text-muted text-[10px] tracking-[0.2em] uppercase font-semibold">{announcements.length} announcements</p>
-              <button onClick={() => setAnnForm({})} className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-midnight/80 transition-colors">
+              <p className="text-mute text-[10px] tracking-[0.2em] uppercase font-semibold">{announcements.length} announcements</p>
+              <button onClick={() => setAnnForm({})} className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-6 py-3 hover:bg-ink/80 transition-colors">
                 + New Announcement
               </button>
             </div>
 
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {announcements.length === 0 && <EmptyState message="No announcements yet." />}
               {announcements.map((a) => (
                 <div key={a.id} className="bg-white p-6 flex flex-wrap items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className={`text-[10px] tracking-wide uppercase font-bold px-2 py-0.5 ${a.is_active ? 'bg-midnight text-white' : 'bg-[#F7F7F7] text-muted'}`}>
+                      <span className={`text-[10px] tracking-wide uppercase font-bold px-2 py-0.5 ${a.is_active ? 'bg-ink text-white' : 'bg-paper text-mute'}`}>
                         {a.is_active ? 'Active' : 'Inactive'}
                       </span>
-                      <span className="text-muted text-[10px] tracking-wide uppercase">{a.display_mode}</span>
+                      <span className="text-mute text-[10px] tracking-wide uppercase">{a.display_mode}</span>
                     </div>
-                    <p className="text-midnight font-bold text-sm">{a.title}</p>
-                    {a.body && <p className="text-muted text-xs mt-1">{a.body}</p>}
+                    <p className="text-ink font-bold text-sm">{a.title}</p>
+                    {a.body && <p className="text-mute text-xs mt-1">{a.body}</p>}
                   </div>
                   <div className="flex gap-3">
-                    <button onClick={() => setAnnForm({ ...a, starts_at: a.starts_at?.slice(0,16), ends_at: a.ends_at?.slice(0,16) })} className="text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline">Edit</button>
+                    <button onClick={() => setAnnForm({ ...a, starts_at: a.starts_at?.slice(0,16), ends_at: a.ends_at?.slice(0,16) })} className="text-[10px] tracking-wide uppercase font-bold text-ink hover:underline">Edit</button>
                     <button onClick={() => deleteAnnouncement(a.id)} className="text-[10px] tracking-wide uppercase font-bold text-red-500 hover:underline">Delete</button>
                   </div>
                 </div>
@@ -517,7 +517,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'vendors' && (
           vendors.length === 0 ? <EmptyState message="No vendor accounts yet." /> : (
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {vendors.map((v) => {
                 const brand = brands.find((b) => b.id === v.brand_id)
                 const pending = brand && !brand.is_active
@@ -525,15 +525,15 @@ export default function AdminDashboard() {
                   <div key={v.id} className="bg-white p-6 flex flex-wrap items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        <p className="text-midnight font-bold text-sm">{brand?.name || `Brand #${v.brand_id}`}</p>
+                        <p className="text-ink font-bold text-sm">{brand?.name || `Brand #${v.brand_id}`}</p>
                         {pending && <span className="text-[10px] tracking-wide uppercase font-bold px-2 py-0.5 bg-yellow-100 text-yellow-800">Pending</span>}
                       </div>
-                      <p className="text-muted text-xs">{v.first_name} {v.last_name} · {v.email}</p>
-                      {brand?.category && <p className="text-muted text-[10px] mt-0.5">{brand.category}{brand.location ? ` · ${brand.location}` : ''}</p>}
+                      <p className="text-mute text-xs">{v.first_name} {v.last_name} · {v.email}</p>
+                      {brand?.category && <p className="text-mute text-[10px] mt-0.5">{brand.category}{brand.location ? ` · ${brand.location}` : ''}</p>}
                     </div>
                     <div className="flex gap-3">
                       {brand && (
-                        <button onClick={() => setBrandForm(brand)} className="text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline">Edit Brand</button>
+                        <button onClick={() => setBrandForm(brand)} className="text-[10px] tracking-wide uppercase font-bold text-ink hover:underline">Edit Brand</button>
                       )}
                       {brand && (pending ? (
                         <button onClick={() => approveBrand(brand.id)} className="text-[10px] tracking-wide uppercase font-bold text-green-600 hover:underline">Approve</button>
@@ -550,26 +550,26 @@ export default function AdminDashboard() {
 
         {activeTab === 'inquiries' && (
           inquiries.length === 0 ? <EmptyState message="No vendor inquiries yet." /> : (
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {inquiries.map((inq) => (
                 <div key={inq.id} className="bg-white p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <p className="text-muted text-[10px] tracking-wide uppercase mb-1">Business</p>
-                    <p className="text-midnight font-bold text-sm">{inq.business_name}</p>
+                    <p className="text-mute text-[10px] tracking-wide uppercase mb-1">Business</p>
+                    <p className="text-ink font-bold text-sm">{inq.business_name}</p>
                   </div>
                   <div>
-                    <p className="text-muted text-[10px] tracking-wide uppercase mb-1">Contact</p>
-                    <p className="text-midnight text-sm">{inq.contact_name}</p>
-                    <p className="text-muted text-xs">{inq.email}</p>
+                    <p className="text-mute text-[10px] tracking-wide uppercase mb-1">Contact</p>
+                    <p className="text-ink text-sm">{inq.contact_name}</p>
+                    <p className="text-mute text-xs">{inq.email}</p>
                   </div>
                   <div>
-                    <p className="text-muted text-[10px] tracking-wide uppercase mb-1">Category</p>
-                    <p className="text-midnight text-sm">{inq.product_category}</p>
+                    <p className="text-mute text-[10px] tracking-wide uppercase mb-1">Category</p>
+                    <p className="text-ink text-sm">{inq.product_category}</p>
                   </div>
                   <div>
-                    <p className="text-muted text-[10px] tracking-wide uppercase mb-1">Instagram</p>
-                    <p className="text-midnight text-sm">{inq.instagram_handle || '—'}</p>
-                    <p className="text-muted text-[10px] mt-1">
+                    <p className="text-mute text-[10px] tracking-wide uppercase mb-1">Instagram</p>
+                    <p className="text-ink text-sm">{inq.instagram_handle || '—'}</p>
+                    <p className="text-mute text-[10px] mt-1">
                       {inq.created_at ? new Date(inq.created_at).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                     </p>
                   </div>
@@ -581,26 +581,26 @@ export default function AdminDashboard() {
 
         {activeTab === 'customers' && (
           customers.length === 0 ? <EmptyState message="No customers yet." /> : (
-            <div className="flex flex-col gap-px bg-[#E5E5E5]">
+            <div className="flex flex-col gap-px bg-rule">
               {customers.map((c) => (
                 <div key={c.id} className="bg-white p-5 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="text-midnight font-bold text-sm">{c.first_name} {c.last_name}</p>
-                    <p className="text-muted text-xs">{c.email}</p>
+                    <p className="text-ink font-bold text-sm">{c.first_name} {c.last_name}</p>
+                    <p className="text-mute text-xs">{c.email}</p>
                   </div>
                   <div className="flex items-center gap-3">
                     <select
                       value={c.role || 'customer'}
                       onChange={(e) => changeRole(c.id, e.target.value, c.brand_id)}
-                      className="text-[10px] tracking-wide uppercase font-bold border border-midnight text-midnight bg-white px-2 py-1"
+                      className="text-[10px] tracking-wide uppercase font-bold border border-ink text-ink bg-white px-2 py-1"
                     >
                       {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
                     </select>
-                    {c.brand_id && <span className="text-[10px] tracking-wide uppercase text-muted">brand #{c.brand_id}</span>}
-                    {c.email_opt_in && <span className="text-[10px] tracking-wide uppercase font-medium border border-midnight text-midnight px-2 py-0.5">Email</span>}
-                    {c.sms_opt_in && <span className="text-[10px] tracking-wide uppercase font-medium border border-midnight text-midnight px-2 py-0.5">SMS</span>}
+                    {c.brand_id && <span className="text-[10px] tracking-wide uppercase text-mute">brand #{c.brand_id}</span>}
+                    {c.email_opt_in && <span className="text-[10px] tracking-wide uppercase font-medium border border-ink text-ink px-2 py-0.5">Email</span>}
+                    {c.sms_opt_in && <span className="text-[10px] tracking-wide uppercase font-medium border border-ink text-ink px-2 py-0.5">SMS</span>}
                   </div>
-                  <p className="text-muted text-[10px]">
+                  <p className="text-mute text-[10px]">
                     {c.created_at ? new Date(c.created_at).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
                   </p>
                 </div>
@@ -617,8 +617,8 @@ export default function AdminDashboard() {
 function EmptyState({ message }) {
   return (
     <div className="py-24 text-center bg-white">
-      <div className="w-8 h-px bg-midnight mx-auto mb-8" />
-      <p className="text-muted text-sm uppercase tracking-widest">{message}</p>
+      <div className="w-8 h-px bg-ink mx-auto mb-8" />
+      <p className="text-mute text-sm uppercase tracking-widest">{message}</p>
     </div>
   )
 }
@@ -641,33 +641,33 @@ function AnnouncementFormModal({ initial, onClose, onSave }) {
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-6 overflow-y-auto" onClick={onClose}>
       <div className="bg-white max-w-xl w-full p-8 my-8" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-lg">
+          <h3 className="text-ink font-black uppercase tracking-wide text-lg">
             {form.id ? 'Edit Announcement' : 'New Announcement'}
           </h3>
-          <button onClick={onClose} className="text-muted text-xl hover:text-midnight">×</button>
+          <button onClick={onClose} className="text-mute text-xl hover:text-ink">×</button>
         </div>
         <div className="flex flex-col gap-4 text-sm">
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Title</span>
-            <input value={form.title} onChange={(e) => set('title', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Title</span>
+            <input value={form.title} onChange={(e) => set('title', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Body (for popup)</span>
-            <textarea value={form.body} onChange={(e) => set('body', e.target.value)} rows={3} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Body (for popup)</span>
+            <textarea value={form.body} onChange={(e) => set('body', e.target.value)} rows={3} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <div className="grid grid-cols-2 gap-4">
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] tracking-wide uppercase text-muted">CTA Label</span>
-              <input value={form.cta_label} onChange={(e) => set('cta_label', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+              <span className="text-[10px] tracking-wide uppercase text-mute">CTA Label</span>
+              <input value={form.cta_label} onChange={(e) => set('cta_label', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] tracking-wide uppercase text-muted">CTA URL</span>
-              <input value={form.cta_url} onChange={(e) => set('cta_url', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+              <span className="text-[10px] tracking-wide uppercase text-mute">CTA URL</span>
+              <input value={form.cta_url} onChange={(e) => set('cta_url', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
             </label>
           </div>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Display Mode</span>
-            <select value={form.display_mode} onChange={(e) => set('display_mode', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight">
+            <span className="text-[10px] tracking-wide uppercase text-mute">Display Mode</span>
+            <select value={form.display_mode} onChange={(e) => set('display_mode', e.target.value)} className="border border-rule px-3 py-2 text-ink">
               <option value="banner">Banner (top strip)</option>
               <option value="popup">Popup (once per visitor)</option>
               <option value="both">Both</option>
@@ -675,21 +675,21 @@ function AnnouncementFormModal({ initial, onClose, onSave }) {
           </label>
           <div className="grid grid-cols-2 gap-4">
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] tracking-wide uppercase text-muted">Starts (optional)</span>
-              <input type="datetime-local" value={form.starts_at || ''} onChange={(e) => set('starts_at', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+              <span className="text-[10px] tracking-wide uppercase text-mute">Starts (optional)</span>
+              <input type="datetime-local" value={form.starts_at || ''} onChange={(e) => set('starts_at', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-[10px] tracking-wide uppercase text-muted">Ends (optional)</span>
-              <input type="datetime-local" value={form.ends_at || ''} onChange={(e) => set('ends_at', e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+              <span className="text-[10px] tracking-wide uppercase text-mute">Ends (optional)</span>
+              <input type="datetime-local" value={form.ends_at || ''} onChange={(e) => set('ends_at', e.target.value)} className="border border-rule px-3 py-2 text-ink" />
             </label>
           </div>
-          <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-muted">
+          <label className="flex items-center gap-2 text-[11px] tracking-wide uppercase text-mute">
             <input type="checkbox" checked={form.is_active} onChange={(e) => set('is_active', e.target.checked)} /> Active
           </label>
         </div>
         <div className="flex justify-end gap-3 mt-8">
-          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-muted px-6 py-3 hover:text-midnight">Cancel</button>
-          <button onClick={() => onSave(form)} className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80">
+          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-mute px-6 py-3 hover:text-ink">Cancel</button>
+          <button onClick={() => onSave(form)} className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80">
             Save
           </button>
         </div>
@@ -767,25 +767,25 @@ function MockupStudio({ token, templates, onTemplateChange }) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="bg-white border border-[#E5E5E5] p-8">
-        <div className="w-6 h-px bg-midnight mb-5" />
-        <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-2">Mockup Studio</h3>
-        <p className="text-muted text-xs leading-relaxed mb-6">
+      <div className="bg-white border border-rule p-8">
+        <div className="w-6 h-px bg-ink mb-5" />
+        <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-2">Mockup Studio</h3>
+        <p className="text-mute text-xs leading-relaxed mb-6">
           Upload a transparent-PNG design + blank-tee templates. The compositor applies the same anchor rect to every tee so the design lands in the same spot across every color. Output is 1200×1500 to match the site's product image aspect ratio.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="flex flex-col gap-3">
-            <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">1. Design (transparent PNG)</p>
+            <p className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">1. Design (transparent PNG)</p>
             <input ref={designInputRef} type="file" accept="image/png" onChange={pickDesign} className="text-xs" />
             {designPreview && (
-              <img src={designPreview} alt="Design" className="w-40 h-40 object-contain border border-[#E5E5E5] bg-[#F7F7F7]" />
+              <img src={designPreview} alt="Design" className="w-40 h-40 object-contain border border-rule bg-paper" />
             )}
           </div>
           <div className="flex flex-col gap-3">
-            <p className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">2. Tee templates</p>
-            <button onClick={() => setTplForm({})} className="self-start text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline">+ Upload new template</button>
-            <p className="text-muted text-[10px]">Selected: {selectedIds.length}</p>
+            <p className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">2. Tee templates</p>
+            <button onClick={() => setTplForm({})} className="self-start text-[10px] tracking-wide uppercase font-bold text-ink hover:underline">+ Upload new template</button>
+            <p className="text-mute text-[10px]">Selected: {selectedIds.length}</p>
           </div>
         </div>
 
@@ -795,31 +795,31 @@ function MockupStudio({ token, templates, onTemplateChange }) {
           <button
             onClick={runGenerate}
             disabled={busy === 'generate' || !design || selectedIds.length === 0}
-            className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 disabled:opacity-40"
+            className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 disabled:opacity-40"
           >
             {busy === 'generate' ? 'Generating…' : `Generate ${selectedIds.length} Mockup${selectedIds.length === 1 ? '' : 's'}`}
           </button>
         </div>
       </div>
 
-      <div className="bg-white border border-[#E5E5E5] p-8">
-        <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-4">Tee Template Library</h3>
+      <div className="bg-white border border-rule p-8">
+        <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-4">Tee Template Library</h3>
         {templates.length === 0 ? (
-          <p className="text-muted text-xs">No templates yet. Upload a blank-tee photo to get started.</p>
+          <p className="text-mute text-xs">No templates yet. Upload a blank-tee photo to get started.</p>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {templates.map((t) => (
-              <div key={t.id} className={`border p-3 flex flex-col gap-2 ${selectedIds.includes(t.id) ? 'border-midnight' : 'border-[#E5E5E5]'}`}>
-                <img src={absolutize(t.image_url)} alt={t.name} className="w-full aspect-[4/5] object-cover bg-[#F7F7F7]" />
-                <p className="text-midnight font-semibold text-xs">{t.name} <span className="text-muted font-mono">#{t.id}</span></p>
-                {t.color && <p className="text-muted text-[10px] uppercase tracking-wide">{t.color}</p>}
+              <div key={t.id} className={`border p-3 flex flex-col gap-2 ${selectedIds.includes(t.id) ? 'border-ink' : 'border-rule'}`}>
+                <img src={absolutize(t.image_url)} alt={t.name} className="w-full aspect-[4/5] object-cover bg-paper" />
+                <p className="text-ink font-semibold text-xs">{t.name} <span className="text-mute font-mono">#{t.id}</span></p>
+                {t.color && <p className="text-mute text-[10px] uppercase tracking-wide">{t.color}</p>}
                 <div className="flex justify-between items-center gap-2 mt-1">
-                  <label className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted">
+                  <label className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-mute">
                     <input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => toggleSelect(t.id)} />
                     Select
                   </label>
                   <div className="flex gap-2">
-                    <button onClick={() => runPreview(t.id)} disabled={!design || busy === 'preview'} className="text-[10px] tracking-wide uppercase font-bold text-midnight hover:underline disabled:opacity-40">Preview</button>
+                    <button onClick={() => runPreview(t.id)} disabled={!design || busy === 'preview'} className="text-[10px] tracking-wide uppercase font-bold text-ink hover:underline disabled:opacity-40">Preview</button>
                     <button onClick={() => deleteTemplate(t.id)} className="text-[10px] tracking-wide uppercase font-bold text-red-500 hover:underline">×</button>
                   </div>
                 </div>
@@ -830,24 +830,24 @@ function MockupStudio({ token, templates, onTemplateChange }) {
       </div>
 
       {previewUrl && (
-        <div className="bg-white border border-[#E5E5E5] p-8">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-4">Preview</h3>
-          <img src={previewUrl} alt="Preview" className="max-w-sm border border-[#E5E5E5]" />
+        <div className="bg-white border border-rule p-8">
+          <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-4">Preview</h3>
+          <img src={previewUrl} alt="Preview" className="max-w-sm border border-rule" />
         </div>
       )}
 
       {generated.length > 0 && (
-        <div className="bg-white border border-[#E5E5E5] p-8">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-4">Generated ({generated.length})</h3>
+        <div className="bg-white border border-rule p-8">
+          <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-4">Generated ({generated.length})</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {generated.map((url) => (
               <div key={url} className="flex flex-col gap-2">
-                <img src={absolutize(url)} alt="" className="w-full aspect-[4/5] object-cover border border-[#E5E5E5]" />
-                <input readOnly value={url} onClick={(e) => e.target.select()} className="border border-[#E5E5E5] px-2 py-1 text-[10px] text-midnight" />
+                <img src={absolutize(url)} alt="" className="w-full aspect-[4/5] object-cover border border-rule" />
+                <input readOnly value={url} onClick={(e) => e.target.select()} className="border border-rule px-2 py-1 text-[10px] text-ink" />
               </div>
             ))}
           </div>
-          <p className="text-muted text-[11px] mt-4">Copy a URL and paste it into a product's Image URL field — or attach it in the Products tab.</p>
+          <p className="text-mute text-[11px] mt-4">Copy a URL and paste it into a product's Image URL field — or attach it in the Products tab.</p>
         </div>
       )}
 
@@ -894,31 +894,31 @@ function TemplateUploadModal({ token, onClose, onSaved }) {
     <div className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center p-6 overflow-y-auto" onClick={onClose}>
       <div className="bg-white max-w-lg w-full p-8" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-midnight font-black uppercase tracking-wide text-lg">New Tee Template</h3>
-          <button onClick={onClose} className="text-muted text-xl hover:text-midnight">×</button>
+          <h3 className="text-ink font-black uppercase tracking-wide text-lg">New Tee Template</h3>
+          <button onClick={onClose} className="text-mute text-xl hover:text-ink">×</button>
         </div>
         <div className="flex flex-col gap-4 text-sm">
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Name</span>
-            <input value={name} onChange={(e) => setName(e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Name</span>
+            <input value={name} onChange={(e) => setName(e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Color</span>
-            <input value={color} onChange={(e) => setColor(e.target.value)} className="border border-[#E5E5E5] px-3 py-2 text-midnight" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Color</span>
+            <input value={color} onChange={(e) => setColor(e.target.value)} className="border border-rule px-3 py-2 text-ink" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Anchor JSON override (optional)</span>
-            <input value={anchor} onChange={(e) => setAnchor(e.target.value)} placeholder='{"x":375,"y":450,"w":450,"h":550}' className="border border-[#E5E5E5] px-3 py-2 text-midnight font-mono text-xs" />
+            <span className="text-[10px] tracking-wide uppercase text-mute">Anchor JSON override (optional)</span>
+            <input value={anchor} onChange={(e) => setAnchor(e.target.value)} placeholder='{"x":375,"y":450,"w":450,"h":550}' className="border border-rule px-3 py-2 text-ink font-mono text-xs" />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-[10px] tracking-wide uppercase text-muted">Blank tee image</span>
+            <span className="text-[10px] tracking-wide uppercase text-mute">Blank tee image</span>
             <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setFile(e.target.files?.[0] || null)} className="text-xs" />
           </label>
           {error && <p className="text-red-500 text-xs">{error}</p>}
         </div>
         <div className="flex justify-end gap-3 mt-8">
-          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-muted px-6 py-3 hover:text-midnight">Cancel</button>
-          <button onClick={submit} disabled={busy} className="bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-midnight/80 disabled:opacity-40">
+          <button onClick={onClose} className="text-[11px] tracking-[0.15em] uppercase font-bold text-mute px-6 py-3 hover:text-ink">Cancel</button>
+          <button onClick={submit} disabled={busy} className="bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3 hover:bg-ink/80 disabled:opacity-40">
             {busy ? 'Uploading…' : 'Save'}
           </button>
         </div>

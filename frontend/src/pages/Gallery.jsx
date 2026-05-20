@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 
 // ─── Editorial Gallery / Lookbook — /gallery ─────────────────────────────────
 // Showcases DA SHOP's brands and culture through editorial imagery.
@@ -75,28 +75,28 @@ export default function Gallery() {
     <main className="pt-[88px]">
 
       {/* ── Header ── */}
-      <section className="bg-white py-20 px-6 border-b border-[#E5E5E5]">
+      <section className="bg-white py-20 px-6 border-b border-rule">
         <div className="max-w-[1280px] mx-auto">
-          <div className="w-10 h-px bg-midnight mb-10" />
-          <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">
+          <div className="w-10 h-px bg-ink mb-10" />
+          <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-4">
             Our World
           </p>
           <h1
-            className="text-midnight font-black uppercase"
+            className="text-ink font-black uppercase"
             style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '0.04em' }}
           >
             The Gallery
           </h1>
-          <p className="text-muted text-sm mt-5 max-w-lg leading-relaxed">
+          <p className="text-mute text-sm mt-5 max-w-lg leading-relaxed">
             An editorial look at the brands, products, and culture behind DA SHOP. Pacific identity, expressed through craft.
           </p>
         </div>
       </section>
 
       {/* ── Editorial grid ── */}
-      <section className="bg-[#F7F7F7] py-20 px-6">
+      <section className="bg-paper py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5] auto-rows-[280px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-rule auto-rows-[280px]">
             {editorialImages.map((item) => (
               <Link
                 key={item.id}
@@ -120,7 +120,7 @@ export default function Gallery() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-midnight py-20 px-6">
+      <section className="bg-ink py-20 px-6">
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <h2
@@ -135,7 +135,7 @@ export default function Gallery() {
           </div>
           <Link
             to="/brands"
-            className="flex-shrink-0 bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors"
+            className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors"
           >
             All Brands →
           </Link>

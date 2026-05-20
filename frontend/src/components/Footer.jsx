@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import logoLight from '../assets/logo-dark.svg'
 
 const shopLinks = [
   { label: 'All Clothing',  to: '/category/clothing' },
@@ -15,24 +14,19 @@ const schoolLinks = [
   { label: 'Apply a School', to: '/become-a-vendor' },
 ]
 
-const aboutLinks = [
-  { label: 'Our Brands',       to: '/brands' },
-  { label: 'Become a Vendor',  to: '/become-a-vendor' },
-  { label: 'Gallery',          to: '/gallery' },
-]
-
 const supportLinks = [
-  { label: 'Support & FAQ',  to: '/support' },
-  { label: 'Shipping Info',  to: '/shipping' },
-  { label: 'Returns Policy', to: '/returns' },
-  { label: 'Terms',          to: '/terms' },
-  { label: 'Privacy',        to: '/privacy' },
+  { label: 'Support & FAQ',   to: '/support' },
+  { label: 'Shipping Info',   to: '/shipping' },
+  { label: 'Returns Policy',  to: '/returns' },
+  { label: 'Become a Vendor', to: '/become-a-vendor' },
+  { label: 'Terms',           to: '/terms' },
+  { label: 'Privacy',         to: '/privacy' },
 ]
 
 function FooterColumn({ title, links }) {
   return (
     <div>
-      <p className="text-white/20 text-[10px] tracking-[0.2em] uppercase font-semibold mb-5">
+      <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-paper/40 font-medium mb-5">
         {title}
       </p>
       <ul className="flex flex-col gap-3">
@@ -40,7 +34,7 @@ function FooterColumn({ title, links }) {
           <li key={link.label}>
             <Link
               to={link.to}
-              className="text-white/30 text-[11px] uppercase tracking-[0.1em] hover:text-white transition-colors"
+              className="font-mono text-[12px] tracking-[0.04em] text-paper/50 hover:text-paper transition-colors"
             >
               {link.label}
             </Link>
@@ -53,30 +47,32 @@ function FooterColumn({ title, links }) {
 
 export default function Footer() {
   return (
-    <footer className="bg-midnight">
-      <div className="max-w-[1280px] mx-auto px-6 py-16 border-t border-white/5">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
+    <footer className="bg-ink mt-16">
+      <div className="max-w-[1440px] mx-auto px-6 pt-14 pb-6">
 
-          <div className="md:col-span-1">
-            <img src={logoLight} alt="DA SHOP" className="h-7 w-auto mb-5" />
-            <p className="text-white/25 text-xs leading-relaxed max-w-[200px]">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 pb-12 border-b border-paper/10">
+
+          <div className="md:col-span-2">
+            <p className="font-display font-black text-[64px] leading-[0.95] tracking-[-0.03em] uppercase text-paper">
+              DA SHOP<span className="text-accent">.</span>
+            </p>
+            <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-paper/30 mt-4 max-w-[200px]">
               A multi-brand catalog of basics.
             </p>
           </div>
 
-          <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-10">
+          <div className="md:col-span-3 grid grid-cols-2 md:grid-cols-3 gap-10">
             <FooterColumn title="Shop"    links={shopLinks} />
             <FooterColumn title="Schools" links={schoolLinks} />
-            <FooterColumn title="About"   links={aboutLinks} />
             <FooterColumn title="Support" links={supportLinks} />
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-white/15 text-[10px] tracking-[0.15em] uppercase">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-6">
+          <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-paper/20">
             © DA SHOP. All Rights Reserved.
           </p>
-          <p className="text-white/10 text-[10px] tracking-[0.1em] uppercase">
+          <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-paper/15">
             Built for the Community
           </p>
         </div>

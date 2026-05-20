@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { categories } from '../data/products'
@@ -10,10 +10,10 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 function BrandCardSkeleton() {
   return (
     <div className="bg-white overflow-hidden">
-      <div className="h-56 bg-midnight/10 animate-pulse" />
-      <div className="p-5 border-t border-[#E5E5E5] flex flex-col gap-2">
-        <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
-        <div className="h-4 w-32 bg-midnight/10 animate-pulse" />
+      <div className="h-56 bg-ink/10 animate-pulse" />
+      <div className="p-5 border-t border-rule flex flex-col gap-2">
+        <div className="h-2.5 w-16 bg-ink/10 animate-pulse" />
+        <div className="h-4 w-32 bg-ink/10 animate-pulse" />
       </div>
     </div>
   )
@@ -22,11 +22,11 @@ function BrandCardSkeleton() {
 function ProductCardSkeleton() {
   return (
     <div className="bg-white">
-      <div className="aspect-[4/5] bg-midnight/10 animate-pulse" />
-      <div className="p-4 border-t border-[#E5E5E5] flex flex-col gap-2">
-        <div className="h-2.5 w-16 bg-midnight/10 animate-pulse" />
-        <div className="h-4 w-full bg-midnight/10 animate-pulse" />
-        <div className="h-3.5 w-12 bg-midnight/10 animate-pulse" />
+      <div className="aspect-[4/5] bg-ink/10 animate-pulse" />
+      <div className="p-4 border-t border-rule flex flex-col gap-2">
+        <div className="h-2.5 w-16 bg-ink/10 animate-pulse" />
+        <div className="h-4 w-full bg-ink/10 animate-pulse" />
+        <div className="h-3.5 w-12 bg-ink/10 animate-pulse" />
       </div>
     </div>
   )
@@ -117,7 +117,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="#products"
-              className="bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
+              className="bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
             >
               Shop Now
             </a>
@@ -137,18 +137,18 @@ export default function Home() {
       </section>
 
       {/* ── Shop by Category ─────────────────────────────────────────────────── */}
-      <section className="bg-white py-20 px-6 border-b border-[#E5E5E5]">
+      <section className="bg-white py-20 px-6 border-b border-rule">
         <div className="max-w-[1280px] mx-auto">
           <div className="mb-10">
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Browse</p>
+            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Browse</p>
             <h2
-              className="text-midnight font-black uppercase"
+              className="text-ink font-black uppercase"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
             >
               Shop by Category
             </h2>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
             {categories.map((cat) => (
               <Link
                 key={cat.slug}
@@ -176,13 +176,13 @@ export default function Home() {
       </section>
 
       {/* ── Featured Brands ──────────────────────────────────────────────────── */}
-      <section className="bg-[#F7F7F7] py-20 px-6 border-b border-[#E5E5E5]">
+      <section className="bg-paper py-20 px-6 border-b border-rule">
         <div className="max-w-[1280px] mx-auto">
           <div className="mb-10 flex items-end justify-between">
             <div>
-              <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">The Marketplace</p>
+              <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">The Marketplace</p>
               <h2
-                className="text-midnight font-black uppercase"
+                className="text-ink font-black uppercase"
                 style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
               >
                 The Brands
@@ -190,13 +190,13 @@ export default function Home() {
             </div>
             <Link
               to="/brands"
-              className="hidden sm:block text-muted text-[11px] tracking-[0.15em] uppercase font-semibold hover:text-midnight transition-colors"
+              className="hidden sm:block text-mute text-[11px] tracking-[0.15em] uppercase font-semibold hover:text-ink transition-colors"
             >
               All Brands →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-rule">
             {brandsLoading
               ? [0, 1, 2, 3].map((i) => <BrandCardSkeleton key={i} />)
               : safeBrands.map((brand) => (
@@ -221,14 +221,14 @@ export default function Home() {
                         />
                       )}
                     </div>
-                    <div className="p-5 border-t border-[#E5E5E5]">
-                      <p className="text-muted text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
+                    <div className="p-5 border-t border-rule">
+                      <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
                         {brand.category}
                       </p>
-                      <h3 className="text-midnight font-black uppercase tracking-wide text-sm mb-1">
+                      <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-1">
                         {brand.name}
                       </h3>
-                      <p className="text-muted text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-midnight transition-colors">
+                      <p className="text-mute text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-ink transition-colors">
                         Shop Brand →
                       </p>
                     </div>
@@ -239,7 +239,7 @@ export default function Home() {
       </section>
 
       {/* ── THE CULTURE ──────────────────────────────────────────────────────── */}
-      <section id="culture" className="bg-midnight py-20 px-6">
+      <section id="culture" className="bg-ink py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
           <div className="mb-12">
             <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">Our World</p>
@@ -297,9 +297,9 @@ export default function Home() {
 
       {/* ── Featured Brand Spotlight ─────────────────────────────────────────── */}
       {featuredBrand && (
-        <section className="bg-white border-b border-[#E5E5E5]">
+        <section className="bg-white border-b border-rule">
           {/* Editorial header */}
-          <div className="relative h-[24rem] md:h-[32rem] overflow-hidden bg-midnight">
+          <div className="relative h-[24rem] md:h-[32rem] overflow-hidden bg-ink">
             {featuredBrand.hero_image_url && (
               <img
                 src={featuredBrand.hero_image_url}
@@ -333,7 +333,7 @@ export default function Home() {
                 </div>
                 <Link
                   to={`/brand/${featuredBrand.id}`}
-                  className="flex-shrink-0 bg-white text-midnight font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3.5 hover:bg-white/90 transition-colors duration-200 self-end"
+                  className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3.5 hover:bg-white/90 transition-colors duration-200 self-end"
                 >
                   Shop {featuredBrand.name} →
                 </Link>
@@ -343,7 +343,7 @@ export default function Home() {
 
           {/* 4-product preview grid */}
           {featuredProducts.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
               {featuredProducts.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
                   <div className="relative overflow-hidden">
@@ -353,12 +353,12 @@ export default function Home() {
                       className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   </div>
-                  <div className="p-4 border-t border-[#E5E5E5]">
-                    <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                  <div className="p-4 border-t border-rule">
+                    <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                       {product.collection}
                     </p>
-                    <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
-                    <span className="text-midnight font-bold text-[13px]">${product.price}</span>
+                    <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
+                    <span className="text-ink font-bold text-[13px]">${product.price}</span>
                   </div>
                 </Link>
               ))}
@@ -371,9 +371,9 @@ export default function Home() {
       <section id="products" className="bg-white py-20 px-6">
         <div className="max-w-[1280px] mx-auto">
           <div className="mb-10">
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">New Arrivals</p>
+            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">New Arrivals</p>
             <h2
-              className="text-midnight font-black uppercase"
+              className="text-ink font-black uppercase"
               style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
             >
               All Products
@@ -388,8 +388,8 @@ export default function Home() {
                 onClick={() => setActiveFilter(f)}
                 className={`text-[11px] tracking-[0.12em] uppercase font-bold px-5 py-2 border transition-colors duration-150 ${
                   activeFilter === f
-                    ? 'bg-midnight text-white border-midnight'
-                    : 'bg-white text-muted border-[#E5E5E5] hover:border-midnight hover:text-midnight'
+                    ? 'bg-ink text-white border-ink'
+                    : 'bg-white text-mute border-rule hover:border-ink hover:text-ink'
                 }`}
               >
                 {f === 'Paintings' ? 'Paintings & Prints' : f}
@@ -398,16 +398,16 @@ export default function Home() {
           </div>
 
           {/* Brand filter row */}
-          <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-[#E5E5E5]">
-            <span className="text-muted text-[10px] tracking-[0.15em] uppercase mr-2">Brand:</span>
+          <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-rule">
+            <span className="text-mute text-[10px] tracking-[0.15em] uppercase mr-2">Brand:</span>
             {brandOptions.map((b) => (
               <button
                 key={b}
                 onClick={() => setActiveBrand(b)}
                 className={`text-[11px] tracking-[0.1em] uppercase font-medium px-4 py-1.5 border transition-colors duration-150 ${
                   activeBrand === b
-                    ? 'bg-midnight text-white border-midnight'
-                    : 'bg-white text-muted border-[#E5E5E5] hover:border-midnight hover:text-midnight'
+                    ? 'bg-ink text-white border-ink'
+                    : 'bg-white text-mute border-rule hover:border-ink hover:text-ink'
                 }`}
               >
                 {b}
@@ -417,23 +417,23 @@ export default function Home() {
 
           {/* Product grid */}
           {productsLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-rule">
               {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => <ProductCardSkeleton key={i} />)}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="py-24 text-center">
-              <p className="text-muted text-sm uppercase tracking-widest mb-6">
+              <p className="text-mute text-sm uppercase tracking-widest mb-6">
                 No products match this filter.
               </p>
               <button
                 onClick={() => { setActiveFilter('All'); setActiveBrand('All') }}
-                className="bg-midnight text-white font-black text-[11px] tracking-[0.12em] uppercase px-10 py-4 hover:bg-midnight/80 transition-colors"
+                className="bg-ink text-white font-black text-[11px] tracking-[0.12em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors"
               >
                 Clear Filters
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-[#E5E5E5]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-px bg-rule">
               {filteredProducts.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
                   <div className="relative overflow-hidden">
@@ -443,19 +443,19 @@ export default function Home() {
                       className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                      <span className="bg-midnight text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
+                      <span className="bg-ink text-white text-[10px] font-black tracking-[0.1em] uppercase px-2 py-1">
                         {product.category}
                       </span>
                     </div>
                   </div>
-                  <div className="p-4 border-t border-[#E5E5E5]">
-                    <p className="text-muted text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
+                  <div className="p-4 border-t border-rule">
+                    <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
                       {product.collection}
                     </p>
-                    <h3 className="text-midnight font-bold text-[13px] mb-2 leading-snug">
+                    <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug">
                       {product.name}
                     </h3>
-                    <span className="text-midnight font-bold text-[13px]">
+                    <span className="text-ink font-bold text-[13px]">
                       ${product.price}
                     </span>
                   </div>
@@ -467,23 +467,23 @@ export default function Home() {
       </section>
 
       {/* ── Become a Vendor CTA ───────────────────────────────────────────────── */}
-      <section className="bg-[#F7F7F7] py-24 px-6 border-t border-[#E5E5E5]">
+      <section className="bg-paper py-24 px-6 border-t border-rule">
         <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
-            <p className="text-muted text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Pacific vendors</p>
+            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Pacific vendors</p>
             <h2
-              className="text-midnight font-black uppercase"
+              className="text-ink font-black uppercase"
               style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', letterSpacing: '0.04em' }}
             >
               Sell on DA SHOP
             </h2>
-            <p className="text-muted text-sm leading-relaxed mt-4 max-w-md">
+            <p className="text-mute text-sm leading-relaxed mt-4 max-w-md">
               Get your own branded storefront, reach new customers, and represent your culture — on your terms.
             </p>
           </div>
           <Link
             to="/become-a-vendor"
-            className="flex-shrink-0 bg-midnight text-white font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-midnight/80 transition-colors duration-200"
+            className="flex-shrink-0 bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-ink/80 transition-colors duration-200"
           >
             Apply to Sell
           </Link>

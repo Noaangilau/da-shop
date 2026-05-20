@@ -2,13 +2,13 @@
 
 ## Environment Variables
 
-### Backend (Railway / .env)
+### Backend (.env)
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ Prod | PostgreSQL URL (Railway auto-injects). SQLite used in dev. |
+| `DATABASE_URL` | ✅ Prod | PostgreSQL connection URL. SQLite used in dev. |
 | `SECRET_KEY` | ✅ | JWT signing secret — generate with `openssl rand -hex 32` |
-| `FRONTEND_ORIGIN` | ✅ | Full frontend URL e.g. `https://dashopf-production.up.railway.app` |
+| `FRONTEND_ORIGIN` | ✅ | Full frontend URL e.g. `https://da-shop.vercel.app` |
 | `STRIPE_SECRET_KEY` | ✅ Prod | Stripe secret key (`sk_live_...` or `sk_test_...`) |
 | `STRIPE_WEBHOOK_SECRET` | ✅ Prod | Stripe webhook signing secret (`whsec_...`) — see Stripe setup below |
 | `RESEND_API_KEY` | ✅ Prod | Resend API key for transactional email |
@@ -19,11 +19,11 @@
 | `FROM_EMAIL` | Optional | Sender email e.g. `DA SHOP <hello@dashop.co.nz>` |
 | `SHOP_URL` | Optional | Frontend URL used in email links (defaults to `https://dashop.co.nz`) |
 
-### Frontend (Railway / .env)
+### Frontend (.env)
 
 | Variable | Required | Description |
 |---|---|---|
-| `VITE_API_URL` | ✅ | Backend URL e.g. `https://dashopb-production.up.railway.app` |
+| `VITE_API_URL` | ✅ | Backend URL e.g. `https://da-shop-api.vercel.app` |
 | `VITE_STRIPE_PK` | ✅ Prod | Stripe publishable key (`pk_live_...` or `pk_test_...`) |
 
 ---
@@ -31,7 +31,7 @@
 ## Stripe Setup
 
 1. Go to Stripe Dashboard → Webhooks → Add endpoint
-2. URL: `https://dashopb-production.up.railway.app/payments/webhook`
+2. URL: `https://da-shop-api.vercel.app/payments/webhook`
 3. Events to listen for:
    - `payment_intent.succeeded`
    - `charge.refunded`
@@ -48,13 +48,13 @@
 
 | Record | Type | Value |
 |---|---|---|
-| `dashop.co.nz` | CNAME | Railway frontend domain |
-| `api.dashop.co.nz` | CNAME | Railway backend domain |
-| `www.dashop.co.nz` | CNAME | Railway frontend domain |
+| `dashop.co.nz` | CNAME | `cname.vercel-dns.com` |
+| `api.dashop.co.nz` | CNAME | `cname.vercel-dns.com` |
+| `www.dashop.co.nz` | CNAME | `cname.vercel-dns.com` |
 
 After DNS is live, update:
 - `FRONTEND_ORIGIN=https://dashop.co.nz`
-- `VITE_API_URL=https://api.dashop.co.nz`
+- `VITE_API_URL=https://api.dashop.co.nz` (set in Vercel project env vars)
 - `SHOP_URL=https://dashop.co.nz`
 - Stripe webhook endpoint URL
 
@@ -110,5 +110,5 @@ After DNS is live, update:
 - [ ] Set Stripe keys to `sk_live_...` / `pk_live_...`
 - [ ] Monitor `notification_logs` for any `status="failed"` rows
 - [ ] Monitor `chat_logs` for `hallucination_flag` rows
-- [ ] Run `python3 diagnostic.py` against production
-- [ ] Set up Railway health check alerting on `/health`
+- [ ] Run `python3 diagnostic.py` against production backend URL
+- [ ] Set up Vercel monitoring / uptime alerting on `/health`

@@ -97,9 +97,12 @@ except Exception as e:
 
 app = FastAPI(title="DA SHOP API")
 
+_frontend_origin = os.getenv("FRONTEND_ORIGIN", "")
+_origins = [o.strip() for o in _frontend_origin.split(",") if o.strip()] or ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_origins,
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -119,7 +119,7 @@ export default function Profile() {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  placeholder="+64 21 000 0000"
+                  placeholder="+1 (801) 000-0000"
                   className="border border-[#E5E5E5] px-4 py-3 text-sm text-midnight placeholder-gray-300 focus:outline-none focus:border-midnight transition-colors bg-white"
                 />
               </div>
@@ -219,7 +219,7 @@ export default function Profile() {
                       ))}
                     </div>
                     <p className="text-muted text-[10px] tracking-wide">
-                      {new Date(order.created_at).toLocaleDateString('en-NZ', {
+                      {new Date(order.created_at).toLocaleDateString('en-US', {
                         day: 'numeric', month: 'long', year: 'numeric'
                       })}
                     </p>

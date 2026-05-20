@@ -202,7 +202,7 @@ export default function Checkout() {
     shipping_address: '',
     shipping_city:    '',
     shipping_postcode:'',
-    shipping_country: 'New Zealand',
+    shipping_country: '',
   })
   const [formError, setFormError] = useState('')
 
@@ -381,9 +381,9 @@ export default function Checkout() {
                   {[
                     { name: 'shipping_name',     label: 'Full Name',      placeholder: 'Name on package' },
                     { name: 'shipping_address',  label: 'Street Address', placeholder: '123 Pacific Rd' },
-                    { name: 'shipping_city',     label: 'City',           placeholder: 'Auckland' },
-                    { name: 'shipping_postcode', label: 'Postcode',       placeholder: '1010' },
-                    { name: 'shipping_country',  label: 'Country',        placeholder: 'New Zealand' },
+                    { name: 'shipping_city',     label: 'City',           placeholder: 'Salt Lake City' },
+                    { name: 'shipping_postcode', label: 'Zip / Postcode', placeholder: '84101' },
+                    { name: 'shipping_country',  label: 'Country',        placeholder: 'United States' },
                   ].map((f) => (
                     <div key={f.name} className="flex flex-col gap-1.5">
                       <label className="text-midnight text-[10px] tracking-[0.2em] uppercase font-semibold">

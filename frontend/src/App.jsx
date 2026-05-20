@@ -28,6 +28,9 @@ import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import Returns from './pages/Returns'
 import Shipping from './pages/Shipping'
+import Support from './pages/Support'
+import Schools from './pages/Schools'
+import SchoolPage from './pages/SchoolPage'
 
 // Redirect /vendor/:id → /brand/:id for backwards compatibility
 function VendorRedirect() {
@@ -82,7 +85,14 @@ function App() {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/become-a-vendor" element={<BecomeAVendor />} />
 
-            {/* Legal / support */}
+            {/* Schools */}
+            <Route path="/schools" element={<Schools />} />
+            <Route path="/school/:id" element={<SchoolPage />} />
+
+            {/* Support */}
+            <Route path="/support" element={<Support />} />
+
+            {/* Legal */}
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/returns" element={<Returns />} />

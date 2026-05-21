@@ -9,7 +9,7 @@ import uuid
 from pathlib import Path
 from fastapi import HTTPException, UploadFile
 
-MEDIA_DIR = Path(os.getenv("MEDIA_DIR", "./media"))
+MEDIA_DIR = Path(os.getenv("MEDIA_DIR", "/tmp/media"))
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 
 ALLOWED_MIME = {"image/png", "image/jpeg", "image/webp"}

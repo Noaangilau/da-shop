@@ -554,3 +554,10 @@ async def admin_mockup_bulk(
 
 def _basename(name: str) -> str:
     return name.rsplit("/", 1)[-1]
+
+
+@router.post("/seed")
+def admin_seed(admin: Customer = Depends(get_admin_customer)):
+    from seed_catalog import seed
+    seed()
+    return {"success": True}

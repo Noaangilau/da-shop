@@ -6,7 +6,7 @@ Each check tests whether DA SHOP has a capability that Shaka Wear offers.
 PASS = DA SHOP matches. FAIL = DA SHOP falls short (gap identified).
 
 Reference site: https://www.shakawear.com/
-DA SHOP live:   https://dashopf-production.up.railway.app
+DA SHOP live:   https://da-shop.vercel.app
 
 Usage:
     python3 diagnostic_benchmark.py
@@ -18,7 +18,7 @@ Requirements:
 import time
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
-FRONTEND = "https://dashopf-production.up.railway.app"
+FRONTEND = "https://da-shop.vercel.app"  # update to your Vercel frontend URL
 
 PASS = "✅ PASS"
 FAIL = "❌ FAIL"

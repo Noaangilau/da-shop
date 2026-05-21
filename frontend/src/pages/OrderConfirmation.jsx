@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
@@ -75,7 +75,7 @@ export default function OrderConfirmation() {
           Order Confirmed
         </h1>
         <p className="text-white/50 text-sm mt-4 max-w-sm mx-auto leading-relaxed">
-          Thanks for your order. A confirmation has been sent to{' '}
+          Thanks for supporting Pacific vendors. A confirmation has been sent to{' '}
           <span className="text-white/80">{order?.email}</span>.
         </p>
       </div>

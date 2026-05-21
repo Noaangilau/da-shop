@@ -1,6 +1,6 @@
 """Shared file-storage helpers for admin + vendor uploads.
 
-Writes to MEDIA_DIR (Railway persistent volume in prod, ./media locally).
+Writes to MEDIA_DIR (set via MEDIA_DIR env var in prod, ./media locally).
 URLs returned are rooted at /media/{filename} and served by
 routers/media.py via FileResponse.
 """

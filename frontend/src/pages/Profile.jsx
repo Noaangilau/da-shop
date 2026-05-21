@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
@@ -119,7 +119,7 @@ export default function Profile() {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  placeholder="+1 (801) 000-0000"
+                  placeholder="+64 21 000 0000"
                   className="border border-rule px-4 py-3 text-sm text-ink placeholder-gray-300 focus:outline-none focus:border-ink transition-colors bg-white"
                 />
               </div>
@@ -219,7 +219,7 @@ export default function Profile() {
                       ))}
                     </div>
                     <p className="text-mute text-[10px] tracking-wide">
-                      {new Date(order.created_at).toLocaleDateString('en-US', {
+                      {new Date(order.created_at).toLocaleDateString('en-NZ', {
                         day: 'numeric', month: 'long', year: 'numeric'
                       })}
                     </p>

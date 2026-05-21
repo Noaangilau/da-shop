@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { loadStripe } from '@stripe/stripe-js'
@@ -43,7 +43,6 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
     setLoading(true)
     setError('')
 
-    // Confirm payment with Stripe
     const { error: stripeError, paymentIntent } = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
@@ -55,7 +54,6 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
       return
     }
 
-    // Payment succeeded — create order on backend
     try {
       const { data } = await axios.post(
         `${API_URL}/orders`,
@@ -202,7 +200,7 @@ export default function Checkout() {
     shipping_address: '',
     shipping_city:    '',
     shipping_postcode:'',
-    shipping_country: '',
+    shipping_country: 'New Zealand',
   })
   const [formError, setFormError] = useState('')
 
@@ -244,8 +242,6 @@ export default function Checkout() {
 
   function handleSuccess(orderOrId) {
     clearCart()
-    // Guest flow: pass the full order payload via location.state so the
-    // confirmation page can render without a token (it can't re-fetch).
     if (orderOrId && typeof orderOrId === 'object') {
       navigate(`/order-confirmation/${orderOrId.id}`, { state: { order: orderOrId, guest: !token } })
     } else {
@@ -324,7 +320,6 @@ export default function Checkout() {
           >
             Checkout
           </h1>
-          {/* Step indicator */}
           <div className="flex items-center gap-3 mt-4">
             {['shipping', 'payment'].map((s, i) => (
               <div key={s} className="flex items-center gap-3">
@@ -381,9 +376,9 @@ export default function Checkout() {
                   {[
                     { name: 'shipping_name',     label: 'Full Name',      placeholder: 'Name on package' },
                     { name: 'shipping_address',  label: 'Street Address', placeholder: '123 Pacific Rd' },
-                    { name: 'shipping_city',     label: 'City',           placeholder: 'Salt Lake City' },
-                    { name: 'shipping_postcode', label: 'Zip / Postcode', placeholder: '84101' },
-                    { name: 'shipping_country',  label: 'Country',        placeholder: 'United States' },
+                    { name: 'shipping_city',     label: 'City',           placeholder: 'Auckland' },
+                    { name: 'shipping_postcode', label: 'Postcode',       placeholder: '1010' },
+                    { name: 'shipping_country',  label: 'Country',        placeholder: 'New Zealand' },
                   ].map((f) => (
                     <div key={f.name} className="flex flex-col gap-1.5">
                       <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">

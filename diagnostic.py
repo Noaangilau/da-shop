@@ -16,8 +16,8 @@ import time
 import requests
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeout
 
-FRONTEND = "https://dashopf-production.up.railway.app"
-BACKEND  = "https://dashopb-production.up.railway.app"
+FRONTEND = "https://da-shop.vercel.app"          # update to your Vercel frontend URL
+BACKEND  = "https://da-shop-backend.vercel.app"  # update to your backend URL
 PASS     = "✅ PASS"
 FAIL     = "❌ FAIL"
 

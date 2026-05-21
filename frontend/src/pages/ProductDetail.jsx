@@ -67,6 +67,7 @@ export default function ProductDetail() {
   const { addToCart } = useCart()
 
   const [product, setProduct]   = useState(null)
+  const [brand, setBrand]       = useState(null)
   const [loading, setLoading]   = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [error, setError]       = useState(false)
@@ -93,12 +94,14 @@ export default function ProductDetail() {
     setSizeError(false)
     setAdded(false)
     setRelated([])
+    setBrand(null)
 
     axios.get(`${API_URL}/products/${id}`)
       .then((res) => {
         setProduct(res.data)
         const variants = Array.isArray(res.data.variants) ? res.data.variants : null
         if (variants && variants.length > 0) setSelectedVariant(variants[0])
+        axios.get(`${API_URL}/brands/${res.data.brand_id}`).then(r => setBrand(r.data)).catch(() => {})
         // Fetch related products from same collection
         if (res.data.collection) {
           setRelLoading(true)
@@ -282,12 +285,14 @@ export default function ProductDetail() {
           <div className="flex flex-col gap-7">
 
             {/* Brand link */}
-            <Link
-              to={`/brand/${product.brand_id}`}
-              className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold hover:text-ink transition-colors"
-            >
-              Filiku Design Co. →
-            </Link>
+            {brand && (
+              <Link
+                to={`/brand/${product.brand_id}`}
+                className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold hover:text-ink transition-colors"
+              >
+                {brand.name} →
+              </Link>
+            )}
 
             <div>
               <h1
@@ -300,19 +305,6 @@ export default function ProductDetail() {
             </div>
 
             <div className="w-full h-px bg-rule" />
-
-            {/* Kaikefiu disclaimer */}
-            {product.kaikefiu && (
-              <div className="border border-rule p-4 bg-paper">
-                <p className="text-[10px] tracking-[0.15em] uppercase font-black text-ink mb-1">
-                  Kaikefiu Series
-                </p>
-                <p className="text-mute text-xs leading-relaxed">
-                  Pacific identity parody apparel. These designs are commentary on the cultural mashup of growing up Polynesian in America.{' '}
-                  <em>Kaikefiu</em> (n.) — one who indulges excessively in American things.
-                </p>
-              </div>
-            )}
 
             <p className="text-gray-500 text-sm leading-relaxed">{product.description}</p>
 
@@ -439,16 +431,20 @@ export default function ProductDetail() {
             )}
 
             {/* ── Sold by strip ── */}
-            <div className="border border-rule p-5">
-              <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-2">Sold by</p>
-              <Link
-                to={`/brand/${product.brand_id}`}
-                className="text-ink font-black text-sm uppercase tracking-wide hover:text-mute transition-colors"
-              >
-                Filiku Design Co. →
-              </Link>
-              <p className="text-mute text-xs mt-1">Salt Lake City, Utah</p>
-            </div>
+            {brand && (
+              <div className="border border-rule p-5">
+                <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-2">Sold by</p>
+                <Link
+                  to={`/brand/${product.brand_id}`}
+                  className="text-ink font-black text-sm uppercase tracking-wide hover:text-mute transition-colors"
+                >
+                  {brand.name} →
+                </Link>
+                {brand.location && (
+                  <p className="text-mute text-xs mt-1">{brand.location}</p>
+                )}
+              </div>
+            )}
 
           </div>
         </div>

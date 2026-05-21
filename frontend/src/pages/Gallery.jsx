@@ -7,64 +7,48 @@ const editorialImages = [
   {
     id: 1,
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=80',
-    brand: 'ffiliku',
-    brandId: 1,
     caption: 'Island Linen — SS25',
     span: 'md:col-span-2 md:row-span-2',
   },
   {
     id: 2,
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=600&q=80',
-    brand: 'Mana Jewelry',
-    brandId: 2,
     caption: 'Shell Collection',
     span: '',
   },
   {
     id: 3,
     image: 'https://images.unsplash.com/photo-1598971861713-54ad16a7e72e?auto=format&fit=crop&w=600&q=80',
-    brand: 'Island Ink Co.',
-    brandId: 4,
     caption: 'Tatau Works',
     span: '',
   },
   {
     id: 4,
     image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80',
-    brand: 'Aloha Art Studio',
-    brandId: 3,
     caption: 'Pacific Series',
     span: '',
   },
   {
     id: 5,
     image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=600&q=80',
-    brand: 'ffiliku',
-    brandId: 1,
     caption: 'Tapa Collection',
     span: '',
   },
   {
     id: 6,
     image: 'https://images.unsplash.com/photo-1547826039-bfc35e0f1ea8?auto=format&fit=crop&w=800&q=80',
-    brand: 'Aloha Art Studio',
-    brandId: 3,
     caption: 'Pacific Ancestors',
     span: 'md:col-span-2',
   },
   {
     id: 7,
     image: 'https://images.unsplash.com/photo-1573408301185-9519f94791c4?auto=format&fit=crop&w=600&q=80',
-    brand: 'Mana Jewelry',
-    brandId: 2,
     caption: 'Gold-Plated Series',
     span: '',
   },
   {
     id: 8,
     image: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&w=600&q=80',
-    brand: 'Island Ink Co.',
-    brandId: 4,
     caption: 'Flash Sheets',
     span: '',
   },
@@ -100,7 +84,7 @@ export default function Gallery() {
             {editorialImages.map((item) => (
               <Link
                 key={item.id}
-                to={`/brand/${item.brandId}`}
+                to="/brands"
                 className={`group relative overflow-hidden bg-white ${item.span}`}
               >
                 <img
@@ -110,7 +94,6 @@ export default function Gallery() {
                 />
                 <div className="absolute inset-0 bg-black/25 group-hover:bg-black/10 transition-colors duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <p className="text-white/50 text-[10px] tracking-[0.2em] uppercase mb-1">{item.brand}</p>
                   <p className="text-white font-black text-xs uppercase tracking-[0.1em]">{item.caption}</p>
                 </div>
               </Link>

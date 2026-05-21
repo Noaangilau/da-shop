@@ -21,7 +21,6 @@ class Product(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     is_featured = Column(Boolean, default=False, nullable=False)
     stock_count = Column(Integer, nullable=True)
-    kaikefiu = Column(Boolean, default=False, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (

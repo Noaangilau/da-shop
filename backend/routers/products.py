@@ -13,7 +13,6 @@ def list_products(
     category: Optional[str] = Query(None),
     collection: Optional[str] = Query(None),
     brand_id: Optional[int] = Query(None),
-    kaikefiu: Optional[bool] = Query(None),
     db: Session = Depends(get_db),
 ):
     q = db.query(Product).filter(Product.is_active == True)
@@ -23,8 +22,6 @@ def list_products(
         q = q.filter(Product.collection.ilike(f"%{collection}%"))
     if brand_id is not None:
         q = q.filter(Product.brand_id == brand_id)
-    if kaikefiu is not None:
-        q = q.filter(Product.kaikefiu == kaikefiu)
     return q.all()
 
 

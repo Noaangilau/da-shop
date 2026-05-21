@@ -18,7 +18,6 @@ class ProductOut(BaseModel):
     image_url: Optional[str] = None
     type: Optional[str] = "product"
     is_active: bool
-    kaikefiu: bool
     created_at: datetime
 
     @field_validator("sizes", mode="before")

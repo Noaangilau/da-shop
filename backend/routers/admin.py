@@ -161,6 +161,8 @@ def _serialize_product(p: Product):
     }
 
 
+
+
 @router.get("/products")
 def admin_list_products(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
     rows = db.query(Product).order_by(Product.brand_id, Product.name).all()
@@ -202,6 +204,13 @@ def admin_update_product(product_id: int, data: ProductIn, admin: Customer = Dep
 @router.delete("/products/all")
 def admin_delete_all_products(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
     count = db.query(Product).delete()
+    db.commit()
+    return {"success": True, "deleted": count}
+
+
+@router.delete("/brands/all")
+def admin_delete_all_brands(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    count = db.query(Brand).delete()
     db.commit()
     return {"success": True, "deleted": count}
 
@@ -563,8 +572,3 @@ def _basename(name: str) -> str:
     return name.rsplit("/", 1)[-1]
 
 
-@router.post("/seed")
-def admin_seed(admin: Customer = Depends(get_admin_customer)):
-    from seed_catalog import seed
-    seed()
-    return {"success": True}

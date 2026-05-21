@@ -61,7 +61,7 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center gap-7">
 
             {/* SHOP dropdown */}
-            <div className="relative" onMouseEnter={openShop} onMouseLeave={closeShop}>
+            <div className="relative flex items-center" onMouseEnter={openShop} onMouseLeave={closeShop}>
               <NavLink
                 to="/category/clothing"
                 className={({ isActive }) => navLink(isActive, shopOpen)}
@@ -97,7 +97,7 @@ export default function Navbar() {
             </NavLink>
 
             {/* SCHOOLS dropdown */}
-            <div className="relative" onMouseEnter={openSchools} onMouseLeave={closeSchools}>
+            <div className="relative flex items-center" onMouseEnter={openSchools} onMouseLeave={closeSchools}>
               <NavLink
                 to="/schools"
                 className={({ isActive }) => navLink(isActive, schoolsOpen)}

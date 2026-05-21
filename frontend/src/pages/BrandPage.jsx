@@ -129,34 +129,23 @@ export default function BrandPage() {
 
       {/* ── Brand info strip ── */}
       <section className="bg-white border-b border-rule">
-        <div className="max-w-[1280px] mx-auto px-6 py-12 flex flex-col md:flex-row gap-10 items-start">
+        <div className="max-w-[1280px] mx-auto px-6 py-8 flex items-center justify-between gap-6">
           {loading ? (
-            <div className="flex-1 flex flex-col gap-3">
-              <div className="h-3 w-32 bg-ink/10 animate-pulse" />
-              <div className="h-4 w-64 bg-ink/10 animate-pulse" />
-              <div className="h-3 w-full bg-ink/10 animate-pulse" />
-              <div className="h-3 w-3/4 bg-ink/10 animate-pulse" />
+            <div className="flex flex-col gap-2">
+              <div className="h-3 w-24 bg-ink/10 animate-pulse" />
+              <div className="h-4 w-48 bg-ink/10 animate-pulse" />
             </div>
           ) : (
             <>
-              {brand.logo_navy_url && (
-                <div className="w-full md:w-44 flex-shrink-0 flex md:justify-start">
-                  <img
-                    src={brand.logo_navy_url}
-                    alt={brand.name}
-                    className="h-28 md:h-36 w-auto object-contain object-left"
-                  />
-                </div>
-              )}
-              <div className="flex-1">
-                <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-3">{brand.location}</p>
-                <p className="text-[15px] italic text-mute mb-4">"{brand.tagline}"</p>
-                <p className="text-gray-500 text-sm leading-relaxed max-w-xl">{brand.bio}</p>
-                {brand.instagram && (
-                  <p className="text-mute text-[10px] tracking-[0.15em] uppercase mt-5">{brand.instagram}</p>
+              <div>
+                {brand.location && (
+                  <p className="text-mute text-[10px] tracking-[0.2em] uppercase mb-1">{brand.location}</p>
+                )}
+                {brand.tagline && (
+                  <p className="text-ink text-sm italic">"{brand.tagline}"</p>
                 )}
               </div>
-              <div className="flex flex-col items-end gap-2 text-mute text-[10px] tracking-[0.15em] uppercase text-right">
+              <div className="flex items-center gap-4 text-mute text-[10px] tracking-[0.15em] uppercase shrink-0">
                 <span>{forSale.length} Products</span>
                 {services.length > 0 && <span>{services.length} Services</span>}
               </div>

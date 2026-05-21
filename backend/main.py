@@ -35,7 +35,6 @@ def _run_migrations():
         "UPDATE customers SET role='admin' WHERE is_admin=true",
         "ALTER TABLE products ADD COLUMN is_featured BOOLEAN DEFAULT FALSE",
         "ALTER TABLE products ADD COLUMN stock_count INTEGER",
-        "ALTER TABLE products ADD COLUMN kaikefiu BOOLEAN DEFAULT FALSE",
         "ALTER TABLE products ADD COLUMN variants TEXT",
         "ALTER TABLE order_items ADD COLUMN variant TEXT",
         "ALTER TABLE order_items ADD COLUMN size TEXT",

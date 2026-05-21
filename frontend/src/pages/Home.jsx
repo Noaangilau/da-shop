@@ -90,88 +90,99 @@ export default function Home() {
     <main className="">
 
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
-      <section className="relative h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
-        <div className="absolute inset-0 bg-black/60" />
+      <section className="max-w-[1440px] mx-auto px-6 py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 items-stretch">
 
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <p className="text-white/40 text-[11px] tracking-[0.5em] uppercase font-medium mb-8">
-            The Pacific Marketplace
-          </p>
-          <h1
-            className="text-white font-black uppercase leading-none mb-6"
-            style={{ fontSize: 'clamp(3.5rem, 8vw, 8rem)', letterSpacing: '0.04em' }}
-          >
-            DA SHOP
-          </h1>
-          <p className="text-white/70 text-xs tracking-[0.2em] uppercase mb-14">
-            Pacific Culture. All In One Place.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href="#products"
-              className="bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-10 py-4 hover:bg-white/90 transition-colors duration-200"
-            >
-              Shop Now
-            </a>
-            <Link
-              to="/brands"
-              className="border border-white/40 text-white text-[11px] tracking-[0.15em] uppercase font-bold px-10 py-4 hover:border-white hover:bg-white/10 transition-colors duration-200"
-            >
-              Meet the Brands
-            </Link>
+          {/* LEFT: copy */}
+          <div className="flex flex-col gap-8 justify-between py-6">
+            <div className="flex flex-col gap-6">
+              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute">
+                CATALOG NO. 01 / PACIFIC MARKETPLACE
+              </div>
+              <h1
+                className="font-display font-black uppercase leading-[0.9] tracking-[-0.03em] text-ink"
+                style={{ fontSize: 'clamp(56px, 9vw, 140px)' }}
+              >
+                BASICS<br />FROM EVERY<br />STUDIO.
+              </h1>
+              <p className="max-w-lg text-[15px] leading-[1.55] text-ink/80">
+                One catalog. Pacific brands and school stores — tees, long sleeves, crew necks, and hoodies, all in one place.
+              </p>
+              <div className="flex gap-3 flex-wrap">
+                <Link to="/category/clothing" className="btn-primary btn-lg inline-flex items-center gap-2">
+                  SHOP THE CATALOG <span>→</span>
+                </Link>
+                <Link to="/schools" className="btn-outline btn-lg">
+                  VIEW SCHOOLS
+                </Link>
+              </div>
+            </div>
+
+            {/* Stats strip */}
+            <div className="border-t border-ink pt-4 grid grid-cols-4 gap-4">
+              {[
+                ['BRANDS',   safeBrands.length || '—'],
+                ['PRODUCTS', safeProducts.length || '—'],
+                ['SCHOOLS',  '03'],
+                ['CATEGORIES', '04'],
+              ].map(([label, val]) => (
+                <div key={label} className="flex flex-col gap-1">
+                  <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-mute">{label}</div>
+                  <div className="font-mono text-[18px] tabular-nums text-ink">{String(val).padStart(2, '0')}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-30">
-          <div className="w-px h-10 bg-white animate-pulse" />
-          <p className="text-white text-[10px] tracking-[0.3em] uppercase">Scroll</p>
+          {/* RIGHT: art panel */}
+          <div className="relative bg-ink text-paper aspect-[4/5] lg:aspect-auto overflow-hidden">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(-45deg, transparent 0 18px, rgba(245,241,234,0.06) 18px 19px)',
+              }}
+            />
+            <div className="absolute inset-0 flex items-center justify-center opacity-40">
+              <svg viewBox="0 0 100 100" className="w-[56%] h-auto" fill="none" stroke="currentColor" strokeWidth={2} strokeLinejoin="round">
+                <path d="M26 28 L38 18 L42 28 C46 22 54 22 58 28 L62 18 L74 28 L84 42 L76 48 L72 40 L72 86 L28 86 L28 40 L24 48 L16 42 Z" />
+                <path d="M50 28 L50 50 M44 50 L56 50" />
+              </svg>
+            </div>
+            <div className="absolute bottom-4 left-4 right-4 flex justify-between font-mono text-[11px] tracking-[0.14em] uppercase">
+              <span>FIG. A — WORKSHOP HOODIE</span>
+              <span>DA SHOP</span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── Shop by Category ─────────────────────────────────────────────────── */}
-      <section className="bg-white py-20 px-6 border-b border-rule">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="mb-10">
-            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Browse</p>
-            <h2
-              className="text-ink font-black uppercase"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
+      {/* ── Categories ───────────────────────────────────────────────────────── */}
+      <section className="max-w-[1440px] mx-auto px-6 py-16">
+        <div className="flex items-end justify-between gap-6 pb-[18px] border-b border-ink mb-7">
+          <div>
+            <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute mb-2">BROWSE BY CATEGORY</div>
+            <h2 className="font-display font-black uppercase text-[40px] leading-[0.95] tracking-[-0.02em] text-ink">EVERY BASIC, FILED.</h2>
+          </div>
+          <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute">04 CATEGORIES</div>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {categories.map((cat, i) => (
+            <Link
+              key={cat.slug}
+              to={`/category/${cat.slug}`}
+              className="group border border-ink bg-paper hover:bg-ink hover:text-paper transition-colors duration-150 p-[18px] flex flex-col gap-[18px] min-h-[260px]"
             >
-              Shop by Category
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
-            {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                to={`/category/${cat.slug}`}
-                className="group relative overflow-hidden aspect-square bg-white"
-              >
-                <img
-                  src={cat.image}
-                  alt={cat.displayLabel || cat.label}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-black/45 group-hover:bg-black/30 transition-colors duration-300" />
-                <div className="absolute inset-0 flex flex-col justify-end p-5">
-                  <p className="text-white font-black text-xs uppercase tracking-[0.15em]">
-                    {cat.displayLabel || cat.label}
-                  </p>
-                  <p className="text-white/50 text-[10px] uppercase tracking-[0.1em] mt-1 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                    Shop →
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
+              <div className="flex justify-between">
+                <span className="font-mono text-[11px] tracking-[0.14em] uppercase">{String(i + 1).padStart(2, '0')}</span>
+                <span className="font-mono text-[11px] tracking-[0.14em] uppercase">{cat.count || '—'} ITEMS</span>
+              </div>
+              <h3 className="font-display font-black uppercase text-[32px] leading-[0.95] tracking-[-0.02em] mt-auto">
+                {cat.displayLabel || cat.label}
+              </h3>
+              <div className="font-mono text-[11px] tracking-[0.14em] uppercase self-end">VIEW &nbsp;→</div>
+            </Link>
+          ))}
         </div>
       </section>
 

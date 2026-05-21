@@ -12,7 +12,7 @@ const shopCategories = [
   { label: 'Hoodies',       to: '/category/clothing?sub=hoodies' },
 ]
 
-const TICKER = 'FREE SHIPPING OVER $80 · NEW DROPS WEEKLY · SCHOOL ORDERS NOW OPEN · FILIKU · TRAPACHINO · DA SHOP · '
+const TICKER = 'FREE SHIPPING OVER $80 ··· NEW DROPS WEEKLY ··· DA SHOP IS A MULTI-BRAND CATALOG OF BASICS ··· SCHOOL ORDERS NOW OPEN ··· '
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen]                   = useState(false)
@@ -45,25 +45,20 @@ export default function Navbar() {
       {/* Ticker */}
       <div className="bg-ink overflow-hidden py-2">
         <div className="flex whitespace-nowrap animate-ticker">
-          {Array(6).fill(TICKER).map((t, i) => (
-            <span key={i} className="font-mono text-[11px] tracking-[0.16em] uppercase text-paper/60 shrink-0">
+          {Array(8).fill(TICKER).map((t, i) => (
+            <span key={i} className="font-mono text-[11px] tracking-[0.16em] uppercase text-paper/60 shrink-0 px-6">
               {t}
             </span>
           ))}
         </div>
       </div>
 
-      {/* Main nav */}
+      {/* Main nav — 3-column grid: links | brandmark | icons */}
       <div className="bg-paper border-b border-ink">
-        <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between h-16">
+        <div className="max-w-[1440px] mx-auto px-6 grid grid-cols-[1fr_auto_1fr] items-center h-16">
 
-          {/* Brandmark */}
-          <Link to="/" className="font-display font-black text-[26px] tracking-[-0.02em] uppercase leading-none text-ink shrink-0">
-            DA SHOP<span className="text-accent">.</span>
-          </Link>
-
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* LEFT: nav links */}
+          <div className="hidden lg:flex items-center gap-7">
 
             {/* SHOP dropdown */}
             <div className="relative" onMouseEnter={openShop} onMouseLeave={closeShop}>
@@ -74,20 +69,21 @@ export default function Navbar() {
                 Shop
               </NavLink>
               {shopOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50">
-                  <div className="bg-paper border border-ink py-2 w-44">
+                <div className="absolute top-full left-0 pt-3 z-50">
+                  <div className="bg-paper border border-ink py-2 min-w-[200px]">
                     {shopCategories.map((item, i) => (
                       <Link
                         key={item.label}
                         to={item.to}
                         onClick={() => setShopOpen(false)}
-                        className={`block px-4 py-1.5 font-mono text-[11px] tracking-[0.1em] uppercase hover:bg-ink hover:text-paper transition-colors ${
+                        className={`flex justify-between items-center px-4 py-2 font-mono text-[11px] tracking-[0.1em] uppercase hover:bg-ink hover:text-paper transition-colors ${
                           i === 0
-                            ? 'font-semibold text-ink border-b border-rule mb-1 pb-2'
+                            ? 'font-semibold text-ink border-b border-rule mb-1 pb-2.5'
                             : 'text-mute'
                         }`}
                       >
-                        {item.label}
+                        <span>{item.label}</span>
+                        {i > 0 && <span className="text-mute-2 text-[10px]">→</span>}
                       </Link>
                     ))}
                   </div>
@@ -109,33 +105,51 @@ export default function Navbar() {
                 Schools
               </NavLink>
               {schoolsOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 z-50">
-                  <div className="bg-paper border border-ink py-2 w-48">
-                    <Link
-                      to="/schools"
-                      onClick={() => setSchoolsOpen(false)}
-                      className="block px-4 py-1.5 font-mono text-[11px] tracking-[0.1em] uppercase font-semibold text-ink hover:bg-ink hover:text-paper border-b border-rule mb-1 pb-2 transition-colors"
-                    >
-                      All Schools
-                    </Link>
+                <div className="absolute top-full left-0 pt-3 z-50">
+                  <div className="bg-paper border border-ink py-2 min-w-[200px]">
+                    <div className="px-4 py-1.5 font-mono text-[10px] tracking-[0.14em] uppercase text-mute border-b border-rule mb-1 pb-2.5">
+                      Partner Schools
+                    </div>
                     {schools.map((school) => (
                       <Link
                         key={school.id}
                         to={`/school/${school.id}`}
                         onClick={() => setSchoolsOpen(false)}
-                        className="block px-4 py-1.5 font-mono text-[11px] tracking-[0.1em] uppercase text-mute hover:text-ink hover:bg-ink/5 transition-colors"
+                        className="flex justify-between items-center px-4 py-2 font-mono text-[11px] tracking-[0.08em] uppercase text-mute hover:bg-ink hover:text-paper transition-colors"
                       >
-                        {school.name}
+                        <span className="flex items-center gap-2">
+                          <span
+                            className="w-2 h-2 inline-block shrink-0"
+                            style={{ background: school.primaryColor || '#0a0a0a' }}
+                          />
+                          {school.name}
+                        </span>
+                        <span className="text-[10px] opacity-60">→</span>
                       </Link>
                     ))}
+                    <Link
+                      to="/schools"
+                      onClick={() => setSchoolsOpen(false)}
+                      className="block px-4 py-2.5 mt-1 border-t border-ink font-mono text-[11px] tracking-[0.14em] uppercase bg-ink text-paper hover:bg-accent hover:border-accent transition-colors"
+                    >
+                      View All Schools →
+                    </Link>
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Desktop right */}
-          <div className="hidden lg:flex items-center gap-6">
+          {/* CENTER: brandmark */}
+          <Link
+            to="/"
+            className="font-display font-black text-[26px] tracking-[-0.02em] uppercase leading-none text-ink whitespace-nowrap justify-self-center"
+          >
+            DA SHOP<span className="text-accent">.</span>
+          </Link>
+
+          {/* RIGHT: icon buttons */}
+          <div className="hidden lg:flex items-center gap-2 justify-self-end">
             {customer ? (
               <>
                 {customer.is_admin && (
@@ -144,22 +158,26 @@ export default function Navbar() {
                 {customer.role === 'vendor' && customer.brand_id && (
                   <Link to="/vendor" className={navLink(false)}>Vendor</Link>
                 )}
-                <Link to="/profile" className={navLink(false)}>{customer.first_name}</Link>
+                <Link to="/profile" className={navLink(false) + ' mr-2'}>{customer.first_name}</Link>
               </>
             ) : (
-              <Link to="/login" className={navLink(false)}>Sign In</Link>
+              <Link to="/login" className={navLink(false) + ' mr-2'}>Sign In</Link>
             )}
-            <Link to="/become-a-vendor" className={navLink(false)}>Sell</Link>
-            <CartIcon totalItems={totalItems} />
+            <IconBtn to="/profile" label="Account">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="8" r="4"/><path d="M3.5 21c1.6-4 4.7-6 8.5-6s6.9 2 8.5 6"/>
+              </svg>
+            </IconBtn>
+            <CartIconBtn totalItems={totalItems} />
           </div>
 
           {/* Mobile: cart + hamburger */}
-          <div className="lg:hidden flex items-center gap-4">
-            <CartIcon totalItems={totalItems} />
-            <button className="p-1" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
-              <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? 'rotate-45 translate-y-[5px]' : ''}`} />
-              <div className={`w-5 h-[1.5px] bg-ink my-[4px] transition-all ${menuOpen ? 'opacity-0' : ''}`} />
-              <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? '-rotate-45 -translate-y-[5px]' : ''}`} />
+          <div className="lg:hidden flex items-center gap-3 justify-self-end">
+            <CartIconBtn totalItems={totalItems} />
+            <button className="flex flex-col gap-[5px] p-1" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
+              <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
+              <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? 'opacity-0' : ''}`} />
+              <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
             </button>
           </div>
         </div>
@@ -261,7 +279,7 @@ export default function Navbar() {
           <Link
             to="/become-a-vendor"
             onClick={() => setMenuOpen(false)}
-            className="bg-ink text-paper font-mono text-[11px] tracking-[0.12em] uppercase font-medium px-5 py-3 text-center hover:opacity-80 transition-opacity mt-2"
+            className="bg-ink text-paper font-mono text-[11px] tracking-[0.12em] uppercase font-medium px-5 py-3 text-center hover:bg-accent hover:border-accent transition-colors mt-2"
           >
             Become a Vendor
           </Link>
@@ -271,14 +289,27 @@ export default function Navbar() {
   )
 }
 
-function CartIcon({ totalItems }) {
+function IconBtn({ to, label, children }) {
   return (
-    <Link to="/cart" className="relative flex items-center" aria-label="Cart">
-      <svg className="w-5 h-5 text-ink" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+    <Link
+      to={to}
+      aria-label={label}
+      className="w-9 h-9 inline-flex items-center justify-center border border-ink text-ink hover:bg-ink hover:text-paper transition-colors"
+    >
+      {children}
+    </Link>
+  )
+}
+
+function CartIconBtn({ totalItems }) {
+  return (
+    <Link to="/cart" className="relative w-9 h-9 inline-flex items-center justify-center border border-ink text-ink hover:bg-ink hover:text-paper transition-colors" aria-label="Cart">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/>
+        <path d="M3 4h3l2.6 12.2a1 1 0 0 0 1 .8h9.4a1 1 0 0 0 1-.8L22 8H6.4"/>
       </svg>
       {totalItems > 0 && (
-        <span className="absolute -top-2 -right-2 bg-ink text-paper text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
+        <span className="absolute -top-1.5 -right-1.5 bg-accent text-paper font-mono text-[10px] min-w-[16px] h-4 inline-flex items-center justify-center px-1">
           {totalItems > 9 ? '9+' : totalItems}
         </span>
       )}

@@ -149,10 +149,10 @@ export default function Schools() {
             </p>
           </div>
           <Link
-            to="/become-a-vendor"
+            to="/support"
             className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors"
           >
-            Apply for Your School →
+            Contact Us →
           </Link>
         </div>
       </section>

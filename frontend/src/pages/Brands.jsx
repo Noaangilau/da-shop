@@ -128,30 +128,6 @@ export default function Brands() {
         </div>
       </section>
 
-      {/* ── Become a vendor CTA ── */}
-      <section className="bg-ink py-20 px-6">
-        <div className="max-w-[1280px] mx-auto text-center">
-          <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-4">
-            Pacific vendors
-          </p>
-          <h2
-            className="text-white font-black uppercase mb-6"
-            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '0.04em' }}
-          >
-            Want to Sell Here?
-          </h2>
-          <p className="text-white/40 text-sm leading-relaxed mb-12 max-w-md mx-auto">
-            Apply to become a vendor and get your own branded storefront on DA SHOP.
-          </p>
-          <Link
-            to="/become-a-vendor"
-            className="inline-block bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors"
-          >
-            Apply Now
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }

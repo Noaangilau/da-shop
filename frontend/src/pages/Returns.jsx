@@ -62,7 +62,7 @@ export default function Returns() {
             For any returns, refunds, or order issues email us at <span className="text-ink font-semibold">hello@dashop.co.nz</span> — we typically respond within 1 business day.
           </p>
           <Link
-            to="/become-a-vendor"
+            to="/support"
             className="inline-block bg-ink text-white font-black text-[11px] tracking-[0.12em] uppercase px-8 py-3 hover:bg-ink/80 transition-colors"
           >
             Contact Us

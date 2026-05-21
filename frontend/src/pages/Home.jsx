@@ -296,30 +296,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Become a Vendor CTA ───────────────────────────────────────────────── */}
-      <section className="bg-paper py-24 px-6 border-t border-rule">
-        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div>
-            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Pacific vendors</p>
-            <h2
-              className="text-ink font-black uppercase"
-              style={{ fontSize: 'clamp(1.5rem, 3.5vw, 2.5rem)', letterSpacing: '0.04em' }}
-            >
-              Sell on DA SHOP
-            </h2>
-            <p className="text-mute text-sm leading-relaxed mt-4 max-w-md">
-              Get your own branded storefront, reach new customers, and represent your culture — on your terms.
-            </p>
-          </div>
-          <Link
-            to="/become-a-vendor"
-            className="flex-shrink-0 bg-ink text-white font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-ink/80 transition-colors duration-200"
-          >
-            Apply to Sell
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }

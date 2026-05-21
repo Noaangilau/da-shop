@@ -275,25 +275,6 @@ export default function BrandPage() {
         </section>
       )}
 
-      {/* ── CTA banner ── */}
-      <section className="bg-ink py-20 px-6">
-        <div className="max-w-[1280px] mx-auto text-center">
-          <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-4">Are you a Pacific vendor?</p>
-          <h2
-            className="text-white font-black uppercase mb-6"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
-          >
-            Sell on DA SHOP
-          </h2>
-          <Link
-            to="/become-a-vendor"
-            className="inline-block bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-12 py-4 hover:bg-white/90 transition-colors duration-200"
-          >
-            Apply to Sell
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
@@ -15,14 +15,12 @@ import Category from './pages/Category'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import Gallery from './pages/Gallery'
-import BecomeAVendor from './pages/BecomeAVendor'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import Checkout from './pages/Checkout'
 import OrderConfirmation from './pages/OrderConfirmation'
 import AdminDashboard from './pages/AdminDashboard'
-import VendorDashboard from './pages/VendorDashboard'
 import NotFound from './pages/NotFound'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
@@ -32,11 +30,6 @@ import Support from './pages/Support'
 import Schools from './pages/Schools'
 import SchoolPage from './pages/SchoolPage'
 
-// Redirect /vendor/:id → /brand/:id for backwards compatibility
-function VendorRedirect() {
-  const { id } = useParams()
-  return <Navigate to={`/brand/${id}`} replace />
-}
 
 function App() {
   return (
@@ -50,13 +43,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
 
-            {/* Brand / vendor routes */}
+            {/* Brand routes */}
             <Route path="/brands" element={<Brands />} />
             <Route path="/brand/:id" element={<BrandPage />} />
-
-            {/* Legacy redirects */}
             <Route path="/vendors" element={<Navigate to="/brands" replace />} />
-            <Route path="/vendor/:id" element={<VendorRedirect />} />
 
             {/* Category and product routes */}
             <Route path="/category/:slug" element={<Category />} />
@@ -78,12 +68,8 @@ function App() {
             {/* Protected — admin only */}
             <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
 
-            {/* Protected — vendor only */}
-            <Route path="/vendor" element={<ProtectedRoute vendorOnly><VendorDashboard /></ProtectedRoute>} />
-
             {/* Utility routes */}
             <Route path="/gallery" element={<Gallery />} />
-            <Route path="/become-a-vendor" element={<BecomeAVendor />} />
 
             {/* Schools */}
             <Route path="/schools" element={<Schools />} />

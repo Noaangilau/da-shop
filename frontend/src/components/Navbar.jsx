@@ -155,9 +155,6 @@ export default function Navbar() {
                 {customer.is_admin && (
                   <Link to="/admin" className={navLink(false)}>Admin</Link>
                 )}
-                {customer.role === 'vendor' && customer.brand_id && (
-                  <Link to="/vendor" className={navLink(false)}>Vendor</Link>
-                )}
                 <Link to="/profile" className={navLink(false) + ' mr-2'}>{customer.first_name}</Link>
               </>
             ) : (
@@ -264,25 +261,12 @@ export default function Navbar() {
                   Admin Dashboard
                 </Link>
               )}
-              {customer.role === 'vendor' && customer.brand_id && (
-                <Link to="/vendor" onClick={() => setMenuOpen(false)} className="py-2 font-mono text-[11px] tracking-[0.12em] uppercase text-mute hover:text-ink transition-colors">
-                  Vendor Dashboard
-                </Link>
-              )}
             </>
           ) : (
             <Link to="/login" onClick={() => setMenuOpen(false)} className="py-2 font-mono text-[11px] tracking-[0.12em] uppercase text-mute hover:text-ink transition-colors">
               Sign In / Create Account
             </Link>
           )}
-
-          <Link
-            to="/become-a-vendor"
-            onClick={() => setMenuOpen(false)}
-            className="bg-ink text-paper font-mono text-[11px] tracking-[0.12em] uppercase font-medium px-5 py-3 text-center hover:bg-accent hover:border-accent transition-colors mt-2"
-          >
-            Become a Vendor
-          </Link>
         </div>
       )}
     </nav>

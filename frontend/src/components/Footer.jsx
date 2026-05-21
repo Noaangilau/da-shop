@@ -9,18 +9,16 @@ const shopLinks = [
 ]
 
 const schoolLinks = [
-  { label: 'All Schools',    to: '/schools' },
-  { label: 'West High',      to: '/school/west-high' },
-  { label: 'Apply a School', to: '/become-a-vendor' },
+  { label: 'All Schools', to: '/schools' },
+  { label: 'West High',   to: '/school/west-high' },
 ]
 
 const supportLinks = [
-  { label: 'Support & FAQ',   to: '/support' },
-  { label: 'Shipping Info',   to: '/shipping' },
-  { label: 'Returns Policy',  to: '/returns' },
-  { label: 'Become a Vendor', to: '/become-a-vendor' },
-  { label: 'Terms',           to: '/terms' },
-  { label: 'Privacy',         to: '/privacy' },
+  { label: 'Support & FAQ',  to: '/support' },
+  { label: 'Shipping Info',  to: '/shipping' },
+  { label: 'Returns Policy', to: '/returns' },
+  { label: 'Terms',          to: '/terms' },
+  { label: 'Privacy',        to: '/privacy' },
 ]
 
 function FooterColumn({ title, links }) {

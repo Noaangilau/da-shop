@@ -21,7 +21,7 @@ export default function Navbar() {
   const [mobileShopOpen, setMobileShopOpen]       = useState(false)
   const [mobileSchoolsOpen, setMobileSchoolsOpen] = useState(false)
 
-  const { totalItems } = useCart()
+  const { totalItems, openDrawer } = useCart()
   const { customer } = useAuth()
 
   const shopTimer    = useRef(null)
@@ -165,12 +165,12 @@ export default function Navbar() {
                 <circle cx="12" cy="8" r="4"/><path d="M3.5 21c1.6-4 4.7-6 8.5-6s6.9 2 8.5 6"/>
               </svg>
             </IconBtn>
-            <CartIconBtn totalItems={totalItems} />
+            <CartIconBtn totalItems={totalItems} onOpen={openDrawer} />
           </div>
 
           {/* Mobile: cart + hamburger */}
           <div className="lg:hidden flex items-center gap-3 justify-self-end">
-            <CartIconBtn totalItems={totalItems} />
+            <CartIconBtn totalItems={totalItems} onOpen={openDrawer} />
             <button className="flex flex-col gap-[5px] p-1" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">
               <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
               <div className={`w-5 h-[1.5px] bg-ink transition-all ${menuOpen ? 'opacity-0' : ''}`} />
@@ -285,9 +285,9 @@ function IconBtn({ to, label, children }) {
   )
 }
 
-function CartIconBtn({ totalItems }) {
+function CartIconBtn({ totalItems, onOpen }) {
   return (
-    <Link to="/cart" className="relative w-9 h-9 inline-flex items-center justify-center border border-ink text-ink hover:bg-ink hover:text-paper transition-colors" aria-label="Cart">
+    <button onClick={onOpen} className="relative w-9 h-9 inline-flex items-center justify-center border border-ink text-ink hover:bg-ink hover:text-paper transition-colors" aria-label="Cart">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
         <circle cx="9" cy="20" r="1.6"/><circle cx="18" cy="20" r="1.6"/>
         <path d="M3 4h3l2.6 12.2a1 1 0 0 0 1 .8h9.4a1 1 0 0 0 1-.8L22 8H6.4"/>
@@ -297,6 +297,6 @@ function CartIconBtn({ totalItems }) {
           {totalItems > 9 ? '9+' : totalItems}
         </span>
       )}
-    </Link>
+    </button>
   )
 }

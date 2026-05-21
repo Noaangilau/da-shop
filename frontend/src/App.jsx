@@ -13,7 +13,7 @@ import Brands from './pages/Brands'
 import BrandPage from './pages/BrandPage'
 import Category from './pages/Category'
 import ProductDetail from './pages/ProductDetail'
-import Cart from './pages/Cart'
+import CartDrawer from './components/CartDrawer'
 import Gallery from './pages/Gallery'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -52,14 +52,15 @@ function App() {
             <Route path="/category/:slug" element={<Category />} />
             <Route path="/product/:id" element={<ProductDetail />} />
 
-            {/* Cart */}
-            <Route path="/cart" element={<Cart />} />
+            {/* Cart — drawer-based; /cart redirects to checkout */}
+            <Route path="/cart" element={<Navigate to="/checkout" replace />} />
 
             {/* Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
             {/* Protected — customer */}
+            <Route path="/dashboard" element={<Navigate to="/profile" replace />} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             {/* Checkout + confirmation are guest-accessible */}
             <Route path="/checkout" element={<Checkout />} />
@@ -89,6 +90,7 @@ function App() {
           </Routes>
           </ErrorBoundary>
           <Footer />
+          <CartDrawer />
           <AIChatWidget />
         </CartProvider>
       </AuthProvider>

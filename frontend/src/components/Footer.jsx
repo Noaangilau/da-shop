@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const shopLinks = [
@@ -44,6 +45,15 @@ function FooterColumn({ title, links }) {
 }
 
 export default function Footer() {
+  const [email, setEmail]         = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+
+  function handleSubscribe(e) {
+    e.preventDefault()
+    setSubscribed(true)
+    setEmail('')
+  }
+
   return (
     <footer className="bg-ink mt-16">
       <div className="max-w-[1440px] mx-auto px-6 pt-14 pb-6">
@@ -64,6 +74,35 @@ export default function Footer() {
             <FooterColumn title="Schools" links={schoolLinks} />
             <FooterColumn title="Support" links={supportLinks} />
           </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 py-8 border-b border-paper/10">
+          <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-paper/40 font-medium shrink-0">
+            Stay Updated
+          </p>
+          {subscribed ? (
+            <p className="font-mono text-[11px] tracking-[0.1em] uppercase text-paper/50">
+              ✓ You're in.
+            </p>
+          ) : (
+            <form onSubmit={handleSubscribe} className="flex gap-2 w-full sm:max-w-sm">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Your email address"
+                className="flex-1 bg-transparent border border-paper/20 px-4 py-2.5 text-paper/70 placeholder-paper/30 font-mono text-[11px] tracking-[0.05em] focus:outline-none focus:border-paper/50 transition-colors"
+              />
+              <button
+                type="submit"
+                className="bg-paper text-ink font-black text-[10px] tracking-[0.15em] uppercase px-5 py-2.5 hover:bg-paper/90 transition-colors shrink-0"
+              >
+                Subscribe
+              </button>
+            </form>
+          )}
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-6">

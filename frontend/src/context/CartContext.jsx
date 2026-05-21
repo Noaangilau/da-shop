@@ -16,6 +16,9 @@ export function CartProvider({ children }) {
       return []
     }
   })
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  function openDrawer()  { setDrawerOpen(true) }
+  function closeDrawer() { setDrawerOpen(false) }
 
   useEffect(() => {
     localStorage.setItem('da-shop-cart', JSON.stringify(cart))
@@ -57,7 +60,7 @@ export function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, updateQty, clearCart, totalItems, totalPrice }}
+      value={{ cart, addToCart, removeFromCart, updateQty, clearCart, totalItems, totalPrice, drawerOpen, openDrawer, closeDrawer }}
     >
       {children}
     </CartContext.Provider>

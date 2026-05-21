@@ -2,6 +2,7 @@
 import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/CartContext'
+import SizeGuideModal from '../components/SizeGuideModal'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -64,7 +65,7 @@ function RelatedProductCard({ product }) {
 
 export default function ProductDetail() {
   const { id } = useParams()
-  const { addToCart } = useCart()
+  const { addToCart, openDrawer } = useCart()
 
   const [product, setProduct]   = useState(null)
   const [brand, setBrand]       = useState(null)
@@ -76,6 +77,7 @@ export default function ProductDetail() {
   const [selectedVariant, setSelectedVariant] = useState(null)
   const [sizeError, setSizeError]       = useState(false)
   const [added, setAdded]               = useState(false)
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false)
   const sizeRef = useRef(null)
 
   const [related, setRelated]         = useState([])
@@ -205,6 +207,7 @@ export default function ProductDetail() {
       selectedSize,
       variant: selectedVariant || null,
     })
+    openDrawer()
     setAdded(true)
     setTimeout(() => setAdded(false), 2000)
   }
@@ -340,13 +343,22 @@ export default function ProductDetail() {
             {/* Size selector */}
             {needsSize && (
               <div ref={sizeRef}>
-                <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-ink mb-3">
-                  Size{' '}
-                  {selectedSize
-                    ? <span className="text-mute font-normal">— {selectedSize}</span>
-                    : sizeError && <span className="text-red-500 font-normal normal-case tracking-normal">— Please select a size</span>
-                  }
-                </p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[10px] tracking-[0.2em] uppercase font-semibold text-ink">
+                    Size{' '}
+                    {selectedSize
+                      ? <span className="text-mute font-normal">— {selectedSize}</span>
+                      : sizeError && <span className="text-red-500 font-normal normal-case tracking-normal">— Please select a size</span>
+                    }
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setSizeGuideOpen(true)}
+                    className="font-mono text-[10px] tracking-[0.15em] uppercase text-mute hover:text-ink transition-colors"
+                  >
+                    Size Guide →
+                  </button>
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {(Array.isArray(product.sizes) ? product.sizes : []).map((size) => (
                     <button
@@ -380,12 +392,12 @@ export default function ProductDetail() {
                 >
                   {added ? '✓ Added to Cart' : 'Add to Cart'}
                 </button>
-                <Link
-                  to="/cart"
-                  className="border border-rule text-ink font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:border-ink transition-colors duration-200 text-center"
+                <button
+                  onClick={openDrawer}
+                  className="border border-rule text-ink font-black text-[11px] tracking-[0.15em] uppercase px-8 py-4 hover:border-ink transition-colors duration-200"
                 >
                   View Cart
-                </Link>
+                </button>
               </div>
             ) : inquirySubmitted ? (
               <div className="border border-rule p-6 text-center">
@@ -492,6 +504,8 @@ export default function ProductDetail() {
           </div>
         </section>
       )}
+
+      <SizeGuideModal open={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
 
     </main>
   )

@@ -89,17 +89,6 @@ def _ensure_admin():
 
 _ensure_admin()
 
-try:
-    from seed_catalog import sync_product_images, seed
-    from sqlalchemy.orm import Session
-    from models.product import Product as _Product
-    with Session(engine) as _s:
-        if _s.query(_Product).count() == 0:
-            print("  [startup] no products found — seeding catalog...")
-            seed()
-    sync_product_images()
-except Exception as e:
-    print(f"  [startup] seed/sync skipped: {e}")
 
 app = FastAPI(title="DA SHOP API")
 

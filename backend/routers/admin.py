@@ -199,6 +199,13 @@ def admin_update_product(product_id: int, data: ProductIn, admin: Customer = Dep
     return _serialize_product(p)
 
 
+@router.delete("/products/all")
+def admin_delete_all_products(admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
+    count = db.query(Product).delete()
+    db.commit()
+    return {"success": True, "deleted": count}
+
+
 @router.delete("/products/{product_id}")
 def admin_delete_product(product_id: int, admin: Customer = Depends(get_admin_customer), db: Session = Depends(get_db)):
     p = db.query(Product).filter(Product.id == product_id).first()

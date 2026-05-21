@@ -71,7 +71,7 @@ export default function SchoolPage() {
             <span className="opacity-70">{school.shortName}</span>
           </div>
           <p className="text-[12px] tracking-[0.14em] uppercase font-mono opacity-80 mb-2">
-            {school.since} · Home of the {school.mascot}
+            {school.since} · HOME OF THE {school.mascot}
           </p>
           <h1
             className="font-black uppercase leading-none"
@@ -81,10 +81,10 @@ export default function SchoolPage() {
           </h1>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 pt-6 border-t border-white/30 max-w-2xl">
             {[
-              ['ITEMS',    products.length > 0 ? products.length : '—'],
-              ['LOCATION', school.location],
-              ['STATUS',   school.storeOpen ? 'OPEN' : 'COMING SOON'],
-              ['COLORS',   school.shortName],
+              ['ITEMS',      products.length > 0 ? String(products.length) : (school.productCount > 0 ? String(school.productCount) : '—')],
+              ['CATEGORIES', '4'],
+              ['COLORS',     school.shortName],
+              ['STATUS',     school.storeOpen ? 'STORE OPEN' : 'COMING SOON'],
             ].map(([label, val]) => (
               <div key={label}>
                 <p className="text-[10px] tracking-[0.2em] uppercase font-mono opacity-70 mb-1">{label}</p>

@@ -26,6 +26,7 @@ export default function Home() {
 
   const [products, setProducts] = useState([])
   const [productsLoading, setProductsLoading] = useState(true)
+  const [brands, setBrands] = useState([])
 
   useEffect(() => {
     axios.get(`${API_URL}/products`)
@@ -35,6 +36,12 @@ export default function Home() {
       })
       .catch(() => setProducts([]))
       .finally(() => setProductsLoading(false))
+  }, [])
+
+  useEffect(() => {
+    axios.get(`${API_URL}/brands`)
+      .then((res) => setBrands(Array.isArray(res.data) ? res.data : []))
+      .catch(() => {})
   }, [])
 
   const safeProducts = (Array.isArray(products) ? products : []).filter(
@@ -131,7 +138,7 @@ export default function Home() {
           {categories.map((cat, i) => (
             <Link
               key={cat.slug}
-              to={`/category/${cat.slug}`}
+              to={cat.to || `/category/${cat.slug}`}
               className="group border border-ink bg-paper hover:bg-ink hover:text-paper transition-colors duration-150 p-[18px] flex flex-col gap-[18px] min-h-[260px]"
             >
               <div className="flex justify-between">
@@ -148,70 +155,51 @@ export default function Home() {
       </section>
 
       {/* ── The Brands ───────────────────────────────────────────────────────── */}
-      <section className="border-t border-ink py-16 px-6">
-        <div className="max-w-[1440px] mx-auto">
-          <div className="flex items-end justify-between gap-6 pb-[18px] border-b border-ink mb-7">
-            <div>
-              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute mb-2">THE MARKETPLACE</div>
-              <h2 className="font-display font-black uppercase text-[40px] leading-[0.95] tracking-[-0.02em] text-ink">
-                THE BRANDS.
-              </h2>
-            </div>
-            <Link
-              to="/brands"
-              className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute hover:text-ink transition-colors"
-            >
-              ALL BRANDS →
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-ink">
-            {[
-              {
-                num: '01',
-                name: 'FILIKU DESIGNS CO.',
-                tagline: 'Heavyweight basics. Built to last.',
-                bio: 'Mid-weight 7oz or higher, pre-shrunk, cut for a relaxed modern fit.',
-                location: 'STUDIO 01',
-                items: 11,
-              },
-              {
-                num: '02',
-                name: 'TRAPACCHINO',
-                tagline: 'Graphic-forward streetwear.',
-                bio: 'Small graphic-led drops. Each piece numbered, produced in limited runs.',
-                location: 'STUDIO 02',
-                items: 8,
-              },
-            ].map((brand) => (
+      {brands.length > 0 && (
+        <section className="border-t border-ink py-16 px-6">
+          <div className="max-w-[1440px] mx-auto">
+            <div className="flex items-end justify-between gap-6 pb-[18px] border-b border-ink mb-7">
+              <div>
+                <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute mb-2">THE MARKETPLACE</div>
+                <h2 className="font-display font-black uppercase text-[40px] leading-[0.95] tracking-[-0.02em] text-ink">
+                  THE BRANDS.
+                </h2>
+              </div>
               <Link
-                key={brand.num}
                 to="/brands"
-                className="group bg-paper hover:bg-ink transition-colors duration-200 p-8 flex flex-col gap-6 min-h-[300px]"
+                className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute hover:text-ink transition-colors"
               >
-                <div className="flex justify-between font-mono text-[11px] tracking-[0.14em] uppercase text-mute group-hover:text-paper/50 transition-colors">
-                  <span>BRAND / {brand.num}</span>
-                  <span>{brand.items} ITEMS →</span>
-                </div>
-                <div
-                  className="font-display font-black uppercase leading-[0.9] tracking-[-0.03em] text-ink group-hover:text-paper transition-colors"
-                  style={{ fontSize: 'clamp(32px, 4vw, 52px)' }}
-                >
-                  {brand.name}
-                </div>
-                <div className="mt-auto flex flex-col gap-1.5">
-                  <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-ink group-hover:text-paper transition-colors">
-                    {brand.tagline}
-                  </p>
-                  <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-mute group-hover:text-paper/40 transition-colors">
-                    {brand.location}
-                  </span>
-                </div>
+                ALL BRANDS →
               </Link>
-            ))}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-ink">
+              {brands.map((brand, i) => (
+                <Link
+                  key={brand.id}
+                  to={`/brand/${brand.id}`}
+                  className="group bg-paper hover:bg-ink transition-colors duration-200 p-8 flex flex-col gap-6 min-h-[300px]"
+                >
+                  <div className="flex justify-between font-mono text-[11px] tracking-[0.14em] uppercase text-mute group-hover:text-paper/50 transition-colors">
+                    <span>BRAND / {String(i + 1).padStart(2, '0')}</span>
+                    <span>VIEW →</span>
+                  </div>
+                  <div
+                    className="font-display font-black uppercase leading-[0.9] tracking-[-0.03em] text-ink group-hover:text-paper transition-colors"
+                    style={{ fontSize: 'clamp(32px, 4vw, 52px)' }}
+                  >
+                    {brand.name}
+                  </div>
+                  {brand.tagline && (
+                    <p className="mt-auto font-mono text-[11px] tracking-[0.12em] uppercase text-ink group-hover:text-paper transition-colors">
+                      {brand.tagline}
+                    </p>
+                  )}
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── All Products ─────────────────────────────────────────────────────── */}
       <section id="products" className="bg-white py-20 px-6">

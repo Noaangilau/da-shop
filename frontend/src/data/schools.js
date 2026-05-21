@@ -5,15 +5,15 @@ export const schools = [
     id: 'west-high',
     name: 'West High School',
     shortName: 'WEST HIGH',
-    mascot: 'PANTHERS',
+    mascot: 'WARRIORS',
     location: 'Salt Lake City, UT',
-    since: 'EST. 2024',
+    since: 'PARTNERED 2026',
     colors: {
       primary: '#CC0000',    // red
       secondary: '#111111',  // black
       primaryInk: '#ffffff', // text on primary
     },
-    productCount: 0, // update as products are added
+    productCount: 4,
     storeOpen: true,
   },
 ]

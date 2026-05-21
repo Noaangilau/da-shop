@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 import Navbar from './components/Navbar'
@@ -92,6 +93,7 @@ function App() {
           <Footer />
           <CartDrawer />
           <AIChatWidget />
+          <SpeedInsights />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

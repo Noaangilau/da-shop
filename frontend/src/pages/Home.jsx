@@ -7,18 +7,6 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 // ─── Home Page ────────────────────────────────────────────────────────────────
 
-function BrandCardSkeleton() {
-  return (
-    <div className="bg-white overflow-hidden">
-      <div className="h-56 bg-ink/10 animate-pulse" />
-      <div className="p-5 border-t border-rule flex flex-col gap-2">
-        <div className="h-2.5 w-16 bg-ink/10 animate-pulse" />
-        <div className="h-4 w-32 bg-ink/10 animate-pulse" />
-      </div>
-    </div>
-  )
-}
-
 function ProductCardSkeleton() {
   return (
     <div className="bg-white">
@@ -34,35 +22,10 @@ function ProductCardSkeleton() {
 
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState('All')
-  const [activeBrand, setActiveBrand] = useState('All')
   const navigate = useNavigate()
 
-  const [brands, setBrands] = useState([])
   const [products, setProducts] = useState([])
-  const [brandsLoading, setBrandsLoading] = useState(true)
   const [productsLoading, setProductsLoading] = useState(true)
-  const [featuredBrand, setFeaturedBrand] = useState(null)
-  const [featuredProducts, setFeaturedProducts] = useState([])
-
-  useEffect(() => {
-    axios.get(`${API_URL}/brands`)
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : []
-        setBrands(data)
-        const first = data[0]
-        if (first) {
-          setFeaturedBrand(first)
-          axios.get(`${API_URL}/brands/${first.id}/products`)
-            .then((r) => {
-              const items = Array.isArray(r.data) ? r.data : []
-              setFeaturedProducts(items.filter((p) => p.type === 'product').slice(0, 4))
-            })
-            .catch(() => {})
-        }
-      })
-      .catch(() => setBrands([]))
-      .finally(() => setBrandsLoading(false))
-  }, [])
 
   useEffect(() => {
     axios.get(`${API_URL}/products`)
@@ -74,16 +37,14 @@ export default function Home() {
       .finally(() => setProductsLoading(false))
   }, [])
 
-  const safeProducts = Array.isArray(products) ? products : []
-  const safeBrands = Array.isArray(brands) ? brands : []
+  const safeProducts = (Array.isArray(products) ? products : []).filter(
+    (p) => p.category === 'Clothing'
+  )
 
   const categoryOptions = ['All', ...new Set(safeProducts.map((p) => p.category))]
-  const brandOptions = ['All', ...safeBrands.map((b) => b.name)]
 
   const filteredProducts = safeProducts.filter((p) => {
-    const matchCat = activeFilter === 'All' || p.category === activeFilter
-    const matchBrand = activeBrand === 'All' || p.brand_id === safeBrands.find((b) => b.name === activeBrand)?.id
-    return matchCat && matchBrand
+    return activeFilter === 'All' || p.category === activeFilter
   })
 
   return (
@@ -121,9 +82,9 @@ export default function Home() {
             {/* Stats strip */}
             <div className="border-t border-ink pt-4 grid grid-cols-4 gap-4">
               {[
-                ['BRANDS',   safeBrands.length || '—'],
-                ['PRODUCTS', safeProducts.length || '—'],
-                ['SCHOOLS',  '03'],
+                ['BRANDS',     '02'],
+                ['PRODUCTS',   safeProducts.length || '—'],
+                ['SCHOOLS',    '01'],
                 ['CATEGORIES', '04'],
               ].map(([label, val]) => (
                 <div key={label} className="flex flex-col gap-1">
@@ -186,119 +147,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Featured Brands ──────────────────────────────────────────────────── */}
-      <section className="bg-paper py-20 px-6 border-b border-rule">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="mb-10 flex items-end justify-between">
+      {/* ── The Brands ───────────────────────────────────────────────────────── */}
+      <section className="border-t border-ink py-16 px-6">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex items-end justify-between gap-6 pb-[18px] border-b border-ink mb-7">
             <div>
-              <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">The Marketplace</p>
-              <h2
-                className="text-ink font-black uppercase"
-                style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
-              >
-                The Brands
+              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute mb-2">THE MARKETPLACE</div>
+              <h2 className="font-display font-black uppercase text-[40px] leading-[0.95] tracking-[-0.02em] text-ink">
+                THE BRANDS.
               </h2>
             </div>
             <Link
               to="/brands"
-              className="hidden sm:block text-mute text-[11px] tracking-[0.15em] uppercase font-semibold hover:text-ink transition-colors"
+              className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute hover:text-ink transition-colors"
             >
-              All Brands →
+              ALL BRANDS →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-px bg-rule">
-            {brandsLoading
-              ? [0, 1, 2, 3].map((i) => <BrandCardSkeleton key={i} />)
-              : safeBrands.map((brand) => (
-                  <Link
-                    key={brand.id}
-                    to={`/brand/${brand.id}`}
-                    className="group bg-white overflow-hidden"
-                  >
-                    <div className="relative h-56 overflow-hidden">
-                      <img
-                        src={brand.card_image_url}
-                        alt={brand.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/15 transition-colors duration-300" />
-                      {brand.logo_white_url && (
-                        <img
-                          src={brand.logo_white_url}
-                          alt=""
-                          aria-hidden="true"
-                          className="absolute top-4 left-4 h-12 w-auto object-contain opacity-90"
-                        />
-                      )}
-                    </div>
-                    <div className="p-5 border-t border-rule">
-                      <p className="text-mute text-[10px] tracking-[0.3em] uppercase font-semibold mb-1">
-                        {brand.category}
-                      </p>
-                      <h3 className="text-ink font-black uppercase tracking-wide text-sm mb-1">
-                        {brand.name}
-                      </h3>
-                      <p className="text-mute text-[10px] tracking-[0.1em] uppercase mt-3 group-hover:text-ink transition-colors">
-                        Shop Brand →
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── THE CULTURE ──────────────────────────────────────────────────────── */}
-      <section id="culture" className="bg-ink py-20 px-6">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="mb-12">
-            <p className="text-white/30 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">Our World</p>
-            <h2
-              className="text-white font-black uppercase"
-              style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
-            >
-              The Culture
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-ink">
             {[
               {
-                title: 'The Story',
-                body: 'DA SHOP was built to give Pacific vendors a platform that understands the culture — not just the commerce. Every brand here is Pacific-led, community-rooted, and building something real.',
-                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-                to: '/brands',
+                num: '01',
+                name: 'FILIKU DESIGNS CO.',
+                tagline: 'Heavyweight basics. Built to last.',
+                bio: 'Mid-weight 7oz or higher, pre-shrunk, cut for a relaxed modern fit.',
+                location: 'STUDIO 01',
+                items: 11,
               },
               {
-                title: 'The Artists',
-                body: 'From tattoo artists to fine art painters, the creators behind DA SHOP brands are carrying Pacific tradition into the modern world. Each one has a story. Each one is building a legacy.',
-                image: 'https://images.unsplash.com/photo-1598971861713-54ad16a7e72e?auto=format&fit=crop&w=600&q=80',
-                to: '/brands',
+                num: '02',
+                name: 'TRAPACCHINO',
+                tagline: 'Graphic-forward streetwear.',
+                bio: 'Small graphic-led drops. Each piece numbered, produced in limited runs.',
+                location: 'STUDIO 02',
+                items: 8,
               },
-              {
-                title: 'The Gallery',
-                body: "Art, fashion, jewelry — all of it rooted in Pacific identity. Browse the editorial gallery to see how DA SHOP's brands express culture through their work.",
-                image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=600&q=80',
-                to: '/gallery',
-              },
-            ].map((tile) => (
+            ].map((brand) => (
               <Link
-                key={tile.title}
-                to={tile.to}
-                className="group relative overflow-hidden aspect-[4/5] bg-black"
+                key={brand.num}
+                to="/brands"
+                className="group bg-paper hover:bg-ink transition-colors duration-200 p-8 flex flex-col gap-6 min-h-[300px]"
               >
-                <img
-                  src={tile.image}
-                  alt={tile.title}
-                  className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700"
-                />
-                <div className="absolute inset-0 flex flex-col justify-end p-7">
-                  <div className="w-6 h-px bg-white mb-5" />
-                  <h3 className="text-white font-black uppercase tracking-wide text-base mb-3">{tile.title}</h3>
-                  <p className="text-white/50 text-xs leading-relaxed">{tile.body}</p>
-                  <p className="text-white/40 text-[10px] tracking-[0.2em] uppercase mt-5 group-hover:text-white transition-colors">
-                    Explore →
+                <div className="flex justify-between font-mono text-[11px] tracking-[0.14em] uppercase text-mute group-hover:text-paper/50 transition-colors">
+                  <span>BRAND / {brand.num}</span>
+                  <span>{brand.items} ITEMS →</span>
+                </div>
+                <div
+                  className="font-display font-black uppercase leading-[0.9] tracking-[-0.03em] text-ink group-hover:text-paper transition-colors"
+                  style={{ fontSize: 'clamp(32px, 4vw, 52px)' }}
+                >
+                  {brand.name}
+                </div>
+                <div className="mt-auto flex flex-col gap-1.5">
+                  <p className="font-mono text-[11px] tracking-[0.12em] uppercase text-ink group-hover:text-paper transition-colors">
+                    {brand.tagline}
                   </p>
+                  <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-mute group-hover:text-paper/40 transition-colors">
+                    {brand.location}
+                  </span>
                 </div>
               </Link>
             ))}
@@ -306,122 +213,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Featured Brand Spotlight ─────────────────────────────────────────── */}
-      {featuredBrand && (
-        <section className="bg-white border-b border-rule">
-          {/* Editorial header */}
-          <div className="relative h-[24rem] md:h-[32rem] overflow-hidden bg-ink">
-            {featuredBrand.hero_image_url && (
-              <img
-                src={featuredBrand.hero_image_url}
-                alt={featuredBrand.name}
-                className="w-full h-full object-cover"
-              />
-            )}
-            <div className="absolute inset-0 bg-black/60" />
-            <div className="absolute inset-0 flex items-end">
-              <div className="max-w-[1280px] mx-auto px-6 pb-12 w-full flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
-                <div>
-                  <p className="text-white/40 text-[10px] tracking-[0.5em] uppercase font-semibold mb-3">
-                    Featured Brand
-                  </p>
-                  {featuredBrand.logo_white_url && (
-                    <img
-                      src={featuredBrand.logo_white_url}
-                      alt={featuredBrand.name}
-                      className="h-20 md:h-24 w-auto mb-5 object-contain object-left"
-                    />
-                  )}
-                  <h2
-                    className="text-white font-black uppercase leading-none"
-                    style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.04em' }}
-                  >
-                    {featuredBrand.name}
-                  </h2>
-                  {featuredBrand.tagline && (
-                    <p className="text-white/50 text-sm italic mt-3 max-w-md">"{featuredBrand.tagline}"</p>
-                  )}
-                </div>
-                <Link
-                  to={`/brand/${featuredBrand.id}`}
-                  className="flex-shrink-0 bg-white text-ink font-black text-[11px] tracking-[0.15em] uppercase px-8 py-3.5 hover:bg-white/90 transition-colors duration-200 self-end"
-                >
-                  Shop {featuredBrand.name} →
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* 4-product preview grid */}
-          {featuredProducts.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-rule">
-              {featuredProducts.map((product) => (
-                <Link key={product.id} to={`/product/${product.id}`} className="group bg-white">
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={product.image_url}
-                      alt={product.name}
-                      className="w-full aspect-[4/5] object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="p-4 border-t border-rule">
-                    <p className="text-mute text-[10px] tracking-[0.15em] uppercase font-medium mb-1">
-                      {product.collection}
-                    </p>
-                    <h3 className="text-ink font-bold text-[13px] mb-2 leading-snug">{product.name}</h3>
-                    <span className="text-ink font-bold text-[13px]">${product.price}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
       {/* ── All Products ─────────────────────────────────────────────────────── */}
       <section id="products" className="bg-white py-20 px-6">
-        <div className="max-w-[1280px] mx-auto">
-          <div className="mb-10">
-            <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">New Arrivals</p>
-            <h2
-              className="text-ink font-black uppercase"
-              style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '0.04em' }}
-            >
-              All Products
-            </h2>
+        <div className="max-w-[1440px] mx-auto">
+          <div className="flex items-end justify-between gap-6 pb-[18px] border-b border-ink mb-7">
+            <div>
+              <div className="font-mono text-[11px] tracking-[0.12em] uppercase text-mute mb-2">NEW ARRIVALS</div>
+              <h2 className="font-display font-black uppercase text-[40px] leading-[0.95] tracking-[-0.02em] text-ink">
+                ALL PRODUCTS.
+              </h2>
+            </div>
+            <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute">
+              {safeProducts.length} ITEMS
+            </div>
           </div>
 
           {/* Category filter pills */}
-          <div className="flex flex-wrap items-center gap-2 mb-4">
+          <div className="flex flex-wrap items-center gap-2 mb-10">
             {categoryOptions.map((f) => (
               <button
                 key={f}
                 onClick={() => setActiveFilter(f)}
-                className={`text-[11px] tracking-[0.12em] uppercase font-bold px-5 py-2 border transition-colors duration-150 ${
+                className={`font-mono text-[11px] tracking-[0.12em] uppercase px-5 py-2 border transition-colors duration-150 ${
                   activeFilter === f
-                    ? 'bg-ink text-white border-ink'
+                    ? 'bg-ink text-paper border-ink'
                     : 'bg-white text-mute border-rule hover:border-ink hover:text-ink'
                 }`}
               >
-                {f === 'Paintings' ? 'Paintings & Prints' : f}
-              </button>
-            ))}
-          </div>
-
-          {/* Brand filter row */}
-          <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-rule">
-            <span className="text-mute text-[10px] tracking-[0.15em] uppercase mr-2">Brand:</span>
-            {brandOptions.map((b) => (
-              <button
-                key={b}
-                onClick={() => setActiveBrand(b)}
-                className={`text-[11px] tracking-[0.1em] uppercase font-medium px-4 py-1.5 border transition-colors duration-150 ${
-                  activeBrand === b
-                    ? 'bg-ink text-white border-ink'
-                    : 'bg-white text-mute border-rule hover:border-ink hover:text-ink'
-                }`}
-              >
-                {b}
+                {f}
               </button>
             ))}
           </div>
@@ -437,7 +256,7 @@ export default function Home() {
                 No products match this filter.
               </p>
               <button
-                onClick={() => { setActiveFilter('All'); setActiveBrand('All') }}
+                onClick={() => setActiveFilter('All')}
                 className="bg-ink text-white font-black text-[11px] tracking-[0.12em] uppercase px-10 py-4 hover:bg-ink/80 transition-colors"
               >
                 Clear Filters
@@ -479,7 +298,7 @@ export default function Home() {
 
       {/* ── Become a Vendor CTA ───────────────────────────────────────────────── */}
       <section className="bg-paper py-24 px-6 border-t border-rule">
-        <div className="max-w-[1280px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div>
             <p className="text-mute text-[10px] tracking-[0.4em] uppercase font-semibold mb-3">Pacific vendors</p>
             <h2

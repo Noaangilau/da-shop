@@ -59,7 +59,7 @@ export default function Category() {
     setActiveBrand('All')
 
     const params = {}
-    if (!isServices) params.category = label
+    if (!isServices) params.category = matched?.apiCategory || label
     else params.category = 'Art Services'
 
     axios.get(`${API_URL}/products`, { params })

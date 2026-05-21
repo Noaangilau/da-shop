@@ -6,32 +6,32 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 
-const API_URL    = import.meta.env.VITE_API_URL    || 'http://localhost:8000'
-const STRIPE_KEY = import.meta.env.VITE_STRIPE_PK  || ''
+const API_URL    = import.meta.env.VITE_API_URL   || 'http://localhost:8000'
+const STRIPE_KEY = import.meta.env.VITE_STRIPE_PK || ''
 
 const stripePromise = STRIPE_KEY ? loadStripe(STRIPE_KEY) : null
 
 const STRIPE_APPEARANCE = {
   theme: 'stripe',
   variables: {
-    colorPrimary:    '#111111',
+    colorPrimary:    '#0a0a0a',
     colorBackground: '#ffffff',
-    colorText:       '#111111',
+    colorText:       '#0a0a0a',
     colorDanger:     '#ef4444',
     fontFamily:      'Inter, Arial, sans-serif',
     borderRadius:    '0px',
     spacingUnit:     '4px',
   },
   rules: {
-    '.Input': { border: '1px solid #E5E5E5', boxShadow: 'none', padding: '12px 16px', fontSize: '14px' },
-    '.Input:focus': { border: '1px solid #111111', boxShadow: 'none', outline: 'none' },
-    '.Label': { fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: '600', color: '#111111' },
+    '.Input': { border: '1px solid #d9d4ca', boxShadow: 'none', padding: '12px 16px', fontSize: '14px' },
+    '.Input:focus': { border: '1px solid #0a0a0a', boxShadow: 'none', outline: 'none' },
+    '.Label': { fontSize: '10px', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: '600', color: '#0a0a0a' },
   },
 }
 
 // ── Step 2: Stripe payment form (must be inside <Elements>) ───────────────────
 
-function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSuccess }) {
+function PaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
   const stripe   = useStripe()
   const elements = useElements()
   const [error, setError]     = useState('')
@@ -68,7 +68,7 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
             quantity:     item.qty,
             image:        item.image,
             variant:      item.variant?.color || null,
-            size:         item.selectedSize || null,
+            size:         item.selectedSize   || null,
           })),
         },
         token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
@@ -101,11 +101,7 @@ function PaymentStep({ clientSecret, shippingForm, cart, token, onBack, onSucces
         {loading ? 'Processing…' : `Pay $${total.toFixed(2)}`}
       </button>
 
-      <button
-        type="button"
-        onClick={onBack}
-        className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors"
-      >
+      <button type="button" onClick={onBack} className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors">
         ← Back to Shipping
       </button>
     </form>
@@ -135,7 +131,7 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
             quantity:     item.qty,
             image:        item.image,
             variant:      item.variant?.color || null,
-            size:         item.selectedSize || null,
+            size:         item.selectedSize   || null,
           })),
         },
         token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
@@ -157,7 +153,6 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
         </p>
         <p className="text-mute text-xs leading-relaxed">
           <code>VITE_STRIPE_PK</code> is not set. Orders are created without payment verification.
-          Set the env var to enable real Stripe payments.
         </p>
       </div>
 
@@ -171,11 +166,7 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
         {loading ? 'Placing Order…' : `Place Order — $${total.toFixed(2)}`}
       </button>
 
-      <button
-        type="button"
-        onClick={onBack}
-        className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors"
-      >
+      <button type="button" onClick={onBack} className="text-mute text-[10px] tracking-[0.15em] uppercase text-center hover:text-ink transition-colors">
         ← Back to Shipping
       </button>
     </form>
@@ -186,21 +177,21 @@ function DevPaymentStep({ shippingForm, cart, token, onBack, onSuccess }) {
 
 export default function Checkout() {
   const { customer, token, saveCartToBackend } = useAuth()
-  const { cart, totalPrice, clearCart } = useCart()
+  const { cart, totalPrice, clearCart, openDrawer } = useCart()
   const navigate = useNavigate()
 
-  const [step, setStep]       = useState('shipping')   // 'shipping' | 'payment'
-  const [clientSecret, setClientSecret] = useState('')
+  const [step, setStep]                   = useState('shipping')
+  const [clientSecret, setClientSecret]   = useState('')
   const [intentLoading, setIntentLoading] = useState(false)
 
   const [form, setForm] = useState({
-    email:            customer?.email || '',
-    phone:            customer?.phone || '',
-    shipping_name:    customer ? `${customer.first_name} ${customer.last_name}` : '',
-    shipping_address: '',
-    shipping_city:    '',
-    shipping_postcode:'',
-    shipping_country: 'New Zealand',
+    email:             customer?.email      || '',
+    phone:             customer?.phone      || '',
+    shipping_name:     customer ? `${customer.first_name} ${customer.last_name}` : '',
+    shipping_address:  '',
+    shipping_city:     '',
+    shipping_postcode: '',
+    shipping_country:  'New Zealand',
   })
   const [formError, setFormError] = useState('')
 
@@ -258,16 +249,12 @@ export default function Checkout() {
         <div className="flex flex-col gap-px bg-rule mb-6">
           {cart.map((item) => (
             <div key={item.lineKey || `${item.id}|${item.variant?.color || ''}|${item.selectedSize || ''}`} className="bg-white flex gap-3 p-3">
-              <img src={item.image} alt={item.name} className="w-14 h-14 object-cover flex-shrink-0" />
+              <img src={item.image_url || item.image} alt={item.name} className="w-14 h-14 object-cover flex-shrink-0 bg-paper" />
               <div className="flex-1 min-w-0">
                 <p className="text-mute text-[10px] tracking-wide uppercase">{item.brand}</p>
                 <p className="text-ink font-bold text-xs leading-snug truncate">{item.name}</p>
-                {item.variant?.color && (
-                  <p className="text-mute text-[10px]">Color: {item.variant.color}</p>
-                )}
-                {item.selectedSize && (
-                  <p className="text-mute text-[10px]">Size: {item.selectedSize}</p>
-                )}
+                {item.variant?.color && <p className="text-mute text-[10px]">Color: {item.variant.color}</p>}
+                {item.selectedSize    && <p className="text-mute text-[10px]">Size: {item.selectedSize}</p>}
                 <p className="text-mute text-[10px]">×{item.qty}</p>
               </div>
               <span className="text-ink font-bold text-xs flex-shrink-0">
@@ -282,12 +269,12 @@ export default function Checkout() {
           <span className="text-ink font-black text-xl">${totalPrice.toFixed(2)}</span>
         </div>
         {step === 'shipping' && (
-          <Link
-            to="/cart"
-            className="block text-center text-mute text-[10px] tracking-[0.15em] uppercase hover:text-ink transition-colors mt-6"
+          <button
+            onClick={openDrawer}
+            className="block w-full text-center text-mute text-[10px] tracking-[0.15em] uppercase hover:text-ink transition-colors mt-6"
           >
             ← Edit Cart
-          </Link>
+          </button>
         )}
       </div>
     </div>
@@ -375,10 +362,10 @@ export default function Checkout() {
                 <div className="flex flex-col gap-4">
                   {[
                     { name: 'shipping_name',     label: 'Full Name',      placeholder: 'Name on package' },
-                    { name: 'shipping_address',  label: 'Street Address', placeholder: '123 Pacific Rd' },
-                    { name: 'shipping_city',     label: 'City',           placeholder: 'Auckland' },
-                    { name: 'shipping_postcode', label: 'Postcode',       placeholder: '1010' },
-                    { name: 'shipping_country',  label: 'Country',        placeholder: 'New Zealand' },
+                    { name: 'shipping_address',  label: 'Street Address', placeholder: '123 Pacific Rd'  },
+                    { name: 'shipping_city',     label: 'City',           placeholder: 'Auckland'         },
+                    { name: 'shipping_postcode', label: 'Postcode',       placeholder: '1010'             },
+                    { name: 'shipping_country',  label: 'Country',        placeholder: 'New Zealand'      },
                   ].map((f) => (
                     <div key={f.name} className="flex flex-col gap-1.5">
                       <label className="text-ink text-[10px] tracking-[0.2em] uppercase font-semibold">
@@ -413,12 +400,8 @@ export default function Checkout() {
           {step === 'payment' && (
             <div className="lg:col-span-2">
               {STRIPE_KEY && clientSecret ? (
-                <Elements
-                  stripe={stripePromise}
-                  options={{ clientSecret, appearance: STRIPE_APPEARANCE }}
-                >
+                <Elements stripe={stripePromise} options={{ clientSecret, appearance: STRIPE_APPEARANCE }}>
                   <PaymentStep
-                    clientSecret={clientSecret}
                     shippingForm={form}
                     cart={cart}
                     token={token}

@@ -10,15 +10,14 @@ export default function OrderConfirmation() {
   const { token, customer } = useAuth()
   const location = useLocation()
   const stateOrder = location.state?.order || null
-  const isGuest = Boolean(location.state?.guest) || !customer
+  const isGuest    = Boolean(location.state?.guest) || !customer
 
   const [order, setOrder]     = useState(stateOrder)
   const [loading, setLoading] = useState(!stateOrder)
 
   useEffect(() => {
-    // Guests can't re-fetch their order (endpoint requires auth) — they
-    // must see the server payload carried in location.state. Members still
-    // fetch so a reload works.
+    // Guests can't re-fetch their order (endpoint requires auth).
+    // Members still fetch so a reload works.
     if (stateOrder || !token) { setLoading(false); return }
     axios
       .get(`${API_URL}/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -41,7 +40,7 @@ export default function OrderConfirmation() {
         <div className="text-center max-w-md">
           <div className="w-10 h-px bg-ink mx-auto mb-10" />
           <h1 className="text-ink font-black uppercase text-2xl mb-4">
-            Order details unavailable
+            Order Details Unavailable
           </h1>
           <p className="text-mute text-sm mb-8 leading-relaxed">
             We couldn't load this order in your browser. Guest orders can't be
@@ -75,7 +74,7 @@ export default function OrderConfirmation() {
           Order Confirmed
         </h1>
         <p className="text-white/50 text-sm mt-4 max-w-sm mx-auto leading-relaxed">
-          Thanks for supporting Pacific vendors. A confirmation has been sent to{' '}
+          Thanks for your order. A confirmation has been sent to{' '}
           <span className="text-white/80">{order?.email}</span>.
         </p>
       </div>
@@ -122,9 +121,9 @@ export default function OrderConfirmation() {
             </p>
             <div className="flex flex-col gap-1">
               <p className="text-ink font-bold text-sm">{order?.shipping_name}</p>
-              <p className="text-gray-500 text-sm">{order?.shipping_address}</p>
-              <p className="text-gray-500 text-sm">{order?.shipping_city} {order?.shipping_postcode}</p>
-              <p className="text-gray-500 text-sm">{order?.shipping_country}</p>
+              <p className="text-mute text-sm">{order?.shipping_address}</p>
+              <p className="text-mute text-sm">{order?.shipping_city} {order?.shipping_postcode}</p>
+              <p className="text-mute text-sm">{order?.shipping_country}</p>
             </div>
             {order?.phone && (
               <p className="text-mute text-xs mt-4">{order.phone}</p>
@@ -138,9 +137,8 @@ export default function OrderConfirmation() {
               Become a Member
             </p>
             <p className="text-mute text-sm leading-relaxed mb-6">
-              Create an account with the same email to track this order, plus get
-              member-only perks: first-look drops, early access to releases, and
-              subscriber discounts from Pacific vendors.
+              Create an account with the same email to track this order and get
+              first-look drops, early access, and member-only perks.
             </p>
             <ul className="text-ink text-xs leading-relaxed mb-6 flex flex-col gap-1">
               <li>• New-drop alerts straight to your inbox</li>

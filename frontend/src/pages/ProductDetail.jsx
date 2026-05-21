@@ -13,7 +13,6 @@ function getTypeLabel(product) {
   if (name.includes('long sleeve') || col.includes('long sleeve')) return 'Long Sleeve'
   if (name.includes('hoodie') || col.includes('hoodie'))             return 'Hoodie'
   if (name.includes('crewneck') || col.includes('crewneck'))         return 'Crewneck'
-  if (name.includes('fleece') || col.includes('fleece'))             return 'Fleece'
   if (product.category === 'Clothing')                               return 'Tee'
   return null
 }

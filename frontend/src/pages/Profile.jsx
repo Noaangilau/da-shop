@@ -9,15 +9,15 @@ export default function Profile() {
   const { customer, token, updateProfile, logout } = useAuth()
 
   const [form, setForm] = useState({
-    first_name:   customer?.first_name || '',
-    last_name:    customer?.last_name  || '',
-    phone:        customer?.phone      || '',
+    first_name:   customer?.first_name  || '',
+    last_name:    customer?.last_name   || '',
+    phone:        customer?.phone       || '',
     email_opt_in: customer?.email_opt_in ?? false,
     sms_opt_in:   customer?.sms_opt_in  ?? false,
   })
-  const [saving, setSaving]     = useState(false)
-  const [saved, setSaved]       = useState(false)
-  const [orders, setOrders]     = useState([])
+  const [saving, setSaving]   = useState(false)
+  const [saved, setSaved]     = useState(false)
+  const [orders, setOrders]   = useState([])
   const [ordersLoading, setOrdersLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('profile')
 
@@ -161,9 +161,7 @@ export default function Profile() {
                 >
                   {saving ? 'Saving…' : 'Save Changes'}
                 </button>
-                {saved && (
-                  <span className="text-mute text-xs tracking-wide">Saved.</span>
-                )}
+                {saved && <span className="text-mute text-xs tracking-wide">Saved.</span>}
               </div>
             </form>
 
@@ -213,14 +211,14 @@ export default function Profile() {
                     </div>
                     <div className="flex flex-col gap-1 mb-3">
                       {(Array.isArray(order.items) ? order.items : []).map((item, i) => (
-                        <p key={i} className="text-gray-500 text-xs">
-                          {item.product_name} <span className="text-mute">×{item.quantity}</span>
+                        <p key={i} className="text-mute text-xs">
+                          {item.product_name} <span className="text-mute-2">×{item.quantity}</span>
                         </p>
                       ))}
                     </div>
                     <p className="text-mute text-[10px] tracking-wide">
                       {new Date(order.created_at).toLocaleDateString('en-NZ', {
-                        day: 'numeric', month: 'long', year: 'numeric'
+                        day: 'numeric', month: 'long', year: 'numeric',
                       })}
                     </p>
                   </div>

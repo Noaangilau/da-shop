@@ -8,17 +8,10 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 // ─── Clothing subcategory filters ─────────────────────────────────────────────
 const clothingSubcategories = [
   { label: 'All',          sub: 'all' },
-  { label: 'New Arrivals', sub: 'new' },
-  { label: 'T-Shirts',     sub: 't-shirts' },
-  { label: 'Shirts',       sub: 'shirts' },
-  { label: 'Fleece',       sub: 'fleece' },
-  { label: 'Outerwear',    sub: 'outerwear' },
-  { label: 'Denim',        sub: 'denim' },
-  { label: 'Bottoms',      sub: 'bottoms' },
-  { label: 'Footwear',     sub: 'footwear' },
-  { label: 'Men',          sub: 'men' },
-  { label: 'Women',        sub: 'women' },
-  { label: 'Accessories',  sub: 'accessories' },
+  { label: 'Tees',         sub: 't-shirts' },
+  { label: 'Long Sleeves', sub: 'long-sleeves' },
+  { label: 'Crew Necks',   sub: 'crew-necks' },
+  { label: 'Hoodies',      sub: 'hoodies' },
 ]
 
 function ProductSkeleton() {

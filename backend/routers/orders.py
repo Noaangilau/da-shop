@@ -117,6 +117,11 @@ def create_order(
         order_id=order.id,
         total=total,
         items=items_for_email,
+        shipping_name=data.shipping_name,
+        shipping_address=data.shipping_address,
+        shipping_city=data.shipping_city,
+        shipping_postcode=data.shipping_postcode,
+        shipping_country=data.shipping_country,
         db=db,
         customer_id=customer.id if customer else None,
     )

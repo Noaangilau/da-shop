@@ -168,16 +168,25 @@ export default function Category() {
     return Math.ceil(Math.max(...products.map((p) => p.price || 0)) / 10) * 10 || 200
   }, [products])
 
+  const qParam = searchParams.get('q')?.trim().toLowerCase() || ''
+
   // Apply filters + sort
   const filtered = useMemo(() => {
     let list = [...products]
+    if (qParam) {
+      list = list.filter((p) =>
+        (p.name        || '').toLowerCase().includes(qParam) ||
+        (p.brand_name  || '').toLowerCase().includes(qParam) ||
+        (p.collection  || '').toLowerCase().includes(qParam)
+      )
+    }
     if (checkedSubs.size > 0)   list = list.filter((p) => checkedSubs.has(getSubLabel(p)))
     if (checkedBrands.size > 0) list = list.filter((p) => checkedBrands.has(p.subcategory || p.brand_name || 'Other'))
     list = list.filter((p) => (p.price || 0) <= maxPrice)
     if (sortBy === 'price-asc')  list.sort((a, b) => a.price - b.price)
     if (sortBy === 'price-desc') list.sort((a, b) => b.price - a.price)
     return list
-  }, [products, checkedSubs, checkedBrands, maxPrice, sortBy])
+  }, [products, checkedSubs, checkedBrands, maxPrice, sortBy, qParam])
 
   function toggleSub(s) {
     setCheckedSubs((prev) => { const n = new Set(prev); n.has(s) ? n.delete(s) : n.add(s); return n })
@@ -259,13 +268,13 @@ export default function Category() {
           <div className="flex items-end justify-between gap-6">
             <div>
               <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute mb-3">
-                EVERY BRAND, EVERY WEIGHT
+                {qParam ? `SEARCH RESULTS FOR "${qParam.toUpperCase()}"` : 'EVERY BRAND, EVERY WEIGHT'}
               </p>
               <h1
                 className="font-display font-black uppercase text-ink leading-[0.88] tracking-[-0.03em]"
                 style={{ fontSize: 'clamp(2.5rem, 9vw, 8rem)' }}
               >
-                ALL GARMENTS
+                {qParam ? 'RESULTS.' : 'ALL GARMENTS'}
               </h1>
             </div>
             {!loading && (

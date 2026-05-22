@@ -160,6 +160,9 @@ export default function Checkout() {
   const [clientSecret, setClientSecret]   = useState('')
   const [intentLoading, setIntentLoading] = useState(false)
   const [discountCode, setDiscountCode]   = useState('')
+  const [discountApplied, setDiscountApplied] = useState(null) // { code, label, saving, new_subtotal }
+  const [discountError,   setDiscountError]   = useState('')
+  const [discountLoading, setDiscountLoading] = useState(false)
 
   const [form, setForm] = useState({
     email:             customer?.email      || '',
@@ -175,6 +178,25 @@ export default function Checkout() {
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value })
     setFormError('')
+  }
+
+  async function handleApplyDiscount() {
+    const code = discountCode.trim()
+    if (!code) return
+    setDiscountLoading(true)
+    setDiscountError('')
+    setDiscountApplied(null)
+    try {
+      const { data } = await axios.post(`${API_URL}/discounts/validate`, {
+        code,
+        subtotal: totalPrice,
+      })
+      setDiscountApplied(data)
+    } catch (err) {
+      setDiscountError(err.response?.data?.detail || 'Invalid or expired discount code.')
+    } finally {
+      setDiscountLoading(false)
+    }
   }
 
   async function handleShippingSubmit(e) {
@@ -213,8 +235,9 @@ export default function Checkout() {
     }
   }
 
-  const freeShipping = totalPrice >= 80
-  const shipping     = freeShipping ? 0 : 8.50
+  const effectiveSubtotal = discountApplied ? discountApplied.new_subtotal : totalPrice
+  const freeShipping      = effectiveSubtotal >= 80
+  const shipping          = freeShipping ? 0 : 8.50
 
   if (cart.length === 0 && step === 'shipping') {
     return (
@@ -287,17 +310,48 @@ export default function Checkout() {
         </div>
 
         {/* Discount code */}
-        <div className="p-4 border-b border-rule flex gap-2">
-          <input
-            type="text"
-            value={discountCode}
-            onChange={(e) => setDiscountCode(e.target.value)}
-            placeholder="DISCOUNT CODE"
-            className="flex-1 border border-rule bg-paper px-3 py-2.5 font-mono text-[10px] tracking-[0.1em] uppercase text-ink placeholder-mute/50 focus:outline-none focus:border-ink transition-colors"
-          />
-          <button className="bg-ink text-paper font-mono font-bold text-[10px] tracking-[0.12em] uppercase px-4 py-2.5 hover:bg-ink/80 transition-colors flex-shrink-0">
-            APPLY
-          </button>
+        <div className="p-4 border-b border-rule">
+          {discountApplied ? (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-ink font-bold">
+                  {discountApplied.code}
+                </p>
+                <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-mute mt-0.5">
+                  {discountApplied.label}
+                </p>
+              </div>
+              <button
+                onClick={() => { setDiscountApplied(null); setDiscountCode(''); setDiscountError('') }}
+                className="font-mono text-[10px] tracking-[0.1em] uppercase text-mute hover:text-red-400 transition-colors"
+              >
+                REMOVE ×
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={discountCode}
+                  onChange={(e) => { setDiscountCode(e.target.value); setDiscountError('') }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyDiscount()}
+                  placeholder="DISCOUNT CODE"
+                  className="flex-1 border border-rule bg-paper px-3 py-2.5 font-mono text-[10px] tracking-[0.1em] uppercase text-ink placeholder-mute/50 focus:outline-none focus:border-ink transition-colors"
+                />
+                <button
+                  onClick={handleApplyDiscount}
+                  disabled={discountLoading || !discountCode.trim()}
+                  className="bg-ink text-paper font-mono font-bold text-[10px] tracking-[0.12em] uppercase px-4 py-2.5 hover:bg-ink/80 transition-colors flex-shrink-0 disabled:opacity-40"
+                >
+                  {discountLoading ? '…' : 'APPLY'}
+                </button>
+              </div>
+              {discountError && (
+                <p className="font-mono text-[10px] tracking-[0.06em] text-red-400 mt-2">{discountError}</p>
+              )}
+            </>
+          )}
         </div>
 
         {/* Totals */}
@@ -306,6 +360,14 @@ export default function Checkout() {
             <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-mute">SUBTOTAL</span>
             <span className="text-ink font-bold">${totalPrice.toFixed(2)}</span>
           </div>
+          {discountApplied && (
+            <div className="flex justify-between text-sm">
+              <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-mute">
+                DISCOUNT ({discountApplied.code})
+              </span>
+              <span className="text-green-700 font-bold">−${discountApplied.saving.toFixed(2)}</span>
+            </div>
+          )}
           <div className="flex justify-between text-sm">
             <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-mute">SHIPPING</span>
             <span className="text-ink font-bold">{freeShipping ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
@@ -313,7 +375,7 @@ export default function Checkout() {
           <div className="w-full h-px bg-rule" />
           <div className="flex justify-between items-center">
             <span className="font-mono text-[11px] tracking-[0.14em] uppercase font-bold text-ink">TOTAL</span>
-            <span className="text-ink font-black text-lg">${(totalPrice + shipping).toFixed(2)}</span>
+            <span className="text-ink font-black text-lg">${(effectiveSubtotal + shipping).toFixed(2)}</span>
           </div>
         </div>
       </div>

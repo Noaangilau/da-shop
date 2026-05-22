@@ -16,7 +16,7 @@ import models.chat_log           # noqa: F401
 import models.announcement       # noqa: F401
 import models.tee_template        # noqa: F401
 
-from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments, announcements, media, vendor
+from routers import vendor_inquiry, auth, customers, orders, ai_chat, admin, brands, products, payments, announcements, media, vendor, discounts
 
 load_dotenv()
 
@@ -114,6 +114,7 @@ app.include_router(payments.router)
 app.include_router(announcements.router)
 app.include_router(media.router)
 app.include_router(vendor.router)
+app.include_router(discounts.router)
 
 
 @app.get("/health")

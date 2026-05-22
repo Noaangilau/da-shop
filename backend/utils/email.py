@@ -132,6 +132,7 @@ def send_sms(
 # ── Email templates ────────────────────────────────────────────────────────────
 
 def _base_html(title: str, body_html: str) -> str:
+    """Branded DA SHOP email shell — ink/paper palette, monospace labels, zero border-radius."""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,30 +140,94 @@ def _base_html(title: str, body_html: str) -> str:
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>{title}</title>
   <style>
-    body  {{ font-family: Arial, sans-serif; background:#f7f7f7; margin:0; padding:0; color:#111; }}
-    .wrap {{ max-width:580px; margin:32px auto; background:#fff; border:1px solid #e5e5e5; }}
-    .hdr  {{ background:#111; padding:24px 32px; }}
-    .hdr h1 {{ color:#fff; font-size:18px; letter-spacing:0.12em; text-transform:uppercase; margin:0; }}
-    .body {{ padding:32px; font-size:14px; line-height:1.7; color:#444; }}
-    .body h2 {{ color:#111; font-size:16px; text-transform:uppercase; letter-spacing:0.08em; margin-top:0; }}
-    .total {{ font-size:22px; font-weight:900; color:#111; margin:16px 0; }}
-    .btn  {{ display:inline-block; background:#111; color:#fff; padding:14px 32px;
-             text-decoration:none; font-size:11px; letter-spacing:0.12em;
-             text-transform:uppercase; font-weight:700; margin-top:8px; }}
-    .ftr  {{ padding:20px 32px; border-top:1px solid #e5e5e5; font-size:11px;
-             color:#888; text-align:center; }}
-    table {{ width:100%; border-collapse:collapse; margin:16px 0; }}
-    td,th {{ padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:13px; text-align:left; }}
-    th    {{ font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:#888; }}
+    body      {{ font-family: Arial, Helvetica, sans-serif; background:#e8e4dd;
+                margin:0; padding:0; color:#0a0a0a; -webkit-font-smoothing:antialiased; }}
+    .outer    {{ max-width:600px; margin:32px auto; padding:0 16px 40px; }}
+
+    /* ── Header bar ── */
+    .hdr      {{ background:#0a0a0a; padding:20px 32px; display:block; }}
+    .hdr-logo {{ font-family: Arial Black, Arial, sans-serif; font-size:20px;
+                font-weight:900; letter-spacing:-0.02em; text-transform:uppercase;
+                color:#f5f1ea; text-decoration:none; display:inline-block; }}
+    .hdr-dot  {{ color:#b04b3a; }}
+    .hdr-sub  {{ font-family: 'Courier New', Courier, monospace; font-size:10px;
+                letter-spacing:0.16em; text-transform:uppercase; color:#f5f1ea;
+                opacity:0.45; margin-top:4px; }}
+
+    /* ── Body card ── */
+    .card     {{ background:#ffffff; border:1px solid #d9d4ca; padding:36px 32px; }}
+    .eyebrow  {{ font-family: 'Courier New', Courier, monospace; font-size:10px;
+                letter-spacing:0.2em; text-transform:uppercase; color:#6b6b6b;
+                margin:0 0 10px; }}
+    .headline {{ font-family: Arial Black, Arial, sans-serif; font-size:32px;
+                font-weight:900; text-transform:uppercase; letter-spacing:-0.02em;
+                line-height:1; color:#0a0a0a; margin:0 0 20px; }}
+    .body-txt {{ font-size:14px; line-height:1.65; color:#444444; margin:0 0 24px; }}
+
+    /* ── Divider ── */
+    .rule     {{ border:none; border-top:1px solid #d9d4ca; margin:24px 0; }}
+    .rule-ink {{ border:none; border-top:1px solid #0a0a0a; margin:20px 0; }}
+
+    /* ── Order items table ── */
+    table     {{ width:100%; border-collapse:collapse; margin:0 0 24px; }}
+    th        {{ font-family: 'Courier New', Courier, monospace; font-size:9px;
+                letter-spacing:0.16em; text-transform:uppercase; color:#6b6b6b;
+                padding:0 0 8px; border-bottom:1px solid #0a0a0a;
+                text-align:left; font-weight:400; }}
+    td        {{ font-size:13px; color:#0a0a0a; padding:10px 0;
+                border-bottom:1px solid #d9d4ca; vertical-align:top; }}
+    td.mono   {{ font-family: 'Courier New', Courier, monospace; font-size:11px;
+                letter-spacing:0.04em; }}
+    td.right  {{ text-align:right; }}
+    .item-name  {{ font-weight:700; text-transform:uppercase;
+                  font-size:12px; letter-spacing:0.03em; }}
+    .item-meta  {{ font-family: 'Courier New', Courier, monospace; font-size:10px;
+                  letter-spacing:0.08em; text-transform:uppercase;
+                  color:#6b6b6b; margin-top:2px; }}
+
+    /* ── Total row ── */
+    .total-row  {{ display:block; margin:4px 0 0; }}
+    .total-lbl  {{ font-family: 'Courier New', Courier, monospace; font-size:10px;
+                  letter-spacing:0.16em; text-transform:uppercase; color:#6b6b6b; }}
+    .total-val  {{ font-family: Arial Black, Arial, sans-serif; font-size:26px;
+                  font-weight:900; color:#0a0a0a; }}
+
+    /* ── CTA button ── */
+    .btn-wrap {{ margin:28px 0 0; }}
+    .btn      {{ display:inline-block; background:#0a0a0a; color:#f5f1ea;
+                padding:14px 36px; font-family: 'Courier New', Courier, monospace;
+                font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+                font-weight:700; text-decoration:none; }}
+
+    /* ── Footer ── */
+    .ftr      {{ padding:24px 0 0; text-align:center; }}
+    .ftr p    {{ font-family: 'Courier New', Courier, monospace; font-size:10px;
+                letter-spacing:0.1em; text-transform:uppercase; color:#6b6b6b;
+                margin:4px 0; }}
+    .ftr a    {{ color:#6b6b6b; text-decoration:none; }}
+    .ftr a:hover {{ color:#0a0a0a; }}
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hdr"><h1>{SHOP_NAME}</h1></div>
-    <div class="body">{body_html}</div>
-    <div class="ftr">Pacific Culture. All in One Place.<br/>
-      <a href="{SHOP_URL}" style="color:#888;">{SHOP_URL}</a>
+  <div class="outer">
+
+    <!-- Header -->
+    <div class="hdr">
+      <div class="hdr-logo">DA SHOP<span class="hdr-dot">.</span></div>
+      <div class="hdr-sub">Pacific Marketplace</div>
     </div>
+
+    <!-- Body card -->
+    <div class="card">
+      {body_html}
+    </div>
+
+    <!-- Footer -->
+    <div class="ftr">
+      <p>Pacific Culture. All in One Place.</p>
+      <p><a href="{SHOP_URL}">{SHOP_URL}</a></p>
+    </div>
+
   </div>
 </body>
 </html>"""
@@ -174,30 +239,96 @@ def send_order_confirmation_email(
     order_id: int,
     total: float,
     items: Optional[list] = None,
+    shipping_name: Optional[str] = None,
+    shipping_address: Optional[str] = None,
+    shipping_city: Optional[str] = None,
+    shipping_postcode: Optional[str] = None,
+    shipping_country: Optional[str] = None,
     db=None,
     customer_id: Optional[int] = None,
 ):
-    subject = f"Order #{order_id} confirmed — {SHOP_NAME}"
+    subject = f"Order #{order_id} Confirmed — DA SHOP"
 
-    rows = ""
+    # ── Item rows ──────────────────────────────────────────────────────────────
+    item_rows = ""
     if items:
-        rows = "<table><tr><th>Item</th><th>Qty</th><th>Price</th></tr>"
         for item in items:
-            rows += (
-                f"<tr><td>{item.get('product_name', item.get('name', ''))}</td>"
-                f"<td>×{item.get('quantity', item.get('qty', 1))}</td>"
-                f"<td>${float(item.get('price', 0)):.2f}</td></tr>"
-            )
-        rows += "</table>"
+            name     = item.get("product_name", item.get("name", ""))
+            qty      = item.get("quantity", item.get("qty", 1))
+            price    = float(item.get("price", 0))
+            variant  = item.get("variant") or ""
+            size     = item.get("size") or ""
+            meta_parts = []
+            if variant: meta_parts.append(f"COLOR {variant.upper()}")
+            if size:    meta_parts.append(f"SIZE {size}")
+            meta = " · ".join(meta_parts)
+            item_rows += f"""
+          <tr>
+            <td>
+              <div class="item-name">{name}</div>
+              {"<div class='item-meta'>" + meta + "</div>" if meta else ""}
+            </td>
+            <td class="mono right">×{qty}</td>
+            <td class="mono right">${price * qty:.2f}</td>
+          </tr>"""
+
+    items_table = ""
+    if item_rows:
+        items_table = f"""
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th style="text-align:right;">Qty</th>
+          <th style="text-align:right;">Price</th>
+        </tr>
+      </thead>
+      <tbody>{item_rows}</tbody>
+    </table>"""
+
+    # ── Shipping block ─────────────────────────────────────────────────────────
+    ship_lines = [l for l in [
+        shipping_name, shipping_address,
+        f"{shipping_city} {shipping_postcode}".strip() if (shipping_city or shipping_postcode) else None,
+        shipping_country,
+    ] if l]
+    ship_html = ""
+    if ship_lines:
+        addr_rows = "".join(f"<tr><td>{l}</td></tr>" for l in ship_lines)
+        ship_html = f"""
+    <hr class="rule"/>
+    <p class="eyebrow">Ships To</p>
+    <table style="margin:0;">
+      <tbody>{addr_rows}</tbody>
+    </table>"""
 
     body_html = f"""
-<h2>Order Confirmed</h2>
-<p>Hey {customer_name}, your order is confirmed and being prepared.</p>
-{rows}
-<p class="total">Total: ${total:.2f}</p>
-<p>We'll send you a shipping update as soon as your order is on its way.<br/>
-Thanks for supporting Pacific vendors.</p>
-<a class="btn" href="{SHOP_URL}">Keep Shopping</a>
+    <p class="eyebrow">Order #{order_id}</p>
+    <h1 class="headline">ORDER<br/>CONFIRMED.</h1>
+    <p class="body-txt">
+      Hey {customer_name}, your order is confirmed and being prepared.
+      We'll send you a shipping update as soon as it's on its way.
+    </p>
+
+    {items_table}
+
+    <hr class="rule-ink"/>
+    <div>
+      <span class="total-lbl">Total Charged</span><br/>
+      <span class="total-val">${total:.2f}</span>
+    </div>
+
+    {ship_html}
+
+    <div class="btn-wrap">
+      <a class="btn" href="{SHOP_URL}">KEEP SHOPPING &nbsp;→</a>
+    </div>
+
+    <hr class="rule" style="margin-top:36px;"/>
+    <p style="font-family:'Courier New',Courier,monospace;font-size:10px;
+              letter-spacing:0.08em;text-transform:uppercase;color:#6b6b6b;margin:0;">
+      Questions? Reply to this email or visit {SHOP_URL}/support
+    </p>
 """
     send_email(
         to=customer_email,

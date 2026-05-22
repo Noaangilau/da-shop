@@ -84,14 +84,26 @@ async def stripe_webhook(
 
     payload = await request.body()
 
-    if webhook_secret and stripe_signature:
+    if webhook_secret:
+        # Production path: signature MUST be present and valid.
+        if not stripe_signature:
+            logger.warning("[STRIPE:webhook] Request missing Stripe-Signature header — rejected")
+            raise HTTPException(status_code=400, detail="Missing Stripe-Signature header")
         try:
             event = _s.Webhook.construct_event(payload, stripe_signature, webhook_secret)
-        except _s.error.SignatureVerificationError:
+        except _s.error.SignatureVerificationError as exc:
+            logger.warning(f"[STRIPE:webhook] Signature verification failed: {exc}")
             raise HTTPException(status_code=400, detail="Invalid Stripe signature")
+        except ValueError:
+            logger.warning("[STRIPE:webhook] Malformed payload")
+            raise HTTPException(status_code=400, detail="Malformed webhook payload")
     else:
-        # Dev: no webhook secret — accept without signature verification
-        event = json.loads(payload)
+        # Dev mode: STRIPE_WEBHOOK_SECRET not configured — accept unsigned payload.
+        logger.warning("[STRIPE:webhook] STRIPE_WEBHOOK_SECRET not set — skipping verification (dev mode)")
+        try:
+            event = json.loads(payload)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Malformed webhook payload")
 
     event_type = event.get("type", "")
     logger.info(f"[STRIPE:webhook] {event_type}")
